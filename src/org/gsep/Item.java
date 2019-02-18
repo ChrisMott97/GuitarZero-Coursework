@@ -1,30 +1,24 @@
 package org.gsep;
 
+import javafx.beans.property.StringProperty;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-abstract class Item extends Pane {
+import java.io.IOException;
+
+public abstract class Item {
+
     private String text;
-    private String pictureUrl;
 
-    Item(String text){
+    public Item(String text){
         this.text = text;
-    }
-
-    Item(String text, String pictureUrl){
-        this.text = text;
-        this.pictureUrl = pictureUrl;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public String getPictureUrl() {
-        return pictureUrl;
     }
 
     @Override
     public String toString() {
-        return this.getText();
+        return text;
     }
 }

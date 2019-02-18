@@ -25,6 +25,7 @@ public class Select extends Application {
 
     public static void main(String[] args) {
         launch(args);
+
         List<MusicItem> someList = new ArrayList<>();
         someList.add(new MusicItem("Song 1"));
         someList.add(new MusicItem("Song 2"));
@@ -35,24 +36,25 @@ public class Select extends Application {
 
         Carousel select = new Carousel<>(someList);
 
-        System.out.println(select.getAll());
-        System.out.println(select.getVisible());
-        System.out.println(select.getIntended());
 
-        Scanner in = new Scanner(System.in);
-
-        while(true){
-            String input = in.nextLine();
-            if(input.equals("next")){
-                select.next();
-            } else if(input.equals("previous")){
-                select.previous();
-            } else{
-                continue;
-            }
-            System.out.println(select.getAll());
-            System.out.println(select.getVisible());
-            System.out.println(select.getIntended());
-        }
+//        System.out.println(select.getAll());
+//        System.out.println(select.getVisible());
+//        System.out.println(select.getIntended());
+//
+//        Scanner in = new Scanner(System.in);
+//
+//        while(true){
+//            String input = in.nextLine();
+//            if(input.equals("next")){
+//                select.next();
+//            } else if(input.equals("previous")){
+//                select.previous();
+//            } else{
+//                continue;
+//            }
+//            System.out.println(select.getAll());
+//            System.out.println(select.getVisible());
+//            System.out.println(select.getIntended());
+//        }
     }
 }

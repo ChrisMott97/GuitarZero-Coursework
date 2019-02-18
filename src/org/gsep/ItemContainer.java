@@ -13,6 +13,10 @@ public class ItemContainer extends Pane {
     @FXML
     private Label label;
 
+    private int position;
+
+    private Item item;
+
     public ItemContainer(){
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("itemContainer.fxml"));
         fxmlLoader.setRoot(this);
@@ -25,9 +29,10 @@ public class ItemContainer extends Pane {
         }
     }
 
-    public ItemContainer(String text){
+    public ItemContainer(Item item){
         this();
-        setText(text);
+        this.item = item;
+        setText(item.getText());
     }
 
     public String getText(){
@@ -45,5 +50,9 @@ public class ItemContainer extends Pane {
     @FXML
     public void doSomething(){
         System.out.println("Some action");
+    }
+
+    public double getCurrentX(){
+        return getLayoutX()+getTranslateX();
     }
 }

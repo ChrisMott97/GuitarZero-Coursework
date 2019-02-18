@@ -11,11 +11,12 @@
 <?import org.gsep.ItemContainer?>
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="339.0" prefWidth="743.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.gsep.FXMLController">
    <children>
-      <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="336.0" prefWidth="553.0" style="-fx-border-color: blue;" StackPane.alignment="CENTER">
+      <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="336.0" prefWidth="600.0" style="-fx-border-color: blue;" StackPane.alignment="CENTER">
          <StackPane.margin>
-            <Insets bottom="100.0" left="30.0" right="30.0" top="100.0" />
+            <Insets bottom="100.0" left="20.0" right="20.0" top="100.0" />
          </StackPane.margin>
          <children>
+
             <ItemContainer fx:id="ic_one" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;">
                <HBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -49,7 +50,7 @@
       <ButtonBar prefHeight="40.0" prefWidth="200.0" StackPane.alignment="CENTER">
         <buttons>
           <Button id="btn_previous" alignment="CENTER" mnemonicParsing="false" text="Previous" textAlignment="CENTER" />
-            <Button id="btn_next" fx:id="btn_next" alignment="CENTER" layoutX="683.0" layoutY="16.0" mnemonicParsing="false" onAction="#move" text="Next" textAlignment="CENTER" />
+            <Button id="btn_next" fx:id="btn_next" alignment="CENTER" layoutX="683.0" layoutY="16.0" mnemonicParsing="false" onAction="#next" text="Next" textAlignment="CENTER" />
         </buttons>
          <StackPane.margin>
             <Insets bottom="50.0" top="250.0" />

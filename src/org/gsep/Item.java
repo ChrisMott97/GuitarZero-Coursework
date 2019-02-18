@@ -17,6 +17,10 @@ public abstract class Item {
         this.text = text;
     }
 
+    public String getText(){
+        return this.text;
+    }
+
     @Override
     public String toString() {
         return text;

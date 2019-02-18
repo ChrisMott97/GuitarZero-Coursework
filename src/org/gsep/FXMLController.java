@@ -1,10 +1,9 @@
 package org.gsep;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.SequentialTransition;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.effect.Glow;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -34,6 +33,8 @@ public class FXMLController {
 
     private double distance;
 
+    private Glow g;
+
 
     public void initialize() {
         containers.add(ic_one);
@@ -44,19 +45,24 @@ public class FXMLController {
         distance = (ic_two.getLayoutX()/2)+10;
         System.out.println(distance);
         System.out.println(ic_five.getLayoutX());
+        g = new Glow();
+        g.setLevel(1);
+        containers.get(2).setEffect(g);
     }
 
     public void next(){
         System.out.println("Moving...");
 
-        TranslateTransition t_one = new TranslateTransition(Duration.seconds(2), containers.get(0));
-        TranslateTransition t_two = new TranslateTransition(Duration.seconds(2), containers.get(1));
-        TranslateTransition t_three = new TranslateTransition(Duration.seconds(2), containers.get(2));
-        TranslateTransition t_four = new TranslateTransition(Duration.seconds(2), containers.get(3));
+        TranslateTransition t_one = new TranslateTransition(Duration.seconds(1), containers.get(0));
+        TranslateTransition t_two = new TranslateTransition(Duration.seconds(1), containers.get(1));
+        TranslateTransition t_three = new TranslateTransition(Duration.seconds(1), containers.get(2));
+        TranslateTransition t_four = new TranslateTransition(Duration.seconds(1), containers.get(3));
 
-        FadeTransition out_five = new FadeTransition(Duration.seconds(.8), containers.get(4));
-        TranslateTransition t_five = new TranslateTransition(Duration.millis(1000), containers.get(4));
-        FadeTransition in_five = new FadeTransition(Duration.seconds(.8), containers.get(4));
+        FadeTransition out_five = new FadeTransition(Duration.seconds(.5), containers.get(4));
+        TranslateTransition right_five = new TranslateTransition(Duration.millis(500), containers.get(4));
+        TranslateTransition t_five = new TranslateTransition(Duration.millis(10), containers.get(4));
+        FadeTransition in_five = new FadeTransition(Duration.seconds(.5), containers.get(4));
+
 
 
 
@@ -66,10 +72,15 @@ public class FXMLController {
         t_four.setByX(distance);
 
         out_five.setToValue(0);
-        t_five.setToX(-containers.get(4).getLayoutX()+20);
+        right_five.setByX(distance/2);
+        t_five.setToX(-containers.get(4).getLayoutX()-(distance/2)+20);
         in_five.setToValue(1);
 
-        SequentialTransition st_five = new SequentialTransition(out_five, t_five, in_five);
+        ParallelTransition outr_five = new ParallelTransition(out_five, right_five);
+        ParallelTransition inr_five = new ParallelTransition(in_five, right_five);
+
+
+        SequentialTransition st_five = new SequentialTransition(outr_five, t_five, inr_five);
 
         t_one.play();
         t_two.play();
@@ -78,6 +89,9 @@ public class FXMLController {
         st_five.play();
 
         containers.add(0, containers.remove(containers.size()-1));
+
+        containers.get(3).setEffect(null);
+        containers.get(2).setEffect(g);
         System.out.println(containers);
     }
 

@@ -1,7 +1,9 @@
+package org.gsep;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Carousel<T extends Item> {
+public class  Carousel<T extends Item> {
     private T intended;
     private List<T> visible = new ArrayList<T>();
     private List<T> all;
@@ -35,8 +37,8 @@ public class Carousel<T extends Item> {
         return intended;
     }
 
-    public List<T> next(){
-        System.out.println("Next...");
+    public List<T> previous(){
+        System.out.println("Previous...");
 
         T moving = all.remove(all.size()-1);
         all.add(0, moving);
@@ -44,8 +46,8 @@ public class Carousel<T extends Item> {
         return visible;
     }
 
-    public List<T> previous(){
-        System.out.println("Previous...");
+    public List<T> next(){
+        System.out.println("Next...");
 
         T moving = all.remove(0);
         all.add(moving);

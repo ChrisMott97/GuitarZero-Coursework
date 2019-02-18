@@ -1,4 +1,8 @@
-abstract class Item {
+package org.gsep;
+
+import javafx.scene.layout.Pane;
+
+abstract class Item extends Pane {
     private String text;
     private String pictureUrl;
 

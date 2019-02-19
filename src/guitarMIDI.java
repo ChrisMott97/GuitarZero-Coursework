@@ -8,6 +8,11 @@ import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Synthesizer;
 import javax.sound.midi.Track;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+
+
 /* TEST*/
 
 public class guitarMIDI {
@@ -50,7 +55,7 @@ public class guitarMIDI {
                 final int          dat1 = smsg.getData1();
                     switch (cmd) {
                         case ShortMessage.PROGRAM_CHANGE:
-                            if(instrumentName(dat1).contains("Gt")) {
+                            if(instrumentName(dat1).contains("Guitar")) {
                                 guitarchan = chan;
                                 System.out.print("@" + tick + ", ");
                                 System.out.println("Program change: " + instrumentName(dat1));
@@ -75,6 +80,19 @@ public class guitarMIDI {
         for ( int i = 0; i < trks.length; i++ ) {
             System.out.println( "Track " + i );
             displayTrack( trks[ i ] );
+        }
+    }
+
+
+    public static void writeToFile (ArrayList< String > arr) {
+        try {
+            FileWriter writer = new FileWriter("output.txt");
+        for (String int : arr) {
+            writer.write(int);
+        }
+        writer.close();
+        } catch ( IOException e ) {
+            //TODO handle this
         }
     }
 

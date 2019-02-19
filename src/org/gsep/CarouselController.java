@@ -10,7 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FXMLController {
+public class CarouselController {
+
+    private MusicItemModel model;
+
     @FXML
     protected Button btn_next;
 
@@ -50,6 +53,21 @@ public class FXMLController {
         containers.get(2).setEffect(g);
     }
 
+    public void linkModel(MusicItemModel model){
+        if(this.model != null)
+            throw new IllegalStateException("Model can only be linked once!");
+
+        this.model = model;
+        this.load();
+        for (int i = 0; i < 5; i++) {
+            containers.get(i).setItem(model.getItems().get(i));
+        }
+    }
+
+    public void load(){
+        model.loadData();
+    }
+
     public void next(){
         System.out.println("Moving...");
 
@@ -62,9 +80,6 @@ public class FXMLController {
         TranslateTransition right_five = new TranslateTransition(Duration.millis(500), containers.get(4));
         TranslateTransition t_five = new TranslateTransition(Duration.millis(10), containers.get(4));
         FadeTransition in_five = new FadeTransition(Duration.seconds(.5), containers.get(4));
-
-
-
 
         t_one.setByX(distance);
         t_two.setByX(distance);

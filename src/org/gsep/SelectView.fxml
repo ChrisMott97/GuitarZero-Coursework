@@ -9,7 +9,7 @@
 
 <?import org.gsep.Item?>
 <?import org.gsep.ItemContainer?>
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="339.0" prefWidth="743.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.gsep.FXMLController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="339.0" prefWidth="743.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.gsep.CarouselController">
    <children>
       <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="336.0" prefWidth="600.0" style="-fx-border-color: blue;" StackPane.alignment="CENTER">
          <StackPane.margin>

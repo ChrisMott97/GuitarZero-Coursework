@@ -47,12 +47,12 @@ public class ItemContainer extends Pane {
         return label.textProperty();
     }
 
-    @FXML
-    public void doSomething(){
-        System.out.println("Some action");
+    public void setItem(Item item){
+        this.item = item;
+        this.label.setText(item.getText());
     }
 
-    public double getCurrentX(){
-        return getLayoutX()+getTranslateX();
+    public Item getItem(){
+        return this.item;
     }
 }

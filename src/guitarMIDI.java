@@ -33,26 +33,34 @@ public class guitarMIDI {
         return NAMES[ note ] + octave;
     }
 
+//    public static void getInstrument(String name){
+//
+//    }
     public static void displayTrack( Track trk ) {
 
+        int guitarchan = 0;
         for ( int i = 0; i < trk.size(); i = i + 1 ) {
             MidiEvent   evt  = trk.get( i );
             MidiMessage msg = evt.getMessage();
             if ( msg instanceof ShortMessage ) {
                 final long         tick = evt.getTick();
                 final ShortMessage smsg = (ShortMessage) msg;
+                final int          chan = smsg.getChannel();
                 final int          cmd  = smsg.getCommand();
                 final int          dat1 = smsg.getData1();
                     switch (cmd) {
                         case ShortMessage.PROGRAM_CHANGE:
-                            if(instrumentName(dat1).equals("Clean Gt.")) {
+                            if(instrumentName(dat1).contains("Gt")) {
+                                guitarchan = chan;
                                 System.out.print("@" + tick + ", ");
                                 System.out.println("Program change: " + instrumentName(dat1));
                             }
                             break;
                         case ShortMessage.NOTE_ON:
-                            System.out.print("@" + tick + ", ");
-                            System.out.println("Note on:  " + dat1);
+                            if(guitarchan == chan) {
+                                System.out.print("@" + tick + ", ");
+                                System.out.println("Note on:  " + dat1);
+                            }
                             break;
                         default:
                             /* ignore other commands */

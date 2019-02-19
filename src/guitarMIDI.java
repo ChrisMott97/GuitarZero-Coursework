@@ -8,6 +8,8 @@ import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Synthesizer;
 import javax.sound.midi.Track;
 
+/* TEST*/
+
 public class guitarMIDI {
     final static String FILE = "MamaDo.mid";
 

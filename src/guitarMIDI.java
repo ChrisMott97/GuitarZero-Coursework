@@ -1,4 +1,4 @@
-import java.io.File;
+import java.io.*;
 import javax.sound.midi.Instrument;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiMessage;
@@ -8,11 +8,10 @@ import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Synthesizer;
 import javax.sound.midi.Track;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 
-import java.io.BufferedWriter;
+import java.nio.file.*;;
+
 
 
 /* TEST*/
@@ -86,12 +85,11 @@ public class guitarMIDI {
 //    }
 
 
-    public static void writeToFile () {
+    public static File writeToFile ( ArrayList <String> arr ) {
 
         BufferedWriter bw = null;
         try {
-            String mycontent = "This String would be written" +
-                    " to the specified File";
+
             //Specify the file name and path here
             File file = new File("noteFile.txt");
 
@@ -104,8 +102,14 @@ public class guitarMIDI {
 
             FileWriter fw = new FileWriter(file);
             bw = new BufferedWriter(fw);
-            bw.write(mycontent);
+
+            for (String noteInfo: arr) {
+                bw.write(noteInfo);
+                bw.newLine();
+            }
             System.out.println("File written Successfully");
+            return file;
+
 
         } catch (IOException ioe) {
             ioe.printStackTrace();
@@ -117,6 +121,7 @@ public class guitarMIDI {
                 System.out.println("Error in closing the BufferedWriter" + ex);
             }
         }
+        return null;
     }
 
 
@@ -145,7 +150,27 @@ public class guitarMIDI {
 //        } catch ( Exception exn ) {
 //            System.out.println( exn ); System.exit( 1 );
 //        }
-
-        writeToFile();
+        ArrayList<String> testArr = new ArrayList<>();
+        testArr.add("hello");
+        testArr.add("this");
+        testArr.add("is");
+        testArr.add("test2");
+        File noteFile = writeToFile(testArr);
+try {
+    FileReader fr = new FileReader(noteFile);
+    BufferedReader br = new BufferedReader(fr);
+    String line;
+    while ((line = br.readLine()) != null) {
+        //process the line
+        System.out.println(line);
     }
+} catch (FileNotFoundException i ) {
+    System.out.println("File not found lol");
+} catch (IOException e) {
+    System.out.println("IO Error");
+}
+
+        }
+
+
 }

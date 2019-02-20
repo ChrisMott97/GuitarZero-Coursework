@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.awt.event.*;
 
@@ -18,7 +19,7 @@ public class StoreManagerFrame {
 	static public File f1;
 	static public File f2;
 	static public File f3;
-
+	static Socket sock;
 	
 	//Launch application
 	public static void create() {
@@ -143,13 +144,15 @@ public class StoreManagerFrame {
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				File[] myArray = {f1, f2, f3};
-				//transfer these files over
+				createSocket();
+				
 				try {
 					tranfer(myArray);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				
 				frame.dispose();
 				
 			}
@@ -157,15 +160,24 @@ public class StoreManagerFrame {
 		btnSave.setBounds(149, 212, 117, 29);
 		frame.getContentPane().add(btnSave);
 		
-		
+ 		
 	}
-
+	
+	//Establish connection
+	public static void createSocket() {
+		try {
+			sock = new Socket("localhost", 2104);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	//Save files on server
 	 public static void tranfer(File[] fList) throws IOException {
-	        // TODO Auto-generated method stub
-	     
-	            Socket sock = new Socket("localhost", 2104);  //replace with your remote host static IP address.
-	            System.out.println("Connecting.........");
 	             
 	            File[] Files = fList;
 	              
@@ -198,15 +210,46 @@ public class StoreManagerFrame {
 	             
 	            dos.write(buffer, 0, buffer.length);   
 	            dos.flush(); 
-	            //dos.close();
 	            }  
-	             
-	            //Closing socket  
-	            //dos.close();
-	            sock.close();
-	 
 	    }  
 	
-	 //Create a folder on server
-	 
+	//FILE READER METHOD
+	public static String fileContents(File nameFile) throws IOException {
+			// declare key *** here***
+			String name = "";
+			    FileReader file = new FileReader(nameFile);
+			    BufferedReader reader = new BufferedReader(file);
+			    
+			    // String key = "";
+			    String line = reader.readLine();
+
+			    while (line != null) {
+			    	name += line;
+			        line = reader.readLine();
+			    }
+			 return name; // so key works
+	    	
+	    }
+	
+	//Create a directory
+	public static void sendMessage() throws UnknownHostException, IOException
+    {	
+		String title= "titleN";
+		sock = new Socket("localhost", 2104);
+        try
+        {
+        	BufferedReader reader = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+    		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
+        //Send command to make directory
+        writer.write("makeDirectory");
+        writer.flush(); 
+        writer.write(title);
+        writer.flush(); 
+       
+        }
+        catch(IOException err)
+        {
+            System.out.println(err.getMessage());
+        }
+    }
 }

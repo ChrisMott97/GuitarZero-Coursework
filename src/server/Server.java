@@ -2,6 +2,7 @@ package server;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
@@ -9,6 +10,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -33,31 +35,43 @@ public class Server {
      BufferedInputStream clientBuff;
   
     ServerSocket serverSocket = new ServerSocket(2104);
-    Socket clientSocket = null;
-    clientSocket = serverSocket.accept();
-   
+  
+     Socket clientSocket = serverSocket.accept();
+     //FOR DIRECTORY CREATION
+     
+     
     while (true){
     //while(true && flag==true){
       while(flag==true){  
-           
-            in = clientSocket.getInputStream(); //used  
-            clientData = new DataInputStream(in); //use 
-            clientBuff = new BufferedInputStream(in); //use 
+    
+    	  		//Reading the message from the client
+	        InputStream is = clientSocket.getInputStream();
+	        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+    	  		if (br.readLine().contains("name")) {
+	          System.out.println("name");
+    	  		}
+    	  		
+            //For file transfer
+            clientData = new DataInputStream(clientSocket.getInputStream()); 
+            clientBuff = new BufferedInputStream(clientSocket.getInputStream()); 
           
             System.out.println("Starting...");  
-                
+            
                 int fileSize = clientData.read();
-                    
-                ArrayList<File>files=new ArrayList<File>(fileSize); //store list of filename from client directory
-                ArrayList<Integer>sizes = new ArrayList<Integer>(fileSize); //store file size from client
+                
+                //store list of filename from client directory
+                ArrayList<File>files=new ArrayList<File>(fileSize); 
+                //store file size from client
+                ArrayList<Integer>sizes = new ArrayList<Integer>(fileSize); 
+                
                 //Start to accept those filename from server
                 for (int count=0;count < fileSize;count ++){
-                        File ff=new File(clientData.readUTF());
-                        files.add(ff);
+                        File f=new File(clientData.readUTF());
+                        files.add(f);
                 }
                  
+                //For each file, save the size of it
                 for (int count=0;count < fileSize;count ++){
-                     
                         sizes.add(clientData.readInt());
                 }
                  
@@ -76,8 +90,9 @@ public class Server {
                 bos=new BufferedOutputStream(output);
                
                 byte[] buffer = new byte[1024];  
-                 
-                bos.write(buffer, 0, buffer.length); //This line is important
+                
+                //This line is important
+                bos.write(buffer, 0, buffer.length); 
                  
                 while (len > 0 && (smblen = clientData.read(buffer)) > 0) { 
                     dos.write(buffer, 0, smblen); 

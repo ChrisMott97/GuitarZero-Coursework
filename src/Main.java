@@ -7,8 +7,10 @@ public class Main {
 
 	public static void main( String[] argv ) throws Exception {
 	
-		//new Server().run();
-		new StoreManagerFrame().create();
+		new Server().run();
+		//new Server().recieveFiles();
+		//new StoreManagerFrame().create();
+		
 			      
 	  }
 	

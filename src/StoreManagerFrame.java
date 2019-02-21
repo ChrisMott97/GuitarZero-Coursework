@@ -182,8 +182,9 @@ public class StoreManagerFrame {
 			try {
 				sendName(readFile(textField_1.getText(), Charset.defaultCharset()));
 				createDir();
+				send(f1);
 				
-			} catch (IOException e1) {
+			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}

@@ -11,32 +11,32 @@
 <?import javafx.scene.layout.TilePane?>
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="610.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.gsep.SelectController">
    <children>
-      <TilePane prefHeight="200.0" prefRows="1" prefTileHeight="120.0" prefTileWidth="120.0" prefWidth="200.0" style="-fx-border-color: black;">
+      <TilePane fx:id="parentContainer" prefHeight="200.0" prefRows="1" prefTileHeight="120.0" prefTileWidth="120.0" prefWidth="200.0" style="-fx-border-color: black;">
          <StackPane.margin>
             <Insets bottom="150.0" left="4.0" right="4.0" top="150.0" />
          </StackPane.margin>
          <children>
-            <ItemContainer fx:id="ic_one" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;">
+            <ItemContainer fx:id="icOne" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: red;">
                <TilePane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </TilePane.margin>
             </ItemContainer>
-            <ItemContainer fx:id="ic_two" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;">
+            <ItemContainer fx:id="icTwo" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;">
                <TilePane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </TilePane.margin>
             </ItemContainer>
-            <ItemContainer fx:id="ic_three" layoutX="130.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;">
+            <ItemContainer fx:id="icThree" layoutX="130.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;">
                <TilePane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </TilePane.margin>
             </ItemContainer>
-            <ItemContainer fx:id="ic_four" layoutX="250.0" layoutY="11.0" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;">
+            <ItemContainer fx:id="icFour" layoutX="250.0" layoutY="11.0" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;">
                <TilePane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </TilePane.margin>
             </ItemContainer>
-            <ItemContainer fx:id="ic_five" layoutX="370.0" layoutY="11.0" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;">
+            <ItemContainer fx:id="icFive" layoutX="370.0" layoutY="11.0" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: black;">
                <TilePane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </TilePane.margin>
@@ -48,8 +48,8 @@
       </TilePane>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" StackPane.alignment="CENTER">
         <buttons>
-          <Button id="btn_previous" alignment="CENTER" mnemonicParsing="false" text="Previous" textAlignment="CENTER" />
-            <Button id="btn_next" fx:id="btn_next" alignment="CENTER" layoutX="683.0" layoutY="16.0" mnemonicParsing="false" onAction="#next" text="Next" textAlignment="CENTER" />
+          <Button id="btn_previous" fx:id="btnPrevious" alignment="CENTER" mnemonicParsing="false" text="Previous" textAlignment="CENTER" />
+            <Button id="btn_next" fx:id="btnNext" alignment="CENTER" layoutX="683.0" layoutY="16.0" mnemonicParsing="false" text="Next" textAlignment="CENTER" />
         </buttons>
          <StackPane.margin>
             <Insets bottom="50.0" top="250.0" />

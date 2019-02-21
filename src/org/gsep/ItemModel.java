@@ -13,6 +13,7 @@ public class ItemModel<T extends Item> {
 //Theoretical Carousel
 
     private List<T> all;
+    private List<T> all2;
     private List<T> visible = new ArrayList<T>();
     private T intended;
     private static final int maxVisibleLength = 5;
@@ -53,8 +54,6 @@ public class ItemModel<T extends Item> {
     }
 
     public List<T> previous(){
-        System.out.println("Previous...");
-
         T moving = all.remove(all.size()-1);
         all.add(0, moving);
         update();
@@ -62,8 +61,6 @@ public class ItemModel<T extends Item> {
     }
 
     public List<T> next(){
-        System.out.println("Next...");
-
         T moving = all.remove(0);
         all.add(moving);
         update();

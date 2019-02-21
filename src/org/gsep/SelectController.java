@@ -1,10 +1,12 @@
 package org.gsep;
 
-import javafx.animation.*;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.effect.Glow;
-import javafx.util.Duration;
+import javafx.scene.input.InputEvent;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.TilePane;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,41 +18,45 @@ public class SelectController {
     private ItemContainerModel icModel;
 
     @FXML
-    protected Button btn_next;
+    protected Button btnNext;
 
     @FXML
-    protected ItemContainer ic_one;
+    protected Button btnPrevious;
 
     @FXML
-    protected ItemContainer ic_two;
+    protected ItemContainer icOne;
 
     @FXML
-    protected ItemContainer ic_three;
+    protected ItemContainer icTwo;
 
     @FXML
-    protected ItemContainer ic_four;
+    protected ItemContainer icThree;
 
     @FXML
-    protected ItemContainer ic_five;
+    protected ItemContainer icFour;
+
+    @FXML
+    protected ItemContainer icFive;
 
     private List<ItemContainer> containers = new ArrayList<>();
 
-    private double distance;
-
-    private Glow g;
-
     public void initialize() {
-        containers.add(ic_one);
-        containers.add(ic_two);
-        containers.add(ic_three);
-        containers.add(ic_four);
-        containers.add(ic_five);
-        distance = (ic_two.getLayoutX()/2)+10;
-        System.out.println(distance);
-        System.out.println(ic_five.getLayoutX());
-        g = new Glow();
-        g.setLevel(1);
-        containers.get(2).setEffect(g);
+        containers.add(icOne);
+        containers.add(icTwo);
+        containers.add(icThree);
+        containers.add(icFour);
+        containers.add(icFive);
+        for (int i = 0; i < containers.size(); i++) {
+            containers.get(i).setInitialPosition(i+1);
+        }
+
+        btnNext.setOnAction(e ->
+                next()
+        );
+
+        btnPrevious.setOnAction(e ->
+                previous()
+        );
     }
 
     public void linkModels(ItemModel iModel, ItemContainerModel icModel){
@@ -61,21 +67,28 @@ public class SelectController {
         this.icModel = icModel;
         this.loadData();
 
-
     }
 
     private void loadData(){
         List<MusicItem> items = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 10; i++) {
             items.add(new MusicItem("Song "+(i+1)));
         }
         iModel.loadData(items);
         icModel.loadData(containers);
+        icModel.map(items);
     }
 
     public void next(){
+        iModel.next();
         icModel.next();
+        icModel.map(iModel.getVisible());
+    }
 
+    public void previous(){
+        iModel.previous();
+        icModel.previous();
+        icModel.map(iModel.getVisible());
     }
 
 }

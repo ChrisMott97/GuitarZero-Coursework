@@ -6,6 +6,7 @@ import java.util.List;
 public class ItemContainerModel<T extends Item> {
     private List<ItemContainer> containers = new ArrayList<>();
     private List<T> items = new ArrayList<>();
+
     private ItemContainer current;
 
     private final double betweenContainers = 120;
@@ -46,5 +47,7 @@ public class ItemContainerModel<T extends Item> {
         }
     }
 
-
+    public List<ItemContainer> getContainers() {
+        return containers;
+    }
 }

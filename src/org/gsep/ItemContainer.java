@@ -1,6 +1,7 @@
 package org.gsep;
 
 import javafx.animation.*;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,8 +28,8 @@ public class ItemContainer extends Pane {
 
     private TranslateTransition halfMoveRight = new TranslateTransition(Duration.seconds(0.5), this);
     private TranslateTransition halfMoveLeft = new TranslateTransition(Duration.seconds(0.5), this);
-    public TranslateTransition jumpLeft = new TranslateTransition(Duration.millis(10), this);
-    public TranslateTransition jumpRight = new TranslateTransition(Duration.millis(10), this);
+    private TranslateTransition jumpLeft = new TranslateTransition(Duration.millis(10), this);
+    private TranslateTransition jumpRight = new TranslateTransition(Duration.millis(10), this);
 
 //    private ParallelTransition fadeOutRight = new ParallelTransition(fadeOut, halfMoveRight);
 //    private ParallelTransition fadeOutLeft = new ParallelTransition(fadeOut, halfMoveLeft);
@@ -120,5 +121,17 @@ public class ItemContainer extends Pane {
 
     public int getInitialPosition() {
         return initialPosition;
+    }
+
+    public Animation.Status getStatus(){
+        if(moveRight.getStatus() == Animation.Status.RUNNING)
+            return Animation.Status.RUNNING;
+        if(moveLeft.getStatus() == Animation.Status.RUNNING)
+            return Animation.Status.RUNNING;
+        if(cycleRight.getStatus() == Animation.Status.RUNNING)
+            return Animation.Status.RUNNING;
+        if(cycleLeft.getStatus() == Animation.Status.RUNNING)
+            return Animation.Status.RUNNING;
+        return Animation.Status.STOPPED;
     }
 }

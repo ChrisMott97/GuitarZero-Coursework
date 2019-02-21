@@ -1,5 +1,6 @@
 package org.gsep;
 
+import javafx.animation.Animation;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -80,12 +81,16 @@ public class SelectController {
     }
 
     public void next(){
+        if(icOne.getStatus() == Animation.Status.RUNNING)
+            return;
         iModel.next();
         icModel.next();
         icModel.map(iModel.getVisible());
     }
 
     public void previous(){
+        if(icOne.getStatus() == Animation.Status.RUNNING)
+            return;
         iModel.previous();
         icModel.previous();
         icModel.map(iModel.getVisible());

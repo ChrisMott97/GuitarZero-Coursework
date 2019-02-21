@@ -31,38 +31,45 @@ public class Server {
 	public static void run()
     {
 		try
-        {
-			//create a connection
-			createConnection();
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-        		
-            while(true)
-            {
-                String command = reader.readLine();
-                if(command.contains("mkdir"))
-                {
-                		new File(name).mkdirs();
-                }
-                
-                if(command.equals("stop"))
-                {
-                	socket.close();
-                }
-                
-                if(command.contains("FileName")) 
-                {
-                	 	System.out.println("FileName command Recieved");
-	                	name=command;
-			    		String[] words=name.split("\\s");
-			    		name=words[1];
-                }
-            }
-        }
-        catch(Exception err)
-        {
+        {	
+    	 	//create a connection
+ 		createConnection();
 
-        }
+    	 	reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        
+        while(true)
+        {
+            String command = reader.readLine();
+            if(command.contains("mkdir"))
+            {
+            		new File(name).mkdirs();
+            }
+            
+            if(command.contains("FileName")) 
+            {
+            	 	System.out.println("FileName command Recieved");
+                	name=command;
+		    		String[] words=name.split("\\s");
+		    		name=words[1];
+            }
+            
+            if (command.contains("FileNotification")) {
+            		System.out.println("NOTI");
+            		
+            }
+            
+            if(command.equals("stop"))
+            {
+            	socket.close();
+            }
+        	}
+     
+    }
+		catch(Exception err)
+		{
+
+		}
     }
 
 
@@ -74,7 +81,7 @@ public static void throwException(String message) throws Exception {
 //create connection
 public static void createConnection() {
 	try {
-		serverSocket = new ServerSocket(1504);
+		serverSocket = new ServerSocket(1510);
 		socket = serverSocket.accept();
 		 System.out.println("Server Created");
 	} catch (IOException e) {
@@ -87,7 +94,7 @@ public static void createConnection() {
 
 //CODE TO RECIEVE FILES FROM CLIENT
 public static void recieveFiles() throws ClassNotFoundException, IOException {
-
+	
 	//File transfer stuff
 	ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 	ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());

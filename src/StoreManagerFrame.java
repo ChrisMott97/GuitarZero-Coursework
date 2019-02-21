@@ -183,15 +183,13 @@ public class StoreManagerFrame {
 			//transfer files to song object
 			song.filesSong =files;
 			
-			//run
 			try {
-				song.sendZip();
-				
-				
+				song.run();
 			} catch (IOException e1) {
-
+				System.out.println("Cant run client class");
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
 				e1.printStackTrace();
-				System.out.println("recieveZip couldn't run 1" ); 
 			}
 			
 			frame.dispose();	

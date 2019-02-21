@@ -17,7 +17,7 @@ public class Client{
 	static Socket socket;
 	
 	//RUN METHOD
-	public static void run() throws IOException {
+	public static void run() throws Exception {
 		
 		//GET NAME OF SONG
 		readFile(filesSong.get(0).toString(), StandardCharsets.UTF_8 );
@@ -26,7 +26,7 @@ public class Client{
 		zipFile(filesSong, name);
 		
 		//SEND ZIPPED FILE TO SERVER AND UNZIP
-		sendZip();
+		sendZip(filesSong.get(0));
 	}
 	
 	//Get name of song
@@ -72,30 +72,30 @@ public class Client{
 	
 	
 	//Send zip file over socket
-	public static void sendZip() throws IOException {
-		socket = new Socket("localhost", 1510);
+	public static void sendZip(File file ) throws Exception {
+	          
+	        socket = new Socket("localhost", 3332);
+	        ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+	 
+	        oos.writeObject(file.getName());
+	 
+	        FileInputStream fis = new FileInputStream(file);
+	        byte [] buffer = new byte[2002];
+	        Integer bytesRead = 0;
+	 
+	        while ((bytesRead = fis.read(buffer)) > 0) {
+	            oos.writeObject(bytesRead);
+	            oos.writeObject(Arrays.copyOf(buffer, buffer.length));
+	        }
+	 
+	        oos.close();
+	        System.exit(0);    
 		
-		//file to transfer
-		File f = new File("/Users/humzahmalik/Bohemian Rhapsody File/title.txt");
-		
-		//streams to transfer files
-        ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-        ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 
-        oos.writeObject(f.getName());
- 
-        FileInputStream fis = new FileInputStream(f);
-        byte [] buffer = new byte[2002];
-        Integer bytesRead = 0;
- 
-        while ((bytesRead = fis.read(buffer)) > 0) {
-            oos.writeObject(bytesRead);
-            oos.writeObject(Arrays.copyOf(buffer, buffer.length));
-        }
- 
-        oos.close();
-        ois.close();
-
+    }
+	
+	public static void throwException(String message) throws Exception {
+        throw new Exception(message);
     }
 	
 	

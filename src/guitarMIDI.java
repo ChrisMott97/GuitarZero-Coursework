@@ -12,10 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * This class holds all code for converting a MIDI file into a form readable by the game during play mode.
+ */
 public class guitarMIDI {
 
     private static List<List<String>> currentArray = new ArrayList<>();
 
+    /**
+     * Returns the name of the synthesizer's nth instrument
+     * @param n     Position of the instrument in the synthesizer's array of instruments
+     * @return      The name of the instrument
+     */
     private static String instrumentName( int n ) {
         try {
             final Synthesizer synth = MidiSystem.getSynthesizer();
@@ -26,12 +34,6 @@ public class guitarMIDI {
         } catch ( Exception exn ) {
             System.out.println( exn ); System.exit( 1 ); return "";
         }
-    }
-
-
-    private static void getInstrument(long tick, int dat1, int count){
-
-        currentArray.get(count).add("@" + tick + ", " + dat1);
     }
 
 
@@ -61,7 +63,7 @@ public class guitarMIDI {
                         for(int j = 0; j < guitarChan.size(); j++) {
                             currentArray.add(new ArrayList<>());
                             if (guitarChan.get(j) == chan) {
-                                getInstrument(tick, dat1,j);
+                                currentArray.get(j).add(tick + ", " + dat1);
                                 break;
                             }
                         }

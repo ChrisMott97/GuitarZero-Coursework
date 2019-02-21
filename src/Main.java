@@ -6,10 +6,14 @@ import server.Server;
 public class Main {
 
 	public static void main( String[] argv ) throws Exception {
-
-		//new Server().run();
-		//new Server().recieveFiles();
-		new StoreManagerFrame().create();
+		
+		//Server s = new Server();
+		//s.recieveZip();
+		
+		StoreManagerFrame smf = new StoreManagerFrame();
+		smf.create();
+		
+		
 			      
 	  }
 	

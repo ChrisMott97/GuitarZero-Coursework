@@ -6,11 +6,10 @@ import server.Server;
 public class Main {
 
 	public static void main( String[] argv ) throws Exception {
-	
-		//new Server().createConnection();
+
+		//new Server().run();
 		//new Server().recieveFiles();
 		new StoreManagerFrame().create();
-		
 			      
 	  }
 	

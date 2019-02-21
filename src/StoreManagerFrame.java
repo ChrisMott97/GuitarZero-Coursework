@@ -177,18 +177,23 @@ public class StoreManagerFrame {
 		btnSave.addActionListener(new ActionListener() {	
 			
 			public void actionPerformed(ActionEvent e) {
-				
 			createSocket();
+			
 			try {
-				//sendName(readFile(textField_1.getText(), Charset.defaultCharset()));
-				//createDir();
+				//path 1 stuff
+				sendName(readFile(textField_1.getText(), Charset.defaultCharset()));
+				createDir();
+				sendFileNotification();
+
+				//path 2 stuff
 				send(f1);
+				closePort();
 				
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			closePort();
+			
 			frame.dispose();	
 				
 			}
@@ -203,7 +208,7 @@ public class StoreManagerFrame {
 	//Establish connection
 	public static void createSocket() {
 		try {
-			socket = new Socket("localhost", 1504);
+			socket = new Socket("localhost", 1510);
 
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
@@ -262,9 +267,20 @@ public class StoreManagerFrame {
 			  return new String(encoded, encoding);
 			}
 	
+	//Send file notification
+	public static void sendFileNotification() throws IOException {
+        reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+   
+        // send name of file
+        writer.write("FileNotification");
+        writer.flush();
+	}
+	
 	//Send files
 	public static void send(File file) throws Exception {
-        
+       
+        //streams to transfer files
         ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
         ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
  

@@ -180,8 +180,8 @@ public class StoreManagerFrame {
 				
 			createSocket();
 			try {
-				sendName(readFile(textField_1.getText(), Charset.defaultCharset()));
-				createDir();
+				//sendName(readFile(textField_1.getText(), Charset.defaultCharset()));
+				//createDir();
 				send(f1);
 				
 			} catch (Exception e1) {
@@ -203,7 +203,7 @@ public class StoreManagerFrame {
 	//Establish connection
 	public static void createSocket() {
 		try {
-			socket = new Socket("localhost", 1500);
+			socket = new Socket("localhost", 1504);
 
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block

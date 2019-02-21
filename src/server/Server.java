@@ -32,10 +32,11 @@ public class Server {
     {
 		try
         {
+			//create a connection
 			createConnection();
-            System.out.println("Hola mundo");
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        		
             while(true)
             {
                 String command = reader.readLine();
@@ -73,18 +74,20 @@ public static void throwException(String message) throws Exception {
 //create connection
 public static void createConnection() {
 	try {
-		serverSocket = new ServerSocket(1500);
+		serverSocket = new ServerSocket(1504);
 		socket = serverSocket.accept();
+		 System.out.println("Server Created");
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
+	
     
 }
 
 //CODE TO RECIEVE FILES FROM CLIENT
 public static void recieveFiles() throws ClassNotFoundException, IOException {
-	createConnection();
+
 	//File transfer stuff
 	ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 	ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
@@ -95,7 +98,7 @@ public static void recieveFiles() throws ClassNotFoundException, IOException {
 	  Object o = ois.readObject();
 	
 	  if (o instanceof String) {
-	  		fos = new FileOutputStream(new File(name));
+	  		fos = new FileOutputStream(new File(o.toString()));
 	  } else {
 	
 	  }

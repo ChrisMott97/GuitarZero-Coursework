@@ -3,13 +3,28 @@ package org.gsep;
 import java.util.ArrayList;
 import java.util.List;
 
-public class  Carousel<T extends Item> {
-    private T intended;
-    private List<T> visible = new ArrayList<T>();
+/*
+ * ItemModel.
+ *
+ * @author  Chris Mott.
+ * @version 1.00, January 2019.
+ */
+public class ItemModel<T extends Item> {
+//Theoretical Carousel
+
     private List<T> all;
+    private List<T> visible = new ArrayList<T>();
+    private T intended;
     private static final int maxVisibleLength = 5;
 
-    Carousel(List<T> all){
+    ItemModel(){}
+
+    ItemModel(List<T> all){
+        this.all = all;
+        this.update();
+    }
+
+    public void loadData(List<T> all){
         this.all = all;
         this.update();
     }

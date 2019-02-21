@@ -10,9 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CarouselController {
+public class SelectController {
 
-    private MusicItemModel model;
+    private ItemModel iModel;
+    private ItemContainerModel icModel;
 
     @FXML
     protected Button btn_next;
@@ -38,7 +39,6 @@ public class CarouselController {
 
     private Glow g;
 
-
     public void initialize() {
         containers.add(ic_one);
         containers.add(ic_two);
@@ -53,38 +53,37 @@ public class CarouselController {
         containers.get(2).setEffect(g);
     }
 
-    public void linkModel(MusicItemModel model){
-        if(this.model != null)
+    public void linkModels(ItemModel iModel, ItemContainerModel icModel){
+        if(this.icModel != null || this.iModel != null)
             throw new IllegalStateException("Model can only be linked once!");
 
-        this.model = model;
-        this.load();
-        for (int i = 0; i < 5; i++) {
-            containers.get(i).setItem(model.getItems().get(i));
-        }
+        this.iModel = iModel;
+        this.icModel = icModel;
+        this.loadData();
+
+
     }
 
-    public void load(){
-        model.loadData();
+    private void loadData(){
+        List<MusicItem> items = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            items.add(new MusicItem("Song "+(i+1)));
+        }
+        iModel.loadData(items);
+        icModel.loadData(containers);
     }
 
     public void next(){
-        System.out.println("Moving...");
 
-        TranslateTransition t_one = new TranslateTransition(Duration.seconds(1), containers.get(0));
-        TranslateTransition t_two = new TranslateTransition(Duration.seconds(1), containers.get(1));
-        TranslateTransition t_three = new TranslateTransition(Duration.seconds(1), containers.get(2));
-        TranslateTransition t_four = new TranslateTransition(Duration.seconds(1), containers.get(3));
+        for (int i = 0; i < 4; i++) {
+            containers.get(i).getMoveRight().setByX(distance);
+            containers.get(i).getMoveRight().play();
+        }
 
         FadeTransition out_five = new FadeTransition(Duration.seconds(.5), containers.get(4));
         TranslateTransition right_five = new TranslateTransition(Duration.millis(500), containers.get(4));
         TranslateTransition t_five = new TranslateTransition(Duration.millis(10), containers.get(4));
         FadeTransition in_five = new FadeTransition(Duration.seconds(.5), containers.get(4));
-
-        t_one.setByX(distance);
-        t_two.setByX(distance);
-        t_three.setByX(distance);
-        t_four.setByX(distance);
 
         out_five.setToValue(0);
         right_five.setByX(distance/2);
@@ -97,17 +96,13 @@ public class CarouselController {
 
         SequentialTransition st_five = new SequentialTransition(outr_five, t_five, inr_five);
 
-        t_one.play();
-        t_two.play();
-        t_three.play();
-        t_four.play();
         st_five.play();
+
 
         containers.add(0, containers.remove(containers.size()-1));
 
         containers.get(3).setEffect(null);
         containers.get(2).setEffect(g);
-        System.out.println(containers);
     }
 
 }

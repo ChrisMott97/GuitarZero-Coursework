@@ -6,19 +6,20 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 public class Main extends Application {
 
     public void start (Stage stage) throws Exception{
         FXMLLoader carouselLoader = new FXMLLoader(getClass().getResource("SelectView.fxml"));
         Parent parent = carouselLoader.load();
-        CarouselController carouselController = carouselLoader.getController();
+        SelectController selectController = carouselLoader.getController();
 
-        MusicItemModel model = new MusicItemModel();
-        carouselController.linkModel(model);
+        ItemModel<MusicItem> iModel = new ItemModel<>();
+        ItemContainerModel icModel = new ItemContainerModel();
+        //temporary data generation
+
+//        iModel.loadData(items);
+
+        selectController.linkModels(iModel, icModel);
 
 
         Scene scene = new Scene(parent);

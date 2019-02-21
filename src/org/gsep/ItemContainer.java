@@ -55,10 +55,6 @@ public class ItemContainer extends Pane {
         setText(item.getText());
     }
 
-    public void combineTransitions(){
-
-    }
-
     public void setMoveRight(double distance) {
         moveRight.setByX(distance);
     }

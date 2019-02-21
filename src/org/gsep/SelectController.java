@@ -74,35 +74,8 @@ public class SelectController {
     }
 
     public void next(){
+        icModel.next();
 
-        for (int i = 0; i < 4; i++) {
-            containers.get(i).getMoveRight().setByX(distance);
-            containers.get(i).getMoveRight().play();
-        }
-
-        FadeTransition out_five = new FadeTransition(Duration.seconds(.5), containers.get(4));
-        TranslateTransition right_five = new TranslateTransition(Duration.millis(500), containers.get(4));
-        TranslateTransition t_five = new TranslateTransition(Duration.millis(10), containers.get(4));
-        FadeTransition in_five = new FadeTransition(Duration.seconds(.5), containers.get(4));
-
-        out_five.setToValue(0);
-        right_five.setByX(distance/2);
-        t_five.setToX(-containers.get(4).getLayoutX()-(distance/2)+20);
-        in_five.setToValue(1);
-
-        ParallelTransition outr_five = new ParallelTransition(out_five, right_five);
-        ParallelTransition inr_five = new ParallelTransition(in_five, right_five);
-
-
-        SequentialTransition st_five = new SequentialTransition(outr_five, t_five, inr_five);
-
-        st_five.play();
-
-
-        containers.add(0, containers.remove(containers.size()-1));
-
-        containers.get(3).setEffect(null);
-        containers.get(2).setEffect(g);
     }
 
 }

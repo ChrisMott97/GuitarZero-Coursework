@@ -16,8 +16,8 @@ import java.util.List;
  * This class holds all code for converting a MIDI file into a form readable by the game during play mode.
  */
 public class guitarMIDI {
-
     private static List<List<String>> currentArray = new ArrayList<>();
+
 
     /**
      * Returns the name of the synthesizer's nth instrument
@@ -26,17 +26,24 @@ public class guitarMIDI {
      */
     private static String instrumentName( int n ) {
         try {
+
             final Synthesizer synth = MidiSystem.getSynthesizer();
             synth.open();
             final Instrument[] instrs = synth.getAvailableInstruments();
             synth.close();
             return instrs[ n ].getName();
+
         } catch ( Exception exn ) {
             System.out.println( exn ); System.exit( 1 ); return "";
         }
     }
 
 
+    /**
+     * Converts
+     * @param track     Track from a MIDI file
+     * @return          ArrayList of strings in the form "timing, note"
+     */
     private static ArrayList <String> displayTrack( Track track ) {
 
         ArrayList<String> longestArray = new ArrayList<>();
@@ -45,18 +52,20 @@ public class guitarMIDI {
         for ( int i = 0; i < track.size(); i = i + 1 ) {
             MidiEvent   evt  = track.get( i );
             MidiMessage msg = evt.getMessage();
+
             if ( msg instanceof ShortMessage ) {
                 final long         tick = evt.getTick();
                 final ShortMessage smsg = (ShortMessage) msg;
                 final int          chan = smsg.getChannel();
                 final int          cmd  = smsg.getCommand();
                 final int          dat1 = smsg.getData1();
+
                 switch (cmd) {
                     case ShortMessage.PROGRAM_CHANGE:
-                        if(instrumentName(dat1).toLowerCase().contains("string") || instrumentName(dat1).toLowerCase().contains("gt") || instrumentName(dat1).toLowerCase().contains("guitar")) {
+                        if(instrumentName(dat1).toLowerCase().contains("string")
+                                || instrumentName(dat1).toLowerCase().contains("gt")
+                                || instrumentName(dat1).toLowerCase().contains("guitar")) {
                             guitarChan.add(chan);
-                            //System.out.print("@" + tick + ", ");
-                            //System.out.println("Program change: " + instrumentName(dat1));
                         }
                         break;
                     case ShortMessage.NOTE_ON:
@@ -75,7 +84,6 @@ public class guitarMIDI {
             }
         }
         int arrayLen = 0;
-
         for (List<String> aCurrentArray : currentArray) {
             if (arrayLen < aCurrentArray.size()) {
                 arrayLen = aCurrentArray.size();

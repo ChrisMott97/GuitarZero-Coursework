@@ -1,12 +1,5 @@
 import java.io.*;
-import javax.sound.midi.Instrument;
-import javax.sound.midi.MidiEvent;
-import javax.sound.midi.MidiMessage;
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.Sequence;
-import javax.sound.midi.ShortMessage;
-import javax.sound.midi.Synthesizer;
-import javax.sound.midi.Track;
+import javax.sound.midi.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +9,6 @@ import java.util.List;
  * This class holds all code for converting a MIDI file into a form readable by the game during play mode.
  */
 public class guitarMIDI {
-    private static List<List<String>> currentArray = new ArrayList<>();
 
 
     /**
@@ -44,15 +36,24 @@ public class guitarMIDI {
      * @param track     Track from a MIDI file
      * @return          ArrayList of strings in the form "timing, note"
      */
-    private static ArrayList <String> displayTrack( Track track ) {
+    private static ArrayList <String> displayTrack( Track track, int resol ) {
 
-        ArrayList<String> longestArray = new ArrayList<>();
+
         ArrayList<Integer> guitarChan = new ArrayList<>();
-
-        for ( int i = 0; i < track.size(); i = i + 1 ) {
+        List<List<String>> currentArray = new ArrayList<>();
+        float mspertick = 0;
+        for ( int i = 0; i < track.size(); i = i +1 ) {
             MidiEvent   evt  = track.get( i );
             MidiMessage msg = evt.getMessage();
-
+//            if (msg instanceof MetaMessage && i == 0) {
+//
+//                MetaMessage mm = (MetaMessage) msg;
+//                if(mm.getType()== SET_TEMPO){
+//                    byte[] data = mm.getData();
+//                    int tempo = (data[0] & 0xff) << 16 | (data[1] & 0xff) << 8 | (data[2] & 0xff);
+//                    int bpm = 60000000 / tempo;
+//                }
+//            }
             if ( msg instanceof ShortMessage ) {
                 final long         tick = evt.getTick();
                 final ShortMessage smsg = (ShortMessage) msg;
@@ -70,9 +71,10 @@ public class guitarMIDI {
                         break;
                     case ShortMessage.NOTE_ON:
                         for(int j = 0; j < guitarChan.size(); j++) {
+
                             currentArray.add(new ArrayList<>());
                             if (guitarChan.get(j) == chan) {
-                                currentArray.get(j).add(tick + ", " + dat1);
+                                currentArray.get(j).add(tick + ", " + dat1 + " Channel : " + chan);
                                 break;
                             }
                         }
@@ -84,7 +86,9 @@ public class guitarMIDI {
             }
         }
         int arrayLen = 0;
+        ArrayList<String> longestArray = new ArrayList<>();
         for (List<String> aCurrentArray : currentArray) {
+
             if (arrayLen < aCurrentArray.size()) {
                 arrayLen = aCurrentArray.size();
                 longestArray = (ArrayList<String>) aCurrentArray;
@@ -136,11 +140,14 @@ public class guitarMIDI {
 
         try {
             Sequence seq = MidiSystem.getSequence( new File( MIDIFile ) );
+            int resol = seq.getResolution();
             Track[] trks = seq.getTracks();
+
             int longestLen = 0;
             ArrayList <String> trackArray = new ArrayList<>();
+
             for (Track trk : trks) {
-                ArrayList<String> currentTrack = displayTrack(trk);
+                ArrayList<String> currentTrack = displayTrack(trk,resol);
                 int trackSize = currentTrack.size();
                 if (trackSize > longestLen) {
                     longestLen = trackSize;
@@ -154,22 +161,22 @@ public class guitarMIDI {
         return null;
     }
 
-//    public static void main (String[] args) {
-//        File noteFile = convertMIDI("queen.mid");
-//
-//
-//        try {
-//            FileReader fr = new FileReader(noteFile);
-//            BufferedReader br = new BufferedReader(fr);
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                //process the line
-//                System.out.println(line);
-//            }
-//        } catch (FileNotFoundException i ) {
-//            System.out.println("File not found lol");
-//        } catch (IOException e) {
-//            System.out.println("IO Error");
-//        }
-//    }
+    public static void main (String[] args) {
+        File noteFile = convertMIDI("queen.mid");
+
+
+        try {
+            FileReader fr = new FileReader(noteFile);
+            BufferedReader br = new BufferedReader(fr);
+            String line;
+            while ((line = br.readLine()) != null) {
+                //process the line
+                System.out.println(line);
+            }
+        } catch (FileNotFoundException i ) {
+            System.out.println("File not found lol");
+        } catch (IOException e) {
+            System.out.println("IO Error");
+        }
+    }
 }

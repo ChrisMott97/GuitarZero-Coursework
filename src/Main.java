@@ -5,10 +5,10 @@ import server.Server;
 
 public class Main {
 
-	public static void main( String[] argv ) throws EOFException, IOException {
-	  
-		//new Server().start();
-		//new StoreManagerFrame().create();
+	public static void main( String[] argv ) throws Exception {
+	
+		//new Server().run();
+		new StoreManagerFrame().create();
 			      
 	  }
 	

@@ -9,83 +9,82 @@ import javax.sound.midi.Synthesizer;
 import javax.sound.midi.Track;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import java.nio.file.*;;
-
-
-
-/* TEST*/
 
 public class guitarMIDI {
-//    final static String FILE = "MamaDo.mid";
-//
-//    public static String instrumentName( int n ) {
-//        try {
-//            final Synthesizer synth = MidiSystem.getSynthesizer();
-//            synth.open();
-//            final Instrument[] instrs = synth.getAvailableInstruments();
-//            synth.close();
-//            return instrs[ n ].getName();
-//        } catch ( Exception exn ) {
-//            System.out.println( exn ); System.exit( 1 ); return "";
-//        }
-//    }
-//
-//    public static String noteName( int n ) {
-//        final String[] NAMES =
-//                { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
-//        final int octave = (n / 12) - 1;
-//        final int note   = n % 12;
-//        return NAMES[ note ] + octave;
-//    }
-//
-////    public static void getInstrument(String name){
-////
-////    }
-//    public static void displayTrack( Track trk ) {
-//
-//        int guitarchan = 0;
-//        for ( int i = 0; i < trk.size(); i = i + 1 ) {
-//            MidiEvent   evt  = trk.get( i );
-//            MidiMessage msg = evt.getMessage();
-//            if ( msg instanceof ShortMessage ) {
-//                final long         tick = evt.getTick();
-//                final ShortMessage smsg = (ShortMessage) msg;
-//                final int          chan = smsg.getChannel();
-//                final int          cmd  = smsg.getCommand();
-//                final int          dat1 = smsg.getData1();
-//                    switch (cmd) {
-//                        case ShortMessage.PROGRAM_CHANGE:
-//                            if(instrumentName(dat1).contains("Guitar")) {
-//                                guitarchan = chan;
-//                                System.out.print("@" + tick + ", ");
-//                                System.out.println("Program change: " + instrumentName(dat1));
-//                            }
-//                            break;
-//                        case ShortMessage.NOTE_ON:
-//                            if(guitarchan == chan) {
-//                                System.out.print("@" + tick + ", ");
-//                                System.out.println("Note on:  " + dat1);
-//                            }
-//                            break;
-//                        default:
-//                            /* ignore other commands */
-//                            break;
-//                    }
-//            }
-//        }
-//    }
-//    public static void displaySequence( Sequence seq ) {
-//        Track[] trks = seq.getTracks();
-//
-//        for ( int i = 0; i < trks.length; i++ ) {
-//            System.out.println( "Track " + i );
-//            displayTrack( trks[ i ] );
-//        }
-//    }
+
+    private static List<List<String>> currentArray = new ArrayList<>();
+
+    private static String instrumentName( int n ) {
+        try {
+            final Synthesizer synth = MidiSystem.getSynthesizer();
+            synth.open();
+            final Instrument[] instrs = synth.getAvailableInstruments();
+            synth.close();
+            return instrs[ n ].getName();
+        } catch ( Exception exn ) {
+            System.out.println( exn ); System.exit( 1 ); return "";
+        }
+    }
 
 
-    public static File writeToFile ( ArrayList <String> arr ) {
+    private static void getInstrument(long tick, int dat1, int count){
+
+        currentArray.get(count).add("@" + tick + ", " + dat1);
+    }
+
+
+    private static ArrayList <String> displayTrack( Track track ) {
+
+        ArrayList<String> longestArray = new ArrayList<>();
+        ArrayList<Integer> guitarChan = new ArrayList<>();
+
+        for ( int i = 0; i < track.size(); i = i + 1 ) {
+            MidiEvent   evt  = track.get( i );
+            MidiMessage msg = evt.getMessage();
+            if ( msg instanceof ShortMessage ) {
+                final long         tick = evt.getTick();
+                final ShortMessage smsg = (ShortMessage) msg;
+                final int          chan = smsg.getChannel();
+                final int          cmd  = smsg.getCommand();
+                final int          dat1 = smsg.getData1();
+                switch (cmd) {
+                    case ShortMessage.PROGRAM_CHANGE:
+                        if(instrumentName(dat1).toLowerCase().contains("string") || instrumentName(dat1).toLowerCase().contains("gt") || instrumentName(dat1).toLowerCase().contains("guitar")) {
+                            guitarChan.add(chan);
+                            //System.out.print("@" + tick + ", ");
+                            //System.out.println("Program change: " + instrumentName(dat1));
+                        }
+                        break;
+                    case ShortMessage.NOTE_ON:
+                        for(int j = 0; j < guitarChan.size(); j++) {
+                            currentArray.add(new ArrayList<>());
+                            if (guitarChan.get(j) == chan) {
+                                getInstrument(tick, dat1,j);
+                                break;
+                            }
+                        }
+                        break;
+                    default:
+                        /* ignore other commands */
+                        break;
+                }
+            }
+        }
+        int arrayLen = 0;
+
+        for (List<String> aCurrentArray : currentArray) {
+            if (arrayLen < aCurrentArray.size()) {
+                arrayLen = aCurrentArray.size();
+                longestArray = (ArrayList<String>) aCurrentArray;
+            }
+        }
+        return longestArray;
+    }
+
+
+    private static File writeToFile ( ArrayList <String> arr ) {
 
         BufferedWriter bw = null;
         try {
@@ -107,7 +106,6 @@ public class guitarMIDI {
                 bw.write(noteInfo);
                 bw.newLine();
             }
-            System.out.println("File written Successfully");
             return file;
 
 
@@ -124,53 +122,44 @@ public class guitarMIDI {
         return null;
     }
 
+    public static File convertMIDI ( String MIDIFile ) {
 
+        try {
+            Sequence seq = MidiSystem.getSequence( new File( MIDIFile ) );
+            Track[] trks = seq.getTracks();
+            int longestLen = 0;
+            ArrayList <String> trackArray = new ArrayList<>();
+            for (Track trk : trks) {
+                ArrayList<String> currentTrack = displayTrack(trk);
+                int trackSize = currentTrack.size();
+                if (trackSize > longestLen) {
+                    longestLen = trackSize;
+                    trackArray = currentTrack;
+                }
+            }
+            return writeToFile(trackArray);
+        } catch ( Exception exn ) {
+            System.out.println( exn ); System.exit( 1 );
+        }
+        return null;
+    }
 
+//    public static void main (String[] args) {
+//        File noteFile = convertMIDI("queen.mid");
+//
+//
 //        try {
-//            FileWriter writer = new FileWriter("output.txt");
-//        for (String str : arr) {
-//            writer.write( str );
-//
-//            File noteFile = new File(fileName);
-//            FileOutputStream outputStream = new FileOutputStream(noteFile);
-//            writer.write(outputStream);
-//
-//
-//        }
-//        writer.close();
-//        } catch ( IOException e ) {
-//            //TODO handle this
+//            FileReader fr = new FileReader(noteFile);
+//            BufferedReader br = new BufferedReader(fr);
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                //process the line
+//                System.out.println(line);
+//            }
+//        } catch (FileNotFoundException i ) {
+//            System.out.println("File not found lol");
+//        } catch (IOException e) {
+//            System.out.println("IO Error");
 //        }
 //    }
-
-    public static void main( String[] argv ) {
-//        try {
-//            Sequence seq = MidiSystem.getSequence( new File( FILE ) );
-//            displaySequence( seq );
-//        } catch ( Exception exn ) {
-//            System.out.println( exn ); System.exit( 1 );
-//        }
-        ArrayList<String> testArr = new ArrayList<>();
-        testArr.add("hello");
-        testArr.add("this");
-        testArr.add("is");
-        testArr.add("test2");
-        File noteFile = writeToFile(testArr);
-try {
-    FileReader fr = new FileReader(noteFile);
-    BufferedReader br = new BufferedReader(fr);
-    String line;
-    while ((line = br.readLine()) != null) {
-        //process the line
-        System.out.println(line);
-    }
-} catch (FileNotFoundException i ) {
-    System.out.println("File not found lol");
-} catch (IOException e) {
-    System.out.println("IO Error");
-}
-
-        }
-
-
 }

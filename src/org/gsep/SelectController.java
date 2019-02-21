@@ -1,14 +1,15 @@
 package org.gsep;
 
 import javafx.animation.Animation;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.input.InputEvent;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.TilePane;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,9 +73,35 @@ public class SelectController {
 
     private void loadData(){
         List<MusicItem> items = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            items.add(new MusicItem("Song "+(i+1)));
+
+//        for (int i = 0; i < 10; i++) {
+//            items.add(new MusicItem("Song "+(i+1)));
+//        }
+
+        try {
+            //
+            File song1 = new File("res/Song1/meta.xml");
+            File song2 = new File("res/Song2/meta.xml");
+
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+
+            Document song1doc = builder.parse(song1);
+            Document song2doc = builder.parse(song2);
+
+            Element el1 = song1doc.getDocumentElement();
+            MusicItem i1 = new MusicItem(el1.getElementsByTagName("Name").item(0).getTextContent());
+            i1.setImageURL("file:res/Song1/song1.png");
+            items.add(i1);
+            Element el2 = song2doc.getDocumentElement();
+            MusicItem i2 = new MusicItem(el2.getElementsByTagName("Name").item(0).getTextContent());
+            i2.setImageURL("file:res/Song2/song2.png");
+            items.add(i2);
+
+        }catch(Exception e){
+            e.printStackTrace();
         }
+
         iModel.loadData(items);
         icModel.loadData(containers);
         icModel.map(items);

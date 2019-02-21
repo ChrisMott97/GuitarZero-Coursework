@@ -7,7 +7,7 @@ public class ItemContainerModel<T extends Item> {
     private List<ItemContainer> containers = new ArrayList<>();
     private List<T> items = new ArrayList<>();
 
-    private ItemContainer current;
+    private ItemContainer intendedContainer;
 
     private final double betweenContainers = 120;
 
@@ -42,12 +42,34 @@ public class ItemContainerModel<T extends Item> {
 
     public void map(List<T> items){
         this.items = items;
-        for (int i = 0; i < 5; i++) {
-            containers.get(i).setItem(items.get(i));
+        if(items.isEmpty())
+            return;
+        if(items.size() >= 5){
+            for (int i = 0; i < 5; i++) {
+                containers.get(i).setItem(items.get(i));
+            }
+        }else{
+            for (int i = 0; i < items.size(); i++) {
+                containers.get(i).setItem(items.get(i));
+            }
+        }
+        intendedContainer = containers.get((int)Math.ceil(items.size()/2));
+        unintend();
+        intendedContainer.setIntended();
+    }
+    
+    private void unintend(){
+        for (ItemContainer ic :
+                containers) {
+            ic.removeIntended();
         }
     }
 
     public List<ItemContainer> getContainers() {
         return containers;
+    }
+
+    public ItemContainer getIntendedContainer() {
+        return intendedContainer;
     }
 }

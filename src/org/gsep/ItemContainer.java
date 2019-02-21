@@ -6,6 +6,11 @@ import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Glow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
@@ -15,6 +20,9 @@ public class ItemContainer extends Pane {
 
     @FXML
     private Label label;
+
+    @FXML
+    private ImageView imageView;
 
     private int initialPosition;
 
@@ -41,7 +49,6 @@ public class ItemContainer extends Pane {
     private SequentialTransition cycleRight = new SequentialTransition(fadeOut, jumpLeft, fadeIn);
     private SequentialTransition cycleLeft = new SequentialTransition(fadeOut, jumpRight, fadeIn);
 
-
     public ItemContainer(){
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ItemContainerView.fxml"));
         fxmlLoader.setRoot(this);
@@ -55,12 +62,20 @@ public class ItemContainer extends Pane {
 
         fadeOut.setToValue(0);
         fadeIn.setToValue(1);
+
     }
 
     public ItemContainer(Item item){
         this();
         this.item = item;
         setText(item.getText());
+    }
+
+    public void setIntended(){
+        this.setStyle("-fx-border-color: red; -fx-border-width: 3px");
+    }
+    public void removeIntended(){
+        this.setStyle("-fx-border-color: black;");
     }
 
     public void setMove(double distance) {
@@ -109,6 +124,7 @@ public class ItemContainer extends Pane {
     public void setItem(Item item){
         this.item = item;
         this.label.setText(item.getText());
+        this.imageView.setImage(new Image(this.item.getImageURL()));
     }
 
     public Item getItem(){

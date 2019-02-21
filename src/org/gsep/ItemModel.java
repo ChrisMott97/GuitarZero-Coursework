@@ -13,7 +13,6 @@ public class ItemModel<T extends Item> {
 //Theoretical Carousel
 
     private List<T> all;
-    private List<T> all2;
     private List<T> visible = new ArrayList<T>();
     private T intended;
     private static final int maxVisibleLength = 5;

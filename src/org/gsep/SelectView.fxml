@@ -9,6 +9,12 @@
 
 <?import org.gsep.ItemContainer?>
 <?import javafx.scene.layout.TilePane?>
+<!--
+ * SelectView.
+ *
+ * @author  Chris Mott.
+ * @version 1.00, January 2019.
+ -->
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="610.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.gsep.SelectController">
    <children>
       <TilePane fx:id="parentContainer" prefHeight="200.0" styleClass="parentContainer" prefRows="1" prefTileHeight="120.0" prefTileWidth="120.0" prefWidth="200.0">

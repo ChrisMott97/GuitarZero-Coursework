@@ -3,6 +3,12 @@ package org.gsep;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * ItemContainerModel.
+ *
+ * @author  Chris Mott.
+ * @version 1.00, January 2019.
+ */
 public class ItemContainerModel<T extends Item> {
     private List<ItemContainer> containers = new ArrayList<>();
     private List<T> items = new ArrayList<>();
@@ -11,6 +17,11 @@ public class ItemContainerModel<T extends Item> {
 
     private final double betweenContainers = 120;
 
+    /**
+     * Loads data into the model.
+     *
+     * @param list of containers.
+     */
     public void loadData(List<ItemContainer> list){
         this.containers = list;
         for (ItemContainer ic : list) {
@@ -20,6 +31,9 @@ public class ItemContainerModel<T extends Item> {
         }
     }
 
+    /**
+     * Ensures all animations play and correctly cycles the list of containers.
+     */
     public void previous(){
         for (int i = 0; i < containers.size()-1; i++) {
             containers.get(i).getMoveRight().play();
@@ -30,6 +44,9 @@ public class ItemContainerModel<T extends Item> {
         this.containers.add(0, this.containers.remove(this.containers.size()-1));
     }
 
+    /**
+     * Ensures all animations play and correctly cycles the list of containers.
+     */
     public void next(){
         for (int i = 1; i < containers.size(); i++) {
             containers.get(i).getMoveLeft().play();
@@ -40,6 +57,12 @@ public class ItemContainerModel<T extends Item> {
         this.containers.add(this.containers.remove(0));
     }
 
+    /**
+     * Maps the theoretically visible items onto the item containers
+     * to ensure the containers are always up to date.
+     *
+     * @param items the list of items to be mapped.
+     */
     public void map(List<T> items){
         this.items = items;
         if(items.isEmpty())
@@ -57,7 +80,10 @@ public class ItemContainerModel<T extends Item> {
         unintend();
         intendedContainer.setIntended();
     }
-    
+
+    /**
+     * Resets intended status for all item containers.
+     */
     private void unintend(){
         for (ItemContainer ic :
                 containers) {
@@ -65,10 +91,20 @@ public class ItemContainerModel<T extends Item> {
         }
     }
 
+    /**
+     * Getter for list of item containers.
+     *
+     * @return list of item containers.
+     */
     public List<ItemContainer> getContainers() {
         return containers;
     }
 
+    /**
+     * Getter for intended item container.
+     *
+     * @return intended item container.
+     */
     public ItemContainer getIntendedContainer() {
         return intendedContainer;
     }

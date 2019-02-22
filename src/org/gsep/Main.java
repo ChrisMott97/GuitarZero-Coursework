@@ -5,22 +5,26 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+/*
+ * Main.
+ *
+ * @author  Chris Mott.
+ * @version 1.00, January 2019.
+ */
 public class Main extends Application {
 
     public void start (Stage stage) throws Exception{
+        //load FXML
         FXMLLoader carouselLoader = new FXMLLoader(getClass().getResource("SelectView.fxml"));
         Parent parent = carouselLoader.load();
+
+        //load controller
         SelectController selectController = carouselLoader.getController();
 
+        //link controller with models
         ItemModel<MusicItem> iModel = new ItemModel<>();
         ItemContainerModel icModel = new ItemContainerModel();
-        //temporary data generation
-
-//        iModel.loadData(items);
-
         selectController.linkModels(iModel, icModel);
-
 
         Scene scene = new Scene(parent);
         scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());

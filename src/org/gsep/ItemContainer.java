@@ -16,6 +16,12 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 
+/*
+ * ItemContainer.
+ *
+ * @author  Chris Mott.
+ * @version 1.00, January 2019.
+ */
 public class ItemContainer extends Pane {
 
     @FXML
@@ -49,6 +55,10 @@ public class ItemContainer extends Pane {
     private SequentialTransition cycleRight = new SequentialTransition(fadeOut, jumpLeft, fadeIn);
     private SequentialTransition cycleLeft = new SequentialTransition(fadeOut, jumpRight, fadeIn);
 
+    /**
+     * Constructor for the custom FXML component Item Container.
+     * Manages loading the FXML.
+     */
     public ItemContainer(){
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ItemContainerView.fxml"));
         fxmlLoader.setRoot(this);
@@ -65,19 +75,25 @@ public class ItemContainer extends Pane {
 
     }
 
-    public ItemContainer(Item item){
-        this();
-        this.item = item;
-        setText(item.getText());
-    }
-
+    /**
+     * Changes style if the given instance is the intended ItemContainer.
+     */
     public void setIntended(){
         this.setStyle("-fx-border-color: red; -fx-border-width: 3px");
     }
+
+    /**
+     * Changes style back to default if the given instance is not the intended ItemContainer.
+     */
     public void removeIntended(){
         this.setStyle("-fx-border-color: black;");
     }
 
+    /**
+     * Sets how far each movement animation goes.
+     *
+     * @param distance the distance between two ItemContainers.
+     */
     public void setMove(double distance) {
         moveRight.setByX(distance);
         halfMoveRight.setByX(distance/2);
@@ -85,60 +101,128 @@ public class ItemContainer extends Pane {
         halfMoveLeft.setByX(-distance/2);
     }
 
+    /**
+     * Sets how far each edge Item Container should jump left when invisible.
+     * @param distance distance to jump.
+     */
     public void setJumpLeft(double distance) {
         jumpLeft.setToX(distance);
     }
 
+    /**
+     * Sets how far each edge Item Container should jump right when invisible.
+     * @param distance distance to jump.
+     */
     public void setJumpRight(double distance) {
         jumpRight.setToX(distance);
     }
 
+    /**
+     * Getter for transition to move right.
+     *
+     * @return move right transition.
+     */
     public TranslateTransition getMoveRight() {
         return moveRight;
     }
 
+    /**
+     * Getter for transition to move left.
+     *
+     * @return move left transition.
+     */
     public TranslateTransition getMoveLeft() {
         return moveLeft;
     }
 
+    /**
+     * Getter for sequential cycle right transition.
+     *
+     * @return sequential cycle right transition.
+     */
     public SequentialTransition getCycleRight(){
         return cycleRight;
     }
 
+    /**
+     * Getter for sequential cycle left transition.
+     *
+     * @return sequential cycle left transition.
+     */
     public SequentialTransition getCycleLeft() {
         return cycleLeft;
     }
 
+    /**
+     * Getter for the text of the container.
+     *
+     * @return the text.
+     */
     public String getText(){
         return textProperty().get();
     }
 
+    /**
+     * Setter for the text of the Item Container.
+     * @param text the text to be set.
+     */
     public void setText(String text){
         textProperty().setValue(text);
     }
 
+    /**
+     * Getter for the property of the text of the label.
+     * @return the property of the text of the label.
+     */
     public StringProperty textProperty(){
         return label.textProperty();
     }
 
+    /**
+     * Links a given Item to the Item Container.
+     *
+     * @param item the Item to be linked.
+     */
     public void setItem(Item item){
         this.item = item;
         this.label.setText(item.getText());
         this.imageView.setImage(new Image(this.item.getImageURL()));
     }
 
+    /**
+     * Getter for the currently contained Item.
+     *
+     * @return the currently contained Item.
+     */
     public Item getItem(){
         return this.item;
     }
 
+    /**
+     * Setter for the initial position of the Item Container
+     * which is used to calculate transitions.
+     * @param initialPosition
+     */
     public void setInitialPosition(int initialPosition) {
         this.initialPosition = initialPosition;
     }
 
+    /**
+     * Getter for the initial position of the Item Container
+     * which is used to calculate transitions.
+     *
+     * @return the initial position (1-5) of the Item Container.
+     */
     public int getInitialPosition() {
         return initialPosition;
     }
 
+    /**
+     * Returns whether there is any animation currently running in the item container.
+     * TODO: More elegant solution
+     *
+     * @return status of whether an animation is running.
+     */
     public Animation.Status getStatus(){
         if(moveRight.getStatus() == Animation.Status.RUNNING)
             return Animation.Status.RUNNING;

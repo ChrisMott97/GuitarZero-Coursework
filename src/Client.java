@@ -29,10 +29,10 @@ public class Client{
 	 */
 	public static void run() throws Exception {
 		
-		//GET NAME OF SONG
+		//Retrieve name of song from text file.
 		readFile(filesSong.get(0).toString(), StandardCharsets.UTF_8 );
 		
-		//CONVERT FILES TO ZIP
+		//Take files and make them into zip
 		zipFile(filesSong, name);
 	}
 	
@@ -46,7 +46,9 @@ public class Client{
 	public static String readFile(String path, Charset encoding) 
 			  throws IOException 
 			{
+				
 			  byte[] encoded = Files.readAllBytes(Paths.get(path));
+			  //hold contents of file in name
 			  name= new String(encoded, encoding);
 			  return name;
 			}
@@ -58,9 +60,9 @@ public class Client{
 	 * @throws IOException
 	 */
 	public static void zipFile(ArrayList<File> files, String name) throws IOException {
-		System.out.println(files.size());
+		//METHOD NOT COMPLETED OR INVOKED YET
 	    try {
-	      
+	    		
 	    	  FileOutputStream   fos = new FileOutputStream(name+".zip");
 	      ZipOutputStream zos = new ZipOutputStream(fos);
 	      byte[] buffer = new byte[128];
@@ -123,6 +125,7 @@ public class Client{
 	 * @throws Exception
 	 */
 	public static void throwException(String message) throws Exception {
+		//METHOD NOT INVOKED YET
         throw new Exception(message);
     }
 	

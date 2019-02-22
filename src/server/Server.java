@@ -7,13 +7,14 @@ import java.net.ServerSocket;
 import java.net.Socket;
  
 /*
- * Server
+ * Server - THIS CLASS HAS NOT YET BEEN IMPLEMENTED
  * 
  * @author Humzah Malik
  * @version 1.0
  * 
  */
 public class Server extends Thread {
+	
     public static final int PORT = 3332;
     public static final int BUFFER_SIZE = 2002;
  
@@ -23,8 +24,9 @@ public class Server extends Thread {
     @Override
     public void run() {
         try {
+        		//Start server on socket of number 'PORT'
             ServerSocket serverSocket = new ServerSocket(PORT);
- 
+            //While connection exists.
             while (true) {
                 Socket s = serverSocket.accept();
                 saveFile(s);
@@ -45,7 +47,7 @@ public class Server extends Thread {
         FileOutputStream fos = null;
         byte [] buffer = new byte[BUFFER_SIZE];
  
-        // 1. Read file name.
+        // Read the name of the file
         Object o = ois.readObject();
  
         if (o instanceof String) {
@@ -54,7 +56,7 @@ public class Server extends Thread {
             throwException("Something is wrong");
         }
  
-        // 2. Read file to the end.
+        // Read the file, byte by byte, until the end
         Integer bytesRead = 0;
  
         do {
@@ -74,7 +76,7 @@ public class Server extends Thread {
  
             buffer = (byte[])o;
  
-            // 3. Write data to output file.
+            //Write the data to an output file
             fos.write(buffer, 0, bytesRead);
            
         } while (bytesRead == BUFFER_SIZE);

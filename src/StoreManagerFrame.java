@@ -193,13 +193,13 @@ public class StoreManagerFrame {
 				//Validation 1- Check fields contain a non-empty string
 				for(int i=0; i< 3; i++){
 					if(filePaths[i].length()==0) { 
-						System.out.println("field " +(i+1) +" is empty");
+						System.out.println("Text field number " +(i+1) +" has been left empty");
 						empty = true;
 						}
 					}
 				//If field does contain an empty string, close application and give warning.
 				if (empty==true) {
-					System.out.println("This application has closed. Please next time ensure all fields submit a file");
+					System.out.println("This application has closed. Please next time ensure ALL fields contain a file");
 					frame.dispose(); 
 					return;
 				}	

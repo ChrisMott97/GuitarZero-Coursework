@@ -6,16 +6,29 @@ public class NoteHighwayModel {
     private Note[][] noteSequence;
     private int beat = 0;
 
+    /**
+     * Sets the note sequence that the note highway plays
+     *
+     * @param noteSequence 2D array of note types to set
+     */
     public void setNoteSequence(Note[][] noteSequence){
         this.noteSequence = noteSequence;
         this.beat = 0;
     }
 
+    /**
+     * Moves on to the next beat
+     */
     public void advance(){
         beat++;
     }
 
-    //notes to appear at the top of the highway
+    /**
+     * returns the notes that appear at the top of the note highway
+     * so that notes can be sent down the highway
+     *
+     * @return list of note types
+     */
     public Note[] top(){
 
         if (beat-lanePositions < noteSequence.length && beat-lanePositions >= 0)
@@ -24,7 +37,12 @@ public class NoteHighwayModel {
             return new Note[]{Note.OPEN, Note.OPEN, Note.OPEN};
     }
 
-    //notes at the end of the highway
+    /**
+     * returns the notes that appear at the bottom of the note highway
+     * so that user input can be checked against it
+     *
+     * @return list of note types
+     */
     public Note[] bottom(){
         if (beat < noteSequence.length)
             return noteSequence[beat];

@@ -3,6 +3,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import server.Server;
+import server.guitarMIDI;
 
 import java.io.*;
 import java.net.InetSocketAddress;
@@ -221,6 +222,10 @@ public class StoreManagerFrame {
 					files.add(new File(filePaths[i]));  
 					}
 				
+				//Create proprietry file from midi file and add that to list of files
+				 File noteFile = guitarMIDI.convertMIDI(files.get(2).getAbsolutePath());
+				 files.add(noteFile);  
+				 
 				//Close frame
 				frame.dispose(); 
 				

@@ -17,20 +17,33 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.awt.event.*;
 
-
+/*
+ * StoreManagerFrame
+ * 
+ * @author Humzah Malik
+ * @version 1.0
+ * 
+ */
 public class StoreManagerFrame {
 
 	private JFrame frame;
 	
-	///Initialise text fields
+	///Declaring fields holding file paths as a String and files as a File object
 	JTextField textField_1, textField_2, textField_3 = null;
 	File f1, f2, f3;
 	String f1_path, f2_path, f3_path = null;
+	
+	//Initialise ArrayList to hold files and Array to hold file paths
 	ArrayList<File> files = new ArrayList<File>();
 	String[] filePaths;
-	boolean empty;
+	
+	//Declare booleans used to validate file entry
+	static boolean empty;
 	static boolean invalid;
-
+	
+	/**
+	 * Method calling create(), which in turn invokes the JFrame.
+	 */
 	//Launch application
 	public static void create() {
 		
@@ -46,19 +59,24 @@ public class StoreManagerFrame {
 		});
 	}
 
-	//Create application
+	/**
+	 * Method that invokes the initializing of the JFrame.
+	 */
 	public StoreManagerFrame() {
 		initialize();
 	}
-
-	//initialise frame
+	
+	/**
+	 * Method containing information on the structure of the JFrame and its functionality. Method also dynamically calls Client class. 
+	 */
 	private void initialize() {
-		
+		//Setting bounds of JFrame
 		frame = new JFrame("Store Manager");
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
+		//Creating text fields to hold file paths
 		textField_1 = new JTextField();
 		textField_1.setBounds(96, 41, 219, 26);
 		frame.getContentPane().add(textField_1);
@@ -74,22 +92,23 @@ public class StoreManagerFrame {
 		frame.getContentPane().add(textField_3);
 		textField_3.setColumns(10);
 		
-		//Button 1
+		//Create first button to browse for .txt file
 		JButton nameButton = new JButton("Browse");
 		nameButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//open file chooser
+				//Open file chooser
 				JFileChooser jf1 = new JFileChooser();
-				//File can only be in image format
+				//File can only be in text format
 				FileNameExtensionFilter filter1 = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
 				jf1.setFileFilter(filter1);
 				
 				int aa = jf1.showOpenDialog(null);
+				//If chosen file if off allowed format
 				if(aa==JFileChooser.APPROVE_OPTION) {
 					char cbuf[]=null;
 					f1=jf1.getSelectedFile();
+					//Set contents of textfield to the path of the file
 					textField_1.setText(f1.getAbsolutePath());
-					String f1_path = textField_1.getText();
 				}
 				
 			}
@@ -99,20 +118,22 @@ public class StoreManagerFrame {
 		
 		
 		
-		//Button 2
+		//Create second button to browse for .txt file
 		JButton coverButton = new JButton("Browse");
 		coverButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//open file chooser
+				//Open file chooser
 				JFileChooser jf2 = new JFileChooser();
 				//File can only be in image format
 				FileNameExtensionFilter filter2 = new FileNameExtensionFilter("png","jpg");
 				jf2.setFileFilter(filter2);
 				
 				int aa = jf2.showOpenDialog(null);
+				//If chosen file if off allowed format
 				if(aa==JFileChooser.APPROVE_OPTION) {
 					char cbuf[]=null;
 					f2=jf2.getSelectedFile();
+					//Set contents of textfield to the path of the file
 					textField_2.setText(f2.getAbsolutePath());
 
 				}
@@ -121,20 +142,22 @@ public class StoreManagerFrame {
 		coverButton.setBounds(327, 97, 117, 29);
 		frame.getContentPane().add(coverButton);
 		
-		//Button 3
+		//Create third button to browse for .txt file
 		JButton musicButton = new JButton("Browse");
 		musicButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//open file chooser
+				//Open file chooser
 				JFileChooser jf3 = new JFileChooser();
 				//File can only be in midi format
 				FileNameExtensionFilter filter3 = new FileNameExtensionFilter("midi", "mid");
 				jf3.setFileFilter(filter3);
 				
 				int aa = jf3.showOpenDialog(null);
+				//If chosen file if off allowed format
 				if(aa==JFileChooser.APPROVE_OPTION) {
 					char cbuf[]=null;
 					f3=jf3.getSelectedFile();
+					//Set contents of textfield to the path of the file
 					textField_3.setText(f3.getAbsolutePath());
 				}
 			}
@@ -142,7 +165,7 @@ public class StoreManagerFrame {
 		musicButton.setBounds(327, 148, 117, 29);
 		frame.getContentPane().add(musicButton);
 		
-		//Buttons
+		//Create labels for text fields
 		JLabel lblTitle = new JLabel("Title");
 		lblTitle.setBounds(22, 46, 61, 16);
 		frame.getContentPane().add(lblTitle);
@@ -155,11 +178,11 @@ public class StoreManagerFrame {
 		lblMusic.setBounds(22, 153, 61, 16);
 		frame.getContentPane().add(lblMusic);
 		
-		//On Submit
+		//Create submit button
 		JButton btnSave = new JButton("Save");
 		
 		btnSave.addActionListener(new ActionListener() {	
-			
+			//On submit
 			public void actionPerformed(ActionEvent e) {
 				//Create a array holding file paths
 				f1_path = textField_1.getText();
@@ -167,26 +190,26 @@ public class StoreManagerFrame {
 				f3_path = textField_3.getText();
 				String[] filePaths = {f1_path, f2_path, f3_path};
 				
-				//1) CHECK FIELDS ARE FULL
+				//Validation 1- Check fields contain a non-empty string
 				for(int i=0; i< 3; i++){
 					if(filePaths[i].length()==0) { 
 						System.out.println("field " +(i+1) +" is empty");
 						empty = true;
 						}
 					}
-				//break if field is null
+				//If field does contain an empty string, close application and give warning.
 				if (empty==true) {
 					System.out.println("This application has closed. Please next time ensure all fields submit a file");
 					frame.dispose(); 
 					return;
 				}	
 				
-				//2) CHECK PATHS ARE VALID
+				//Validation 2- Ensure files both exist and are of the required format
 				checkF1(f1_path);
 				checkF2(f2_path);
 				checkF3(f3_path);
 				
-				//Break if paths are invalid
+				//If files are invalid, break.
 				if (invalid==true) {
 					System.out.println("This application has closed. Please next time ensure all fields submit a VALID file.");
 					frame.dispose(); 
@@ -208,7 +231,6 @@ public class StoreManagerFrame {
 				try {
 					Client.run();
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -220,11 +242,16 @@ public class StoreManagerFrame {
 
 	}
 	
+	/**
+	 * Method validating the file submitted, within the first field, from the StoreManager application. 
+	 * Ensures it is in a .txt format and the file exists.
+	 * @param s: The file path to be checked
+	 */
 	public static void checkF1(String s) {
 		File f = new File(s);
-		//check file exists 
+		//Check file exists and is not a directory
 		if(f.exists() && !f.isDirectory()) { 
-		    //check suffix
+			//Ensure suffix is of correct notation
 			if (!s.endsWith(".txt")) {
 				System.out.println("The first file must be of .txt format.");
 				invalid = true;
@@ -232,43 +259,53 @@ public class StoreManagerFrame {
 		}
 		
 		else{
-			System.out.println("File 1 does not exist");
+			System.out.println("The first file does not exist");
 			invalid = true;
 		}
 		
 	}
 	
+	/**
+	 * Method validating the file submitted, within the second field, from the StoreManager application. 
+	 * Ensures it is in a .jpg or .png format and the file exists.
+	 * @param s: The file path to be checked
+	 */
 	public static void checkF2(String s) {
 		File f = new File(s);
-		//check file exists 
+		//Check file exists and is not a directory
 		if(f.exists() && !f.isDirectory()) { 
-		    //check suffix
+		    //Ensure suffix is of correct notation
 			if (!s.endsWith(".png") && !s.endsWith(".jpg")) {
-				System.out.println("The second file must be of .png or of .jpg format.");
+				System.out.println("The second submitted file must be of .png or of .jpg format.");
 				invalid = true;
 			}
 		}
 		
 		else{
-			System.out.println("File 2 does not exist");
+			System.out.println("The second submitted file does not exist");
 			invalid = true;
 		}
 		
 	}
 
+	/**
+	 * Method validating the file submitted, within the third field, from the StoreManager application. 
+	 * Ensures it is in a .mid format and the file exists.
+	 * @param s: The file path to be checked
+	 */
 	public static void checkF3(String s) {
 		File f = new File(s);
-		//check file exists 
+		//Check file exists and is not a directory
 		if(f.exists() && !f.isDirectory()) { 
-		    //check suffix
+			//Ensure suffix is of correct notation
 			if (!s.endsWith(".mid")) {
-				System.out.println("The first file must be of .mid format.");
+				System.out.println("The third submitted file must be of .mid format.");
 				invalid = true;
 			}
 		}
 		
 		else{
-			System.out.println("File 3 does not exist");
+			System.out.println("The third submitted file does not exist");
 			invalid = true;
 		}
 		

@@ -1,21 +1,23 @@
-import java.io.EOFException;
-import java.io.IOException;
-
+import java.io.*;
 import server.Server;
 
+/**
+ * Main
+ * 
+ * @author humzahmalik
+ * @version 1.0
+ */
 public class Main {
-
+	/**
+	 * Main method that calls the Store Manager Application.
+	 * 
+	 * @param argv
+	 * @throws Exception
+	 */
 	public static void main( String[] argv ) throws Exception {
-		
-		//Server s = new Server();
-		//s.run();
-		
-		//Client c = new Client();
-		//c.sendZip();
 		
 		StoreManagerFrame smf = new StoreManagerFrame();
 		smf.create();
-		
 		
 			      
 	  }

@@ -6,10 +6,20 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
  
+/*
+ * Server
+ * 
+ * @author Humzah Malik
+ * @version 1.0
+ * 
+ */
 public class Server extends Thread {
     public static final int PORT = 3332;
     public static final int BUFFER_SIZE = 2002;
  
+    /**
+     * This method is not yet being used. It will be used to invoke the saveFile() method that will accept the stream from the client.
+     */
     @Override
     public void run() {
         try {
@@ -23,7 +33,12 @@ public class Server extends Thread {
             e.printStackTrace();
         }
     }
- 
+    
+    /**
+     * This method has not yet been completed or implemented. It eventually will establish a connection to the client, and accept its stream of files.
+     * @param socket 
+     * @throws Exception
+     */
     private void saveFile(Socket socket) throws Exception {
         ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
         ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
@@ -72,6 +87,11 @@ public class Server extends Thread {
         oos.close();
     }
  
+    /**
+     * This method handles exceptions within the transfering of the zip file.
+     * @param message
+     * @throws Exception
+     */
     public static void throwException(String message) throws Exception {
         throw new Exception(message);
     }

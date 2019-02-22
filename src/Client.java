@@ -10,13 +10,23 @@ import java.util.Arrays;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+/*
+ * Client
+ * 
+ * @author Humzah Malik
+ * @version 1.0
+ * 
+ */
 public class Client{
 	
 	static ArrayList<File> filesSong = new ArrayList<File>();
 	static String name;
 	static Socket socket;
 	
-	//RUN METHOD
+	/**
+	 * Method that calls the methods readFile() and zipFile(). The purpose of run() is to invoke the client side methods all at once.
+	 * @throws Exception
+	 */
 	public static void run() throws Exception {
 		
 		//GET NAME OF SONG
@@ -26,7 +36,13 @@ public class Client{
 		zipFile(filesSong, name);
 	}
 	
-	//Get name of song
+	/**
+	 * Method that reads a file and returns its contents in a string.
+	 * @param path: Path of the file
+	 * @param encoding
+	 * @return
+	 * @throws IOException
+	 */
 	public static String readFile(String path, Charset encoding) 
 			  throws IOException 
 			{
@@ -35,7 +51,12 @@ public class Client{
 			  return name;
 			}
 	
-	//Zip File
+	/**
+	 * Method that zips an array of files, with the zip file assigned a given name.
+	 * @param files: List of files to zip
+	 * @param name: String to name the Zip file.
+	 * @throws IOException
+	 */
 	public static void zipFile(ArrayList<File> files, String name) throws IOException {
 		System.out.println(files.size());
 	    try {
@@ -67,13 +88,13 @@ public class Client{
 
 	  }
 	
-	//Create a directory
-	public static void createDir(ArrayList<File> files, String name) {
-		
-	}
-	
-	//Send zip file over socket
-	public static void sendZip(File file ) throws Exception {
+
+	/**
+	 * This method has not yet been fully completed. Its purpose will be to establish a connection to the server, and send the zip file over the network.
+	 * @param file: File to send to server.
+	 * @throws Exception
+	 */
+	public static void sendZip(File file) throws Exception {
 	         
 			//connect to server
 	        socket = new Socket("localhost", 3332);
@@ -96,6 +117,11 @@ public class Client{
 
     }
 	
+	/**
+	 * This method handles exceptions within the transfering of the zip file.
+	 * @param message
+	 * @throws Exception
+	 */
 	public static void throwException(String message) throws Exception {
         throw new Exception(message);
     }

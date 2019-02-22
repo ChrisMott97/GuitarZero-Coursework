@@ -24,9 +24,6 @@ public class Client{
 		
 		//CONVERT FILES TO ZIP
 		zipFile(filesSong, name);
-		
-		//SEND ZIPPED FILE TO SERVER AND UNZIP
-		sendZip(filesSong.get(0));
 	}
 	
 	//Get name of song
@@ -70,15 +67,20 @@ public class Client{
 
 	  }
 	
+	//Create a directory
+	public static void createDir(ArrayList<File> files, String name) {
+		
+	}
 	
 	//Send zip file over socket
 	public static void sendZip(File file ) throws Exception {
-	          
+	         
+			//connect to server
 	        socket = new Socket("localhost", 3332);
+	        
+	        
 	        ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-	 
 	        oos.writeObject(file.getName());
-	 
 	        FileInputStream fis = new FileInputStream(file);
 	        byte [] buffer = new byte[2002];
 	        Integer bytesRead = 0;

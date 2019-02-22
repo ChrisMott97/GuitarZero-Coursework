@@ -23,20 +23,14 @@ public class StoreManagerFrame {
 	private JFrame frame;
 	
 	///Initialise text fields
-	JTextField textField_1=null;
-	JTextField textField_2=null;
-	JTextField textField_3=null;
-	File f1;
-	File f2;
-	File f3;
+	JTextField textField_1, textField_2, textField_3 = null;
+	File f1, f2, f3;
+	String f1_path, f2_path, f3_path = null;
 	ArrayList<File> files = new ArrayList<File>();
-	static boolean valid=false;
-	
-	static Socket socket;
-    static BufferedWriter writer;
-    static BufferedReader reader;
-	
-	
+	String[] filePaths;
+	boolean empty;
+	static boolean invalid;
+
 	//Launch application
 	public static void create() {
 		
@@ -64,8 +58,6 @@ public class StoreManagerFrame {
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
-		
 		
 		textField_1 = new JTextField();
 		textField_1.setBounds(96, 41, 219, 26);
@@ -98,8 +90,6 @@ public class StoreManagerFrame {
 					f1=jf1.getSelectedFile();
 					textField_1.setText(f1.getAbsolutePath());
 					String f1_path = textField_1.getText();
-					//Add to file array
-					files.add(f1);
 				}
 				
 			}
@@ -124,9 +114,7 @@ public class StoreManagerFrame {
 					char cbuf[]=null;
 					f2=jf2.getSelectedFile();
 					textField_2.setText(f2.getAbsolutePath());
-					String f2_path = textField_2.getText();
-					//Add to file path array
-					files.add(f2);
+
 				}
 			}
 		});
@@ -148,10 +136,6 @@ public class StoreManagerFrame {
 					char cbuf[]=null;
 					f3=jf3.getSelectedFile();
 					textField_3.setText(f3.getAbsolutePath());
-					String f3_path = textField_3.getText();
-					//Add to file path array
-					files.add(f3);
-
 				}
 			}
 		});
@@ -177,23 +161,56 @@ public class StoreManagerFrame {
 		btnSave.addActionListener(new ActionListener() {	
 			
 			public void actionPerformed(ActionEvent e) {
-			
-			Client song = new Client();
-			
-			//transfer files to song object
-			song.filesSong =files;
-			
-			try {
-				song.run();
-			} catch (IOException e1) {
-				System.out.println("Cant run client class");
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			
-			frame.dispose();	
+				//Create a array holding file paths
+				f1_path = textField_1.getText();
+				f2_path = textField_2.getText();
+				f3_path = textField_3.getText();
+				String[] filePaths = {f1_path, f2_path, f3_path};
 				
+				//1) CHECK FIELDS ARE FULL
+				for(int i=0; i< 3; i++){
+					if(filePaths[i].length()==0) { 
+						System.out.println("field " +(i+1) +" is empty");
+						empty = true;
+						}
+					}
+				//break if field is null
+				if (empty==true) {
+					System.out.println("This application has closed. Please next time ensure all fields submit a file");
+					frame.dispose(); 
+					return;
+				}	
+				
+				//2) CHECK PATHS ARE VALID
+				checkF1(f1_path);
+				checkF2(f2_path);
+				checkF3(f3_path);
+				
+				//Break if paths are invalid
+				if (invalid==true) {
+					System.out.println("This application has closed. Please next time ensure all fields submit a VALID file.");
+					frame.dispose(); 
+					return;
+				}	
+				
+				//Add valid files to array list
+				for(int i=0; i< 3; i++){
+					files.add(new File(filePaths[i]));  
+					}
+				
+				//Close frame
+				frame.dispose(); 
+				
+				//Create a Song object
+				Client song = new Client();
+				song.filesSong = files;
+				//Run method within Client
+				try {
+					Client.run();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 				
 			});
@@ -201,6 +218,60 @@ public class StoreManagerFrame {
 		btnSave.setBounds(149, 212, 117, 29);
 		frame.getContentPane().add(btnSave);
 
+	}
+	
+	public static void checkF1(String s) {
+		File f = new File(s);
+		//check file exists 
+		if(f.exists() && !f.isDirectory()) { 
+		    //check suffix
+			if (!s.endsWith(".txt")) {
+				System.out.println("The first file must be of .txt format.");
+				invalid = true;
+			}
+		}
+		
+		else{
+			System.out.println("File 1 does not exist");
+			invalid = true;
+		}
+		
+	}
+	
+	public static void checkF2(String s) {
+		File f = new File(s);
+		//check file exists 
+		if(f.exists() && !f.isDirectory()) { 
+		    //check suffix
+			if (!s.endsWith(".png") && !s.endsWith(".jpg")) {
+				System.out.println("The second file must be of .png or of .jpg format.");
+				invalid = true;
+			}
+		}
+		
+		else{
+			System.out.println("File 2 does not exist");
+			invalid = true;
+		}
+		
+	}
+
+	public static void checkF3(String s) {
+		File f = new File(s);
+		//check file exists 
+		if(f.exists() && !f.isDirectory()) { 
+		    //check suffix
+			if (!s.endsWith(".mid")) {
+				System.out.println("The first file must be of .mid format.");
+				invalid = true;
+			}
+		}
+		
+		else{
+			System.out.println("File 3 does not exist");
+			invalid = true;
+		}
+		
 	}
 	
 	

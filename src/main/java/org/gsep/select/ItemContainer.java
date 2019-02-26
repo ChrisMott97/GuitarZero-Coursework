@@ -1,4 +1,4 @@
-package org.gsep;
+package org.gsep.select;
 
 import javafx.animation.*;
 import javafx.beans.property.StringProperty;

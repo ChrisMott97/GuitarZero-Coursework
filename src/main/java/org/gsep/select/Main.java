@@ -1,4 +1,4 @@
-package org.gsep;
+package org.gsep.select;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     public void start (Stage stage) throws Exception{
+
         //load FXML
         FXMLLoader carouselLoader = new FXMLLoader(getClass().getResource("/fxml/SelectView.fxml"));
         Parent parent = carouselLoader.load();

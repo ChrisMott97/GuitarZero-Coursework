@@ -1,4 +1,4 @@
-package org.gsep;
+package org.gsep.select;
 
 import java.util.ArrayList;
 import java.util.List;

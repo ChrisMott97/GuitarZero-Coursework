@@ -3,6 +3,6 @@ module GSE.Project {
     requires javafx.controls;
     requires java.xml;
 
-    opens org.gsep to javafx.fxml;
-    exports org.gsep;
+    opens org.gsep.select to javafx.fxml;
+    exports org.gsep.select;
 }

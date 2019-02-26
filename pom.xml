@@ -11,7 +11,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <mainClass>org.gsep.Main</mainClass>
+        <mainClass>org.gsep.select.Main</mainClass>
     </properties>
 
     <organization>
@@ -55,7 +55,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>org.openjfx.MainApp</mainClass>
+                    <mainClass>org.gsep.select.Main</mainClass>
                 </configuration>
             </plugin>
 

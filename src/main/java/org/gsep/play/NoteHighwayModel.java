@@ -1,3 +1,5 @@
+package org.gsep.play;
+
 import java.util.*;
 
 public class NoteHighwayModel {

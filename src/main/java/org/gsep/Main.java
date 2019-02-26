@@ -15,7 +15,7 @@ public class Main extends Application {
 
     public void start (Stage stage) throws Exception{
         //load FXML
-        FXMLLoader carouselLoader = new FXMLLoader(getClass().getResource("SelectView.fxml"));
+        FXMLLoader carouselLoader = new FXMLLoader(getClass().getResource("/fxml/SelectView.fxml"));
         Parent parent = carouselLoader.load();
 
         //load controller
@@ -27,7 +27,7 @@ public class Main extends Application {
         selectController.linkModels(iModel, icModel);
 
         Scene scene = new Scene(parent);
-        scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
 
         stage.setTitle("Select Mode");
         stage.setScene(scene);

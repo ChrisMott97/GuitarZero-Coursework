@@ -1,16 +1,12 @@
 package org.gsep;
 
 import javafx.animation.*;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
-import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
@@ -60,7 +56,7 @@ public class ItemContainer extends Pane {
      * Manages loading the FXML.
      */
     public ItemContainer(){
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ItemContainerView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/ItemContainerView.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 

@@ -206,9 +206,9 @@ public class StoreManagerFrame {
 				}	
 				
 				//Validation 2- Ensure files both exist and are of the required format
-				checkF1(f1_path);
-				checkF2(f2_path);
-				checkF3(f3_path);
+				checkF(f1_path, 1);
+				checkF(f1_path, 2);
+				checkF(f1_path, 3);
 				
 				//If files are invalid, break.
 				if (invalid==true) {
@@ -249,72 +249,66 @@ public class StoreManagerFrame {
 	
 	/**
 	 * Method validating the file submitted, within the first field, from the StoreManager application. 
-	 * Ensures it is in a .txt format and the file exists.
+	 * Ensures it is in the correct format
 	 * @param s: The file path to be checked
 	 */
-	public static void checkF1(String s) {
-		File f = new File(s);
+	public static void checkF(String s, int Case) {
+	File f = new File(s);
+	
+	//Switch statement
+	switch(Case) {
+	case 1:
+
 		//Check file exists and is not a directory
 		if(f.exists() && !f.isDirectory()) { 
 			//Ensure suffix is of correct notation
 			if (!s.endsWith(".txt")) {
 				System.out.println("The first file must be of .txt format.");
 				invalid = true;
+				return;
 			}
 		}
 		
 		else{
 			System.out.println("The first file does not exist");
 			invalid = true;
-		}
-		
-	}
-	
-	/**
-	 * Method validating the file submitted, within the second field, from the StoreManager application. 
-	 * Ensures it is in a .jpg or .png format and the file exists.
-	 * @param s: The file path to be checked
-	 */
-	public static void checkF2(String s) {
-		File f = new File(s);
-		//Check file exists and is not a directory
-		if(f.exists() && !f.isDirectory()) { 
-		    //Ensure suffix is of correct notation
-			if (!s.endsWith(".png") && !s.endsWith(".jpg")) {
-				System.out.println("The second submitted file must be of .png or of .jpg format.");
-				invalid = true;
+			return;
 			}
-		}
+	case 2:
+		//Check file exists and is not a directory
+			if(f.exists() && !f.isDirectory()) { 
+			    //Ensure suffix is of correct notation
+				if (!s.endsWith(".png") && !s.endsWith(".jpg")) {
+					System.out.println("The second submitted file must be of .png or of .jpg format.");
+					invalid = true;
+					return;
+				}
+			}
+			
+			else{
+				System.out.println("The second submitted file does not exist");
+				invalid = true;
+				return;
+			}
 		
-		else{
-			System.out.println("The second submitted file does not exist");
-			invalid = true;
-		}
-		
-	}
-
-	/**
-	 * Method validating the file submitted, within the third field, from the StoreManager application. 
-	 * Ensures it is in a .mid format and the file exists.
-	 * @param s: The file path to be checked
-	 */
-	public static void checkF3(String s) {
-		File f = new File(s);
+	case 3:
 		//Check file exists and is not a directory
 		if(f.exists() && !f.isDirectory()) { 
 			//Ensure suffix is of correct notation
 			if (!s.endsWith(".mid")) {
 				System.out.println("The third submitted file must be of .mid format.");
 				invalid = true;
+				return;
 			}
 		}
 		
 		else{
 			System.out.println("The third submitted file does not exist");
 			invalid = true;
+			return;
 		}
-		
+		}
 	}
 	
-	
+
 }

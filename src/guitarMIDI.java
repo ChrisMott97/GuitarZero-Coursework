@@ -7,9 +7,12 @@ import java.util.List;
 
 /**
  * This class holds all code for converting a MIDI file into a form readable by the game during play mode.
+ *
+ * @author Abigail Lilley
+ * @author Niha Gummakonda
+ * @version 1.0, February 21st 2019
  */
 public class guitarMIDI {
-
 
     /**
      * Returns the name of the synthesizer's nth instrument
@@ -32,10 +35,20 @@ public class guitarMIDI {
 
 
     /**
-     * Converts
+     * Converts a given track of a MIDI file into an ArrayList containing the information used in play mode.
+     * A note's lane is decided by it's relative position within the range of notes (i.e. highest third in lane one,
+     * lowest in lane three).
+     * A note's colour is decided by it's relative position within the range on it's lane (i.e. higher half black,
+     * lower half white). 0 corresponds to black, and 1 to white.
+     *
+     * Future development:
      * @param track     Track from a MIDI file
-     * @return          ArrayList of strings in the form "timing, note"
+     * @return          ArrayList of strings in the form "timing, lane, colour"
+     *                      n.b. lane refers to the path the note will take down the fret board in play mode
+     *                           colour refers to whether the note is black or white
      */
+    //TODO Change note colour logic so sharp and flat notes are black, all others are white (like a piano)
+
     private static ArrayList <String> displayTrack( Track track, int resol ) {
 
 
@@ -74,7 +87,27 @@ public class guitarMIDI {
 
                             currentArray.add(new ArrayList<>());
                             if (guitarChan.get(j) == chan) {
-                                currentArray.get(j).add(tick + ", " + dat1 + " Channel : " + chan);
+
+                                switch (i%6) {
+                                    case 0:
+                                        currentArray.get(j).add(tick + ", 1, 0");
+                                        break;
+                                    case 1:
+                                        currentArray.get(j).add(tick + ", 1, 1");
+                                        break;
+                                    case 2:
+                                        currentArray.get(j).add(tick + ", 2, 0");
+                                        break;
+                                    case 3:
+                                        currentArray.get(j).add(tick + ", 2, 1");
+                                        break;
+                                    case 4:
+                                        currentArray.get(j).add(tick + ", 3, 0");
+                                        break;
+                                    case 5:
+                                        currentArray.get(j).add(tick + ", 3, 1");
+                                        break;
+                                }
                                 break;
                             }
                         }
@@ -85,8 +118,9 @@ public class guitarMIDI {
                 }
             }
         }
-        int arrayLen = 0;
         ArrayList<String> longestArray = new ArrayList<>();
+        int arrayLen = 0;
+
         for (List<String> aCurrentArray : currentArray) {
 
             if (arrayLen < aCurrentArray.size()) {
@@ -98,17 +132,18 @@ public class guitarMIDI {
     }
 
 
+    /**
+     * Takes a string array as input and writes each element to a new line in a .txt file called 'noteFile.txt'
+     * @param arr   An ArrayList. Each element hold a string on information about a note in the order they're played
+     * @return      A .txt file called 'noteFile.txt' where each line is an element of arr
+     */
     private static File writeToFile ( ArrayList <String> arr ) {
 
         BufferedWriter bw = null;
         try {
 
-            //Specify the file name and path here
             File file = new File("noteFile.txt");
 
-            /* This logic will make sure that the file
-             * gets created if it is not present at the
-             * specified location*/
             if (!file.exists()) {
                 file.createNewFile();
             }
@@ -121,7 +156,6 @@ public class guitarMIDI {
                 bw.newLine();
             }
             return file;
-
 
         } catch (IOException ioe) {
             ioe.printStackTrace();
@@ -136,19 +170,29 @@ public class guitarMIDI {
         return null;
     }
 
-    public static File convertMIDI ( String MIDIFile ) {
 
+    /**
+     * Takes the name of a MIDI file and returns a .txt file where information for each note is written on a new line.
+     * A line looks as follows: timing, lane, colour
+     *      Timing:         when the note is played in the song
+     *      Lane (1-3):     the path the note takes in play mode
+     *      Colour (0/1):   which button for the lane corresponds to that note (0 for black, 1 for white)
+     * @param MIDIFileName      Name of the MIDI file you wish to convert to a play mode compatible .txt file
+     * @return                  A .txt file, each line has information needed in play mode for a given note
+     */
+    public static File convertMIDI ( String MIDIFileName ) {
+        //TODO make sure it handles when a) file not found b) input file in not a MIDI file
         try {
-            Sequence seq = MidiSystem.getSequence( new File( MIDIFile ) );
-            int resol = seq.getResolution();
+            Sequence seq = MidiSystem.getSequence( new File( MIDIFileName ) );
             Track[] trks = seq.getTracks();
-
+            int resol = seq.getResolution();
             int longestLen = 0;
             ArrayList <String> trackArray = new ArrayList<>();
 
             for (Track trk : trks) {
-                ArrayList<String> currentTrack = displayTrack(trk,resol);
+                ArrayList<String> currentTrack = displayTrack(trk, resol);
                 int trackSize = currentTrack.size();
+
                 if (trackSize > longestLen) {
                     longestLen = trackSize;
                     trackArray = currentTrack;
@@ -161,9 +205,9 @@ public class guitarMIDI {
         return null;
     }
 
-    public static void main (String[] args) {
-        File noteFile = convertMIDI("queen.mid");
-
+    public static void main (String[] args) {                       //To test file is written and passed back correctly
+                                                                    //In real implementation, convertMIDI will be
+        File noteFile = convertMIDI("queen.mid");      //called from externally
 
         try {
             FileReader fr = new FileReader(noteFile);

@@ -4,9 +4,9 @@ import org.junit.Test;
 
 public class StoreManagerFrameTest {
 
-	@Test
-	public void test() {
-		fail("Not yet implemented");
+	@Test 
+	public void testCheckF() {
+		checkF("s", 5);
 	}
 
 }

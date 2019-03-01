@@ -61,28 +61,6 @@
 //                                    break;
 //                            case 6:
 //                                    break;
-//                            case 7:
-//                                    break;
-//                            case 8:
-//                                    break;
-//                            case 9:
-//                                    break;
-//                            case 10:
-//                                    break;
-//                            case 11:
-//                                    break;
-//                            case 12:
-//                                    break;
-//                            case 13:
-//                                    break;
-//                            case 14:
-//                                    break;
-//                            case 15:
-//                                    break;
-//                            case 16:
-//                                    break;
-//                            case 17:
-//                                    break;
 //                        }
 //
 //                    }
@@ -116,6 +94,7 @@
 //        System.out.println(GUITAR_HERO + " controller not found");
 //        System.exit(1);
 //    }
+//    //TODO event listeners, simple event listeners
 //}
 //
 //
@@ -134,3 +113,4 @@
 //method instead of print, do a if __ != 0, call abstract method button1 pressed
 //
 // */
+//

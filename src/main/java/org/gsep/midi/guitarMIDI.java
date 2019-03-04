@@ -23,15 +23,15 @@ public class guitarMIDI {
      */
     private static String instrumentName( int n ) {
         try {
-
             final Synthesizer synth = MidiSystem.getSynthesizer();
             synth.open();
-            final Instrument[] instrs = synth.getAvailableInstruments();
+            final Instrument[] availableInstruments = synth.getAvailableInstruments();
             synth.close();
-            return instrs[ n ].getName();
 
+            return availableInstruments[n].getName();
         } catch ( Exception exn ) {
-            System.out.println( exn ); System.exit( 1 ); return "";
+            System.out.println( exn ); System.exit( 1 );
+            return "";
         }
     }
 
@@ -52,34 +52,32 @@ public class guitarMIDI {
     //TODO Change note colour logic so sharp and flat notes are black, all others are white (like a piano)
 
     public static ArrayList <String> getTrackNotes( Track track ) {
-
-
-        ArrayList<Integer> guitarChan = new ArrayList<>();
+        ArrayList<Integer> guitarChannnel = new ArrayList<>();
         List<List<String>> currentArray = new ArrayList<>();
+
         for ( int i = 0; i < track.size(); i = i +1 ) {
-            MidiEvent   evt  = track.get( i );
-            MidiMessage msg = evt.getMessage();
+            MidiEvent midiEvent = track.get( i );
+            MidiMessage midiMessage = midiEvent.getMessage();
 
-            if ( msg instanceof ShortMessage ) {
-
-                final long         tick = evt.getTick();
-                final ShortMessage smsg = (ShortMessage) msg;
-                final int          chan = smsg.getChannel();
-                final int          cmd  = smsg.getCommand();
-                final int          dat1 = smsg.getData1();
+            if ( midiMessage instanceof ShortMessage ) {
+                final long tick = midiEvent.getTick();
+                final ShortMessage smsg = (ShortMessage) midiMessage;
+                final int chan = smsg.getChannel();
+                final int cmd = smsg.getCommand();
+                final int dat1 = smsg.getData1();
 
                 switch (cmd) {
                     case ShortMessage.PROGRAM_CHANGE:
                         if(instrumentName(dat1).toLowerCase().contains("guitar")
                                 || instrumentName(dat1).toLowerCase().contains("gt")
                                 || instrumentName(dat1).toLowerCase().contains("string")) {
-                            guitarChan.add(chan);
+                            guitarChannnel.add(chan);
                         }
                         break;
                     case ShortMessage.NOTE_ON:
-                        for (int j = 0; j < guitarChan.size(); j++) {
+                        for (int j = 0; j < guitarChannnel.size(); j++) {
                             currentArray.add(new ArrayList<>());
-                            if (guitarChan.get(j) == chan) {
+                            if (guitarChannnel.get(j) == chan) {
 
                                 switch (dat1 % 6) {
                                     case 0:
@@ -191,11 +189,11 @@ public class guitarMIDI {
      * @param MIDIFileName      Name of the MIDI file you wish to convert to a play mode compatible .txt file
      * @return                  A .txt file, each line has information needed in play mode for a given note
      */
-    public static File convertMIDI ( String MIDIFileName ) {
+    public File convertMIDI ( String MIDIFileName ) {
         //TODO make sure it handles when a) file not found b) input file in not a MIDI file
         try {
 
-            Sequence seq = MidiSystem.getSequence( new File(MIDIFileName));
+            Sequence seq = MidiSystem.getSequence( new File(getClass().getResource(MIDIFileName).getFile()));
             Sequencer seqr = MidiSystem.getSequencer();
             seqr.setSequence(seq);
 //            long tickspermicrosec = seq.getMicrosecondLength()/seq.getTickLength();

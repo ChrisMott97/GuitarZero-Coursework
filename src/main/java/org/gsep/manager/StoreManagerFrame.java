@@ -1,22 +1,12 @@
 package org.gsep.manager;
+import org.gsep.midi.guitarMIDI;
+
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import org.gsep.server.Server;
-import org.gsep.server.guitarMIDI;
-
 import java.io.*;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.awt.event.*;
 
 /*

@@ -4,18 +4,31 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.image.*;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class NoteHighwayView {
-    private int canvasWidth = 500;
-    private int canvasHeight = 500;
+    private int canvasWidth = 950;
+    private int canvasHeight = 700;
     private Canvas canvas = new Canvas (canvasWidth, canvasHeight);
     private GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-    private List<Sprite> noteSprites = Collections.synchronizedList(new ArrayList<>());
-
+    private List<Sprite> noteSprites = Collections.synchronizedList(new ArrayList<>());  
+    //HM - Creating constants to hold incrementation and starting positions of sprites
+    private int xPosition= 537;
+    private int closeness = 60;
+    private double incrementLeft=.65;
+    private double incrementRight=.3;
+    private double incrementCentre=-.2;
+    private double incrementY=2;
+    
+  
+    
+    
     /**
      * Constructor for {@link NoteHighwayView} which starts rendering all the sprites within it
      */
@@ -24,11 +37,29 @@ public class NoteHighwayView {
         {
             public void handle(long currentNanoTime)
             {
+            		//HM - WHAT DOES THIS DO.
                 if (noteSprites.size() > 1) {
                     graphicsContext.clearRect(0,0, canvasWidth, canvasHeight);
                     for (Sprite noteSprite : noteSprites) {
                         noteSprite.render(graphicsContext);
-                        noteSprite.setPos(noteSprite.getPosX(), noteSprite.getPosY() + 2);
+                       
+                        
+                        //HM - If note is centre note, ensure its X position stays central as it travels down the board
+                       if (noteSprite.getNoteID()==1 ) {
+                    	   	noteSprite.setPos(noteSprite.getPosX()+incrementCentre, noteSprite.getPosY() + incrementY);
+                       }
+                     //HM - If note is right-most note, ensure its X position moves to the right as it travels down the board
+                       if (noteSprite.getNoteID()==0) {
+                   	   	noteSprite.setPos(noteSprite.getPosX()+incrementRight, noteSprite.getPosY() + incrementY);
+                      }
+                       //HM - If note is left-most note, ensure its X position moves to the left as it travels down the board
+                       if (noteSprite.getNoteID()==2) {
+                   	   	noteSprite.setPos(noteSprite.getPosX()+-incrementLeft, noteSprite.getPosY() + incrementY);
+                      }
+                        
+                        //HM- Increase size
+                       noteSprite.setNoteSize(noteSprite.getNoteSizeIncrease()+0.45);
+                        
                     }
                 }
             }
@@ -50,27 +81,34 @@ public class NoteHighwayView {
      *
      * @param notes the notes corresponding to each lane
      */
+    
+    //for each notes element (contains 3 element within it)
     public void sendNotes(Note[] notes){
 
         for (int i = 0; i < notes.length; i++){
             Sprite sprite = new Sprite();
-            sprite.setDim(10, 10);
-            sprite.setPos(canvasWidth/2 - 3*15/2 + 15*i,0);
+            //HM- Set position of note on board and give it an ID number, relating to its position on the board
+            sprite.setPos(xPosition - closeness*i, 0);
+            sprite.setNoteID(i);
+            
             switch (notes[i]){
                 case OPEN:
-                    sprite.setFill(Color.LIGHTGRAY);
-                    sprite.setStroke(Color.LIGHTGRAY);
+                		//HM - Changing sprites
+                		sprite.identifyNoteColour(Note.OPEN);
                     break;
                 case BLACK:
-                    sprite.setFill(Color.BLACK);
-                    sprite.setStroke(Color.BLACK);
+                    sprite.identifyNoteColour(Note.BLACK);
                     break;
                 case WHITE:
-                    sprite.setFill(Color.LIGHTGRAY);
-                    sprite.setStroke(Color.BLACK);
+                    sprite.identifyNoteColour(Note.WHITE);
+                    
             }
+            //adding sprite to list of noteSprites
             noteSprites.add(sprite);
         }
+        
+        //If there are more than 24 elents on the board, remove the sprites from the display.
+        //HM - CHANGE THIS TO A POSITION. SAY ONCE IT REACHES Y=300 OR SOMETHING, THEN REMOVE IT FROM THE LIST
         if (noteSprites.size() > 8*3){
             noteSprites.remove(0);
             noteSprites.remove(0);

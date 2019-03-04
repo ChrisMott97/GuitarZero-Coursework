@@ -3,6 +3,10 @@ package org.gsep.play;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
+
+import javax.imageio.ImageIO;
 
 public class Sprite {
     private Color fill;
@@ -11,25 +15,64 @@ public class Sprite {
     private double posY;
     private double width;
     private double height;
-
+    private Note noteColour;
+    private Image image;
+    private double noteSize = 40;
+    private int position;
+    
     /**
+     * @author humzahmalik
+     * Gets size of notes falling
+     *
+     * @param fill fill colour
+     * @return 
+     */
+    public double getNoteSizeIncrease() {
+		return noteSize;
+    	}
+    
+    /**
+     * @author humzahmalik
+     * Sets size of notes falliing
+     *
+     * @param fill fill colour
+     */
+    public void setNoteSize(double noteSize) {
+    		this.noteSize=noteSize;
+    }
+    
+    /**
+     * @author humzahmalik
+     * Sets size of notes falliing
+     *
+     * @param position
+     */
+    public void setNoteID(int position) {
+    		this.position=position;
+    }
+    
+    /**
+     * @author humzahmalik
+     * Get size of notes falliing
+     * @return 
+     *
+     * 
+     */
+    public int getNoteID() {
+    		return position;
+    }
+    
+    /**
+     * @author Ors 
      * Sets fill colour of sprite
      *
      * @param fill fill colour
      */
-    public void setFill(Color fill) {
-        this.fill = fill;
+    public void identifyNoteColour(Note noteColour) {
+        this.noteColour = noteColour;
     }
 
-    /**
-     * Sets stroke colour of sprite
-     *
-     * @param stroke stroke colour
-     */
-    public void setStroke(Color stroke){
-        this.stroke = stroke;
-    }
-
+  
     /**
      * gets the x position of the top left corner of the sprite within the canvas
      *
@@ -59,27 +102,31 @@ public class Sprite {
         this.posY = posY;
     }
 
-    /**
-     * sets the width and the height of the sprite within the canvas
-     *
-     * @param width width pixel value
-     * @param height height pixel value
-     */
-    public void setDim(double width, double height) {
-        this.width = width;
-        this.height = height;
-    }
 
     /**
      * renders the sprite with the current settings for its appearance and location
      *
      * @param gc the GraphicsContext of the canvas to render the sprite to
      */
+    
     public void render(GraphicsContext gc) {
-        gc.setLineWidth(2);
-        gc.setStroke(stroke);
-        gc.setFill(fill);
-        gc.strokeRect(posX, posY, width, height);
-        gc.fillRect(posX, posY, width, height);
+        //HM- Image flow
+    		switch(noteColour){
+    		
+    		case OPEN:
+   		     
+   		     break;
+   		     
+    		 case WHITE:
+    		     image= new Image("White.png", noteSize, noteSize, false, false);
+    		     break;
+    		 
+    		 case BLACK:
+    			 image= new Image("Black.png", noteSize, noteSize, false, false);
+    			 break;
+    		}
+   
+        gc.drawImage(image, posX, posY);
+        
     }
 }

@@ -3,7 +3,8 @@ package org.gsep.play;
 import java.util.*;
 
 public class NoteHighwayModel {
-    private final int lanePositions = 8;
+	//number of empty notes to run before the file is played
+    private final int lanePositions = 0;
     private final int laneQuantity = 3;
     private Note[][] noteSequence;
     private int beat = 0;
@@ -46,6 +47,7 @@ public class NoteHighwayModel {
      * @return list of note types
      */
     public Note[] bottom(){
+    		
         if (beat < noteSequence.length)
             return noteSequence[beat];
         else

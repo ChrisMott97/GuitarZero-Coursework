@@ -18,6 +18,7 @@ public class NoteHighwayView {
     private Canvas canvas = new Canvas (canvasWidth, canvasHeight);
     private GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
     private List<Sprite> noteSprites = Collections.synchronizedList(new ArrayList<>());  
+    
     //HM - Creating constants to hold incrementation and starting positions of sprites
     private int xPosition= 537;
     private int closeness = 60;

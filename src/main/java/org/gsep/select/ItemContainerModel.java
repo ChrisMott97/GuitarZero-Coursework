@@ -69,6 +69,7 @@ public class ItemContainerModel<T extends Item> {
             return;
         if(items.size() >= 5){
             for (int i = 0; i < 5; i++) {
+                System.out.println(items.get(i));
                 containers.get(i).setItem(items.get(i));
             }
         }else{

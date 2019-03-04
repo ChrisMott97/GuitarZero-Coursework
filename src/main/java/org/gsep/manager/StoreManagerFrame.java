@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.gsep.server.Server;
-import org.gsep.server.guitarMIDI;
+import org.gsep.midi.guitarMIDI;
 
 import java.io.*;
 import java.net.InetSocketAddress;

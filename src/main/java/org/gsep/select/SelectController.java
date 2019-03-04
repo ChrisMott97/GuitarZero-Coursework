@@ -93,32 +93,25 @@ public class SelectController {
         List<MusicItem> items = new ArrayList<>();
 
         for (int i = 0; i < 7; i++) {
-            items.add(new MusicItem("Song "+(i+1), "file:res/Song1/song1.png"));
+            items.add(new MusicItem("Song "+(i+1), "/songs/Song1/song1.jpg"));
         }
 //        Temporary Song population
 
         try {
             //TODO: Make loop for all song folders
             //TODO: Correctly load images
-            File song1 = new File("res/Song1/meta.xml");
-            File song2 = new File("res/Song2/meta.xml");
+//            ClassLoader classLoader = getClass().getClassLoader();
+//            System.out.println(getClass().getResource("/songs/Song1/song1.png").getFile());
 
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-
-            Document song1doc = builder.parse(song1);
-            Document song2doc = builder.parse(song2);
-
-            Element el1 = song1doc.getDocumentElement();
-            MusicItem i1 = new MusicItem(el1.getElementsByTagName("Name").item(0).getTextContent(), "file:res/Song1/song1.png");
+            MusicItem i1 = new MusicItem("File Song 1", "/songs/Song1/song1.png");
             items.add(i1);
-            Element el2 = song2doc.getDocumentElement();
-            MusicItem i2 = new MusicItem(el2.getElementsByTagName("Name").item(0).getTextContent(), "file:res/Song2/song2.png");
+            MusicItem i2 = new MusicItem("File Song 2", "/songs/Song2/song2.png");
             items.add(i2);
 
         }catch(Exception e){
             e.printStackTrace();
         }
+
 
         iModel.loadData(items);
         icModel.loadData(containers);

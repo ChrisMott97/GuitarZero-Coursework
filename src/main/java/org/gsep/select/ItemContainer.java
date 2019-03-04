@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
+import java.io.File;
 import java.io.IOException;
 
 /*
@@ -180,9 +181,17 @@ public class ItemContainer extends Pane {
      * @param item the Item to be linked.
      */
     public void setItem(Item item){
+        File file = new File(getClass().getResource(item.getImageURL()).getFile());
+        Image image = new Image(file.toURI().toString());
+
         this.item = item;
         this.label.setText(item.getText());
-        this.imageView.setImage(new Image(this.item.getImageURL()));
+        this.imageView.setImage(image);
+        this.imageView.setPreserveRatio(true);
+        this.imageView.fitWidthProperty().bind(this.widthProperty());
+        this.imageView.fitHeightProperty().bind(this.heightProperty());
+        this.imageView.setFitHeight(80);
+        this.imageView.setFitWidth(80);
     }
 
     /**

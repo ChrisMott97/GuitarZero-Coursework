@@ -43,7 +43,6 @@ public class NoteHighwayView {
                     graphicsContext.clearRect(0,0, canvasWidth, canvasHeight);
                     for (Sprite noteSprite : noteSprites) {
                         noteSprite.render(graphicsContext);
-                       
                         
                         //HM - If note is centre note, ensure its X position stays central as it travels down the board
                        if (noteSprite.getNoteID()==1 ) {
@@ -94,7 +93,6 @@ public class NoteHighwayView {
             
             switch (notes[i]){
                 case OPEN:
-                		//HM - Changing sprites
                 		sprite.identifyNoteColour(Note.OPEN);
                     break;
                 case BLACK:
@@ -110,7 +108,7 @@ public class NoteHighwayView {
         
         //If there are more than 24 elents on the board, remove the sprites from the display.
         //HM - CHANGE THIS TO A POSITION. SAY ONCE IT REACHES Y=300 OR SOMETHING, THEN REMOVE IT FROM THE LIST
-        if (noteSprites.size() > 8*3){
+        if (noteSprites.get(0).getPosY()>300){
             noteSprites.remove(0);
             noteSprites.remove(0);
             noteSprites.remove(0);

@@ -51,11 +51,12 @@ public class guitarMIDI {
      */
     //TODO Change note colour logic so sharp and flat notes are black, all others are white (like a piano)
 
-    public static ArrayList <String> displayTrack( Track track ) {
+    public static ArrayList <String> displayTrack( Track track, int resol ) {
 
 
         ArrayList<Integer> guitarChan = new ArrayList<>();
         List<List<String>> currentArray = new ArrayList<>();
+        float mspertick = 0;
         for ( int i = 0; i < track.size(); i = i +1 ) {
             MidiEvent   evt  = track.get( i );
             MidiMessage msg = evt.getMessage();
@@ -77,41 +78,41 @@ public class guitarMIDI {
 
                 switch (cmd) {
                     case ShortMessage.PROGRAM_CHANGE:
-                        if(instrumentName(dat1).toLowerCase().contains("guitar")
+                        if(instrumentName(dat1).toLowerCase().contains("string")
                                 || instrumentName(dat1).toLowerCase().contains("gt")
-                                || instrumentName(dat1).toLowerCase().contains("string")) {
+                                || instrumentName(dat1).toLowerCase().contains("guitar")) {
                             guitarChan.add(chan);
                         }
                         break;
                     case ShortMessage.NOTE_ON:
-                            for(int j = 0; j < guitarChan.size(); j++) {
+                        for(int j = 0; j < guitarChan.size(); j++) {
 
-                                currentArray.add(new ArrayList<>());
-                                if (guitarChan.get(j) == chan) {
+                            currentArray.add(new ArrayList<>());
+                            if (guitarChan.get(j) == chan) {
 
-                                    switch (i % 6) {
-                                        case 0:
-                                            currentArray.get(j).add(tick + ", 1, 0");
-                                            break;
-                                        case 1:
-                                            currentArray.get(j).add(tick + ", 1, 1");
-                                            break;
-                                        case 2:
-                                            currentArray.get(j).add(tick + ", 2, 0");
-                                            break;
-                                        case 3:
-                                            currentArray.get(j).add(tick + ", 2, 1");
-                                            break;
-                                        case 4:
-                                            currentArray.get(j).add(tick + ", 3, 0");
-                                            break;
-                                        case 5:
-                                            currentArray.get(j).add(tick + ", 3, 1");
-                                            break;
-                                    }
-                                    break;
+                                switch (i%6) {
+                                    case 0:
+                                        currentArray.get(j).add(tick + ", 1, 0");
+                                        break;
+                                    case 1:
+                                        currentArray.get(j).add(tick + ", 1, 1");
+                                        break;
+                                    case 2:
+                                        currentArray.get(j).add(tick + ", 2, 0");
+                                        break;
+                                    case 3:
+                                        currentArray.get(j).add(tick + ", 2, 1");
+                                        break;
+                                    case 4:
+                                        currentArray.get(j).add(tick + ", 3, 0");
+                                        break;
+                                    case 5:
+                                        currentArray.get(j).add(tick + ", 3, 1");
+                                        break;
                                 }
+                                break;
                             }
+                        }
                         break;
                     default:
                         /* ignore other commands */
@@ -187,14 +188,13 @@ public class guitarMIDI {
             ClassLoader classLoader = new guitarMIDI().getClass().getClassLoader();
             Sequence seq = MidiSystem.getSequence( new File( classLoader.getResource(MIDIFileName).getFile() ) );
             long tickspermicrosec = seq.getMicrosecondLength()/seq.getTickLength();
-            System.out.println(tickspermicrosec + " " + seq.getTickLength() + " " + seq.getMicrosecondLength());
             Track[] trks = seq.getTracks();
             int resol = seq.getResolution();
             int longestLen = 0;
             ArrayList <String> trackArray = new ArrayList<>();
 
             for (Track trk : trks) {
-                ArrayList<String> currentTrack = displayTrack(trk);
+                ArrayList<String> currentTrack = displayTrack(trk, resol);
                 int trackSize = currentTrack.size();
 
                 if (trackSize > longestLen) {
@@ -207,24 +207,5 @@ public class guitarMIDI {
             System.out.println( exn ); System.exit( 1 );
         }
         return null;
-    }
-
-    public static void main (String[] args) {                       //To test file is written and passed back correctly
-        //In real implementation, convertMIDI will be
-        File noteFile = convertMIDI("MamaDo.mid");      //called from externally
-
-        try {
-            FileReader fr = new FileReader(noteFile);
-            BufferedReader br = new BufferedReader(fr);
-            String line;
-            while ((line = br.readLine()) != null) {
-                //process the line
-                System.out.println(line);
-            }
-        } catch (FileNotFoundException i ) {
-            System.out.println("File not found lol");
-        } catch (IOException e) {
-            System.out.println("IO Error");
-        }
     }
 }

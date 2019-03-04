@@ -54,7 +54,7 @@ public class guitarMIDITest {
         String fileName = "MamaDo.mid";
         Sequence seq = MidiSystem.getSequence( new File( classLoader.getResource(fileName).getFile() ) );
         Track[] track = seq.getTracks();
-        assertEquals(filearr,guitarMIDI.displayTrack(track[0]));
+        assertEquals(filearr,guitarMIDI.displayTrack(track[0],0));
     }
     @Test
     public void testDisplayTrackNoGuitar(){

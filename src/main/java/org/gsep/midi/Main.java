@@ -1,7 +1,7 @@
-package org.gsep;
+package org.gsep.midi;
 
 import java.io.*;
-import static org.gsep.guitarMIDI.convertMIDI;
+import static org.gsep.midi.guitarMIDI.convertMIDI;
 
 public class Main {
 

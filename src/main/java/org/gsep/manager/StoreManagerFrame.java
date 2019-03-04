@@ -19,7 +19,7 @@ import java.awt.event.*;
 public class StoreManagerFrame {
 
 	private JFrame frame;
-	
+	private guitarMIDI gM;
 	///Declaring fields holding file paths as a String and files as a File object
 	JTextField textField_1, textField_2, textField_3 = null;
 	File f1, f2, f3;
@@ -55,6 +55,7 @@ public class StoreManagerFrame {
 	 * Method that invokes the initializing of the JFrame.
 	 */
 	public StoreManagerFrame() {
+		this.gM = new guitarMIDI();
 		initialize();
 	}
 	
@@ -214,7 +215,7 @@ public class StoreManagerFrame {
 					}
 				
 				//Create proprietry file from midi file and add that to list of files
-				 File noteFile = guitarMIDI.convertMIDI(files.get(2).getAbsolutePath());
+				 File noteFile = gM.convertMIDI(files.get(2).getAbsolutePath());
 				 files.add(noteFile);  
 				 
 				//Close frame

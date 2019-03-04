@@ -51,25 +51,17 @@ public class guitarMIDI {
      */
     //TODO Change note colour logic so sharp and flat notes are black, all others are white (like a piano)
 
-    public static ArrayList <String> displayTrack( Track track, int resol ) {
+    public static ArrayList <String> getTrackNotes( Track track ) {
 
 
         ArrayList<Integer> guitarChan = new ArrayList<>();
         List<List<String>> currentArray = new ArrayList<>();
-        float mspertick = 0;
         for ( int i = 0; i < track.size(); i = i +1 ) {
             MidiEvent   evt  = track.get( i );
             MidiMessage msg = evt.getMessage();
-//            if (msg instanceof MetaMessage && i == 0) {
-//
-//                MetaMessage mm = (MetaMessage) msg;
-//                if(mm.getType()== SET_TEMPO){
-//                    byte[] data = mm.getData();
-//                    int tempo = (data[0] & 0xff) << 16 | (data[1] & 0xff) << 8 | (data[2] & 0xff);
-//                    int bpm = 60000000 / tempo;
-//                }
-//            }
+
             if ( msg instanceof ShortMessage ) {
+
                 final long         tick = evt.getTick();
                 final ShortMessage smsg = (ShortMessage) msg;
                 final int          chan = smsg.getChannel();
@@ -78,36 +70,35 @@ public class guitarMIDI {
 
                 switch (cmd) {
                     case ShortMessage.PROGRAM_CHANGE:
-                        if(instrumentName(dat1).toLowerCase().contains("string")
+                        if(instrumentName(dat1).toLowerCase().contains("guitar")
                                 || instrumentName(dat1).toLowerCase().contains("gt")
-                                || instrumentName(dat1).toLowerCase().contains("guitar")) {
+                                || instrumentName(dat1).toLowerCase().contains("string")) {
                             guitarChan.add(chan);
                         }
                         break;
                     case ShortMessage.NOTE_ON:
-                        for(int j = 0; j < guitarChan.size(); j++) {
-
+                        for (int j = 0; j < guitarChan.size(); j++) {
                             currentArray.add(new ArrayList<>());
                             if (guitarChan.get(j) == chan) {
 
-                                switch (i%6) {
+                                switch (dat1 % 6) {
                                     case 0:
-                                        currentArray.get(j).add(tick + ", 1, 0");
+                                        currentArray.get(j).add(tick + " 1 0");
                                         break;
                                     case 1:
-                                        currentArray.get(j).add(tick + ", 1, 1");
+                                        currentArray.get(j).add(tick + " 1 1");
                                         break;
                                     case 2:
-                                        currentArray.get(j).add(tick + ", 2, 0");
+                                        currentArray.get(j).add(tick + " 2 0");
                                         break;
                                     case 3:
-                                        currentArray.get(j).add(tick + ", 2, 1");
+                                        currentArray.get(j).add(tick + " 2 1");
                                         break;
                                     case 4:
-                                        currentArray.get(j).add(tick + ", 3, 0");
+                                        currentArray.get(j).add(tick + " 3 0");
                                         break;
                                     case 5:
-                                        currentArray.get(j).add(tick + ", 3, 1");
+                                        currentArray.get(j).add(tick + " 3 1");
                                         break;
                                 }
                                 break;
@@ -118,6 +109,7 @@ public class guitarMIDI {
                         /* ignore other commands */
                         break;
                 }
+
             }
         }
         ArrayList<String> longestArray = new ArrayList<>();
@@ -146,6 +138,7 @@ public class guitarMIDI {
 
             File file = new File("noteFile.txt");
 
+            //CHECK THIS
             if (!file.exists()) {
                 file.createNewFile();
             }
@@ -172,6 +165,22 @@ public class guitarMIDI {
         return null;
     }
 
+    public static File xyz(ArrayList arr){
+        for (int i =0; i <arr.size(); i++){
+            if (i < arr.size() - 1) {
+                String[] j = arr.get(i).toString().split("\\s+");
+                String[] k = arr.get(i + 1).toString().split("\\s+");
+                int j1 = Integer.parseInt(j[0]);
+                int k1 = Integer.parseInt(k[0]);
+                if (k1 < j1 + 5 && k1 != j1) {
+                    arr.remove(i + 1);
+                }
+            }
+        }
+
+
+        return writeToFile(arr);
+    }
 
     /**
      * Takes the name of a MIDI file and returns a .txt file where information for each note is written on a new line.
@@ -185,16 +194,19 @@ public class guitarMIDI {
     public static File convertMIDI ( String MIDIFileName ) {
         //TODO make sure it handles when a) file not found b) input file in not a MIDI file
         try {
-            ClassLoader classLoader = new guitarMIDI().getClass().getClassLoader();
-            Sequence seq = MidiSystem.getSequence( new File( classLoader.getResource(MIDIFileName).getFile() ) );
-            long tickspermicrosec = seq.getMicrosecondLength()/seq.getTickLength();
+
+            Sequence seq = MidiSystem.getSequence( new File(MIDIFileName));
+            Sequencer seqr = MidiSystem.getSequencer();
+            seqr.setSequence(seq);
+//            long tickspermicrosec = seq.getMicrosecondLength()/seq.getTickLength();
+//            System.out.println(tickspermicrosec + " " + seq.getTickLength() + " " + seq.getMicrosecondLength());
             Track[] trks = seq.getTracks();
-            int resol = seq.getResolution();
             int longestLen = 0;
             ArrayList <String> trackArray = new ArrayList<>();
-
+            System.out.println(seqr.getTempoInBPM());
             for (Track trk : trks) {
-                ArrayList<String> currentTrack = displayTrack(trk, resol);
+
+                ArrayList<String> currentTrack = getTrackNotes(trk);
                 int trackSize = currentTrack.size();
 
                 if (trackSize > longestLen) {
@@ -202,10 +214,48 @@ public class guitarMIDI {
                     trackArray = currentTrack;
                 }
             }
-            return writeToFile(trackArray);
+
+            return xyz(trackArray);
         } catch ( Exception exn ) {
             System.out.println( exn ); System.exit( 1 );
         }
         return null;
+    }
+
+    public static void main (String[] args) {                       //To test file is written and passed back correctly
+        //In real implementation, convertMIDI will be
+        File noteFile = convertMIDI("MamaDo.mid");      //called from externally
+//        ArrayList<String> arr = new ArrayList<>();
+
+//        arr.add("12345 567 677");
+//        arr.add("12345 567 677");
+//        arr.add("12345 567 677");
+//        arr.add("12345 567 677");
+//        arr.add("12347 434 674");
+//        arr.add("17282 574 267");
+//        arr.add("17292 574 267");
+//        arr.add("17305 363 992");
+//        arr.add("17309 574 267");
+//        arr.add("19827 363 992");
+//        arr.add("19923 574 267");
+//        arr.add("19927 363 992");
+//        arr.add("20123 363 992");
+//        xyz(arr);
+//        for(int i = 0; i < arr.size(); i ++){
+//            System.out.println(arr.get(i));
+//        }
+        try {
+            FileReader fr = new FileReader(noteFile);
+            BufferedReader br = new BufferedReader(fr);
+            String line;
+            while ((line = br.readLine()) != null) {
+                //process the line
+                System.out.println(line);
+            }
+        } catch (FileNotFoundException i ) {
+            System.out.println("File not found lol");
+        } catch (IOException e) {
+            System.out.println("IO Error");
+        }
     }
 }

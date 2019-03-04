@@ -16,6 +16,8 @@ import java.util.List;
  */
 public class guitarMIDI {
 
+    public guitarMIDI self;
+
     /**
      * Returns the name of the synthesizer's nth instrument
      * @param n     Position of the instrument in the synthesizer's array of instruments
@@ -222,7 +224,9 @@ public class guitarMIDI {
 
     public static void main (String[] args) {                       //To test file is written and passed back correctly
         //In real implementation, convertMIDI will be
-        File noteFile = convertMIDI("MamaDo.mid");      //called from externally
+        guitarMIDI boi = new guitarMIDI();
+
+        File noteFile = boi.convertMIDI("MamaDo.mid");      //called from externally
 //        ArrayList<String> arr = new ArrayList<>();
 
 //        arr.add("12345 567 677");

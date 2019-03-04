@@ -1,4 +1,4 @@
-package server;
+package org.gsep.server;
 
 import java.io.*;
 import javax.sound.midi.*;

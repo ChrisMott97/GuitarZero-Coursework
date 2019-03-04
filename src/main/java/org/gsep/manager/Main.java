@@ -1,5 +1,7 @@
+package org.gsep.manager;
+
 import java.io.*;
-import server.Server;
+import org.gsep.server.Server;
 
 /**
  * Main

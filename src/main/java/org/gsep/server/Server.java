@@ -1,4 +1,4 @@
-package server;
+package org.gsep.server;
 
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;

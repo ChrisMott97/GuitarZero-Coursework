@@ -1,4 +1,6 @@
- import java.io.*;
+package org.gsep.manager;
+
+import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;

@@ -1,9 +1,10 @@
+package org.gsep.manager;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import server.Server;
-import server.guitarMIDI;
+import org.gsep.server.Server;
+import org.gsep.server.guitarMIDI;
 
 import java.io.*;
 import java.net.InetSocketAddress;

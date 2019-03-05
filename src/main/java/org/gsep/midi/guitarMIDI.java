@@ -21,7 +21,7 @@ public class guitarMIDI {
      * @param n     Position of the instrument in the synthesizer's array of instruments
      * @return      The name of the instrument
      */
-    private static String instrumentName( int n ) {
+    private String instrumentName( int n ) {
         try {
 
             final Synthesizer synth = MidiSystem.getSynthesizer();
@@ -51,7 +51,7 @@ public class guitarMIDI {
      */
     //TODO Change note colour logic so sharp and flat notes are black, all others are white (like a piano)
 
-    public static ArrayList <String> getTrackNotes( Track track ) {
+    public ArrayList <String> getTrackNotes( Track track ) {
 
 
         ArrayList<Integer> guitarChan = new ArrayList<>();
@@ -131,7 +131,7 @@ public class guitarMIDI {
      * @param arr   An ArrayList. Each element hold a string on information about a note in the order they're played
      * @return      A .txt file called 'noteFile.txt' where each line is an element of arr
      */
-    public static File writeToFile ( ArrayList <String> arr ) {
+    public File writeToFile ( ArrayList <String> arr ) {
 
         BufferedWriter bw = null;
         try {
@@ -165,7 +165,7 @@ public class guitarMIDI {
         return null;
     }
 
-    public static File xyz(ArrayList arr){
+    public File xyz(ArrayList arr){
         for (int i =0; i <arr.size(); i++){
             if (i < arr.size() - 1) {
                 String[] j = arr.get(i).toString().split("\\s+");
@@ -191,7 +191,7 @@ public class guitarMIDI {
      * @param MIDIFileName      Name of the MIDI file you wish to convert to a play mode compatible .txt file
      * @return                  A .txt file, each line has information needed in play mode for a given note
      */
-    public static File convertMIDI ( String MIDIFileName ) {
+    public File convertMIDI ( String MIDIFileName ) {
         //TODO make sure it handles when a) file not found b) input file in not a MIDI file
         try {
 
@@ -224,7 +224,8 @@ public class guitarMIDI {
 
     public static void main (String[] args) {                       //To test file is written and passed back correctly
         //In real implementation, convertMIDI will be
-        File noteFile = convertMIDI("MamaDo.mid");      //called from externally
+    		guitarMIDI boi = new guitarMIDI();
+        File noteFile = new File(boi.getClass().getResource("/MamaDo.mid").getFile());   //called from externally
 //        ArrayList<String> arr = new ArrayList<>();
 
 //        arr.add("12345 567 677");

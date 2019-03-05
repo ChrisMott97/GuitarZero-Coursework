@@ -47,7 +47,14 @@ public class NoteHighwayView {
     	    return iv;
     	}
     
-   
+    	/**
+    	 * @author humzahmalik
+     * Displaying score
+     */
+    	
+    	public void displayScore(int score) {
+    		System.out.println(score);
+    	}
     
     
     /**
@@ -127,7 +134,7 @@ public class NoteHighwayView {
         }
         
         //If there are more than 24 elents on the board, remove the sprites from the display.
-        //HM - CHANGE THIS TO A POSITION. SAY ONCE IT REACHES Y=300 OR SOMETHING, THEN REMOVE IT FROM THE LIST
+        
         if (noteSprites.get(0).getPosY()>300){
             noteSprites.remove(0);
             noteSprites.remove(0);

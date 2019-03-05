@@ -19,6 +19,7 @@ public class NoteHighwayController {
     NoteHighwayController(NoteHighwayModel model, NoteHighwayView view){
         this.model = model;
         this.view = view;
+        updateViewScore();
         //loads note sequence and tempo like this temporarily until proprietary files can be loaded
         this.tempo = 400;
         this.songSequence = new Note[][] {
@@ -93,6 +94,15 @@ public class NoteHighwayController {
         long period = (long)(60f/(float)tempo*7000);
       //This calls repeatedTask
         timer.scheduleAtFixedRate(repeatedTask,0, period);
+    }
+    /**
+     * @author humzahmalik
+     * Updates view with correct score and displays score
+     */
+    
+    public void updateViewScore() {
+    		model.setScore(3);
+    		view.displayScore(model.getScore());
     }
 
 }

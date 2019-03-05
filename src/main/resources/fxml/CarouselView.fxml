@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+
+<?import org.gsep.carousel.ItemContainer?>
+<?import javafx.scene.layout.TilePane?>
+<!--
+ * SelectView.
+ *
+ * @author  Chris Mott.
+ * @version 1.00, January 2019.
+ -->
+<!--<TilePane fx:id="parentContainer" prefHeight="200.0" styleClass="parentContainer" prefRows="1" prefTileHeight="120.0" prefTileWidth="120.0" prefWidth="200.0">-->
+<fx:root type="javafx.scene.layout.TilePane" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+
+   <children>
+      <ItemContainer fx:id="icOne" styleClass="itemContainer" prefHeight="200.0" prefWidth="200.0">
+         <TilePane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </TilePane.margin>
+      </ItemContainer>
+      <ItemContainer fx:id="icTwo" styleClass="itemContainer" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0">
+         <TilePane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </TilePane.margin>
+      </ItemContainer>
+      <ItemContainer fx:id="icThree" styleClass="itemContainer" layoutX="130.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0">
+         <TilePane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </TilePane.margin>
+      </ItemContainer>
+      <ItemContainer fx:id="icFour" styleClass="itemContainer" layoutX="250.0" layoutY="11.0" prefHeight="200.0" prefWidth="200.0">
+         <TilePane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </TilePane.margin>
+      </ItemContainer>
+      <ItemContainer fx:id="icFive" styleClass="itemContainer" layoutX="370.0" layoutY="11.0" prefHeight="200.0" prefWidth="200.0">
+         <TilePane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </TilePane.margin>
+      </ItemContainer>
+   </children>
+</fx:root>
+<!--</TilePane>-->

@@ -1,4 +1,4 @@
-package org.gsep.select;
+package org.gsep.carousel;
 
 import java.util.ArrayList;
 import java.util.List;

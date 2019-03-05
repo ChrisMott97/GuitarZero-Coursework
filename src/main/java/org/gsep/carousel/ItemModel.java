@@ -1,4 +1,4 @@
-package org.gsep.select;
+package org.gsep.carousel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,20 +17,20 @@ public class ItemModel<T extends Item> {
     private T intended;
     private static final int maxVisibleLength = 5;
 
-    /**
-     * Allows ItemModel to be constructed with no arguments.
-     */
-    ItemModel(){}
-
-    /**
-     * Constructor for the ItemModel to initialize the list.
-     *
-     * @param all the list of Items to be loaded.
-     */
-    ItemModel(List<T> all){
-        this.all = all;
-        this.update();
-    }
+//    /**
+//     * Allows ItemModel to be constructed with no arguments.
+//     */
+//    ItemModel(){}
+//
+//    /**
+//     * Constructor for the ItemModel to initialize the list.
+//     *
+//     * @param all the list of Items to be loaded.
+//     */
+//    ItemModel(List<T> all){
+//        this.all = all;
+//        this.update();
+//    }
 
     /**
      * Used after an empty constructor to load the list.

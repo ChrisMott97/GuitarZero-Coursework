@@ -19,15 +19,15 @@
       <children>
           <ImageView fx:id="imageView" preserveRatio="true">
             <viewport>
-               <Rectangle2D height="80.0" width="80.0" />
+               <Rectangle2D height="60.0" width="80.0" />
             </viewport>
             <VBox.margin>
                <Insets left="10.0" right="10.0" top="5.0" />
             </VBox.margin>
          </ImageView>
-          <Label fx:id="label" textAlignment="CENTER" wrapText="true">
+          <Label fx:id="label" textAlignment="LEFT" wrapText="true">
             <font>
-               <Font size="7.0" />
+               <Font size="12.0" />
             </font>
          </Label>
       </children>

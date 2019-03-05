@@ -182,7 +182,7 @@ public class ItemContainer extends Pane {
      */
     public void setItem(Item item){
         File file = new File(getClass().getResource(item.getImageURL()).getFile());
-        Image image = new Image(file.toURI().toString());
+        Image image = new Image(file.toURI().toString(), 65, 65, true, true, true);
 
         this.item = item;
         this.label.setText(item.getText());
@@ -190,8 +190,6 @@ public class ItemContainer extends Pane {
         this.imageView.setPreserveRatio(true);
         this.imageView.fitWidthProperty().bind(this.widthProperty());
         this.imageView.fitHeightProperty().bind(this.heightProperty());
-        this.imageView.setFitHeight(80);
-        this.imageView.setFitWidth(80);
     }
 
     /**

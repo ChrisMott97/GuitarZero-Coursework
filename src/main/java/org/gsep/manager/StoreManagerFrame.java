@@ -208,8 +208,8 @@ public class StoreManagerFrame {
 				
 				//Validation 2- Ensure files both exist and are of the required format
 				checkF(f1_path, 1);
-				checkF(f1_path, 2);
-				checkF(f1_path, 3);
+				checkF(f2_path, 2);
+				checkF(f3_path, 3);
 				
 				//If files are invalid, break.
 				if (invalid==true) {
@@ -232,12 +232,14 @@ public class StoreManagerFrame {
 				
 				//Create a Song object
 				Client song = new Client();
+				
 				song.filesSong = files;
 				//Run method within Client
 				try {
 					Client.run();
 				} catch (Exception e1) {
 					e1.printStackTrace();
+					//remember to exit
 				}
 			}
 				
@@ -279,7 +281,7 @@ public class StoreManagerFrame {
 		//Check file exists and is not a directory
 			if(f.exists() && !f.isDirectory()) { 
 			    //Ensure suffix is of correct notation
-				if (!s.endsWith(".png") && !s.endsWith(".jpg")) {
+				if (!s.endsWith(".png") || !s.endsWith(".jpg")) {
 					System.out.println("The second submitted file must be of .png or of .jpg format.");
 					invalid = true;
 					return;

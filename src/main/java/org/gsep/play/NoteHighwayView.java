@@ -13,20 +13,19 @@ import java.util.Collections;
 import java.util.List;
 
 public class NoteHighwayView {
-    private int canvasWidth = 950;
-    private int canvasHeight = 700;
-    private Canvas canvas = new Canvas (canvasWidth, canvasHeight);
+    private final int CANVASWIDTH = 950;
+    private final int CANVASHEIGHT = 700;
+    private Canvas canvas = new Canvas (CANVASWIDTH, CANVASHEIGHT);
     private GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
     private List<Sprite> noteSprites = Collections.synchronizedList(new ArrayList<>());  
     
     //HM - Creating constants to hold incrementation and starting positions of sprites
     private int xPosition= 537;
     private int closeness = 60;
-    private double incrementLeft=.65;
-    private double incrementRight=.3;
-    private double incrementCentre=-.2;
+    private final double INCREMENTLEFT=.65;
+    private final double INCREMENTRIGHT=.3;
+    private final double INCREMENTCENTRE=-.2;
     private double incrementY=2;
-    
   
     
     
@@ -40,21 +39,21 @@ public class NoteHighwayView {
             {
             		//HM - WHAT DOES THIS DO.
                 if (noteSprites.size() > 1) {
-                    graphicsContext.clearRect(0,0, canvasWidth, canvasHeight);
+                    graphicsContext.clearRect(0,0, CANVASWIDTH, CANVASHEIGHT);
                     for (Sprite noteSprite : noteSprites) {
                         noteSprite.render(graphicsContext);
                         
                         //HM - If note is centre note, ensure its X position stays central as it travels down the board
                        if (noteSprite.getNoteID()==1 ) {
-                    	   	noteSprite.setPos(noteSprite.getPosX()+incrementCentre, noteSprite.getPosY() + incrementY);
+                    	   	noteSprite.setPos(noteSprite.getPosX()+INCREMENTCENTRE, noteSprite.getPosY() + incrementY);
                        }
                      //HM - If note is right-most note, ensure its X position moves to the right as it travels down the board
                        if (noteSprite.getNoteID()==0) {
-                   	   	noteSprite.setPos(noteSprite.getPosX()+incrementRight, noteSprite.getPosY() + incrementY);
+                   	   	noteSprite.setPos(noteSprite.getPosX()+INCREMENTRIGHT, noteSprite.getPosY() + incrementY);
                       }
                        //HM - If note is left-most note, ensure its X position moves to the left as it travels down the board
                        if (noteSprite.getNoteID()==2) {
-                   	   	noteSprite.setPos(noteSprite.getPosX()+-incrementLeft, noteSprite.getPosY() + incrementY);
+                   	   	noteSprite.setPos(noteSprite.getPosX()+-INCREMENTLEFT, noteSprite.getPosY() + incrementY);
                       }
                         
                         //HM- Increase size

@@ -8,6 +8,28 @@ public class NoteHighwayModel {
     private final int laneQuantity = 3;
     private Note[][] noteSequence;
     private int beat = 0;
+    private int score = 0;
+    
+    /**
+     * @author humzahmalik
+     * Sets the score of the game
+     *
+     * @param score - 
+     */
+    public void setScore(int score){
+        this.score=score;
+    }
+    
+    /**
+     * @author humzahmalik
+     * Gets the score of the game
+     *
+     * @param score - 
+     */
+    public int getScore(){
+    		return score;
+    		
+		}
 
     /**
      * Sets the note sequence that the note highway plays

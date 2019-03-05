@@ -26,7 +26,28 @@ public class NoteHighwayView {
     private final double INCREMENTRIGHT=.3;
     private final double INCREMENTCENTRE=-.2;
     private double incrementY=2;
-  
+	final int BACKGROUNDHEIGHT= 1350;
+	final int BACKGROUNDWIDHT= 1200;
+	private int backgroundYpos=-300;
+	private int backgroundXpos=-50;
+	
+	
+	/**
+	 * @author humzahmalik
+     * Setting image view
+     */
+    	public ImageView setBackground(){
+    		Image image = new Image("Runway.png");
+    	    ImageView iv = new ImageView();
+    	    iv.setImage(image);
+    	    iv.setFitHeight(BACKGROUNDHEIGHT);
+    	    iv.setFitWidth(BACKGROUNDWIDHT);
+    	    iv.setY(backgroundYpos);
+    	    iv.setX(backgroundXpos);
+    	    return iv;
+    	}
+    
+   
     
     
     /**

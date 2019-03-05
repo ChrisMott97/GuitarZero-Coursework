@@ -21,7 +21,7 @@ public class NoteHighwayController {
         this.view = view;
         updateViewScore();
         //loads note sequence and tempo like this temporarily until proprietary files can be loaded
-        this.tempo = 400;
+        this.tempo = 1000;
         this.songSequence = new Note[][] {
                 {Note.OPEN, Note.OPEN, Note.BLACK},
                 {Note.BLACK, Note.WHITE, Note.BLACK},

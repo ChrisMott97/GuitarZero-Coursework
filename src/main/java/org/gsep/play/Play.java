@@ -35,7 +35,7 @@ public class Play extends Application{
         NoteHighwayView view = new NoteHighwayView();
         NoteHighwayController controller = new NoteHighwayController(model, view);
         
-        //hm- import image
+        //hm- import image and assign to a image view, displaying it on the canvas
         Image image = new Image("Runway.png");
         ImageView iv = new ImageView();
         iv.setImage(image);
@@ -43,8 +43,9 @@ public class Play extends Application{
         iv.setFitWidth(backgroundWidth);
         iv.setY(backgroundYpos);
         iv.setX(backgroundXpos);
-        
         root.getChildren().add(iv);
+        
+        
         root.getChildren().add(view.getCanvas());
         
     

@@ -56,7 +56,6 @@ public class NoteHighwayModel {
     public Note[] top(){
 
         if (beat-lanePositions < noteSequence.length && beat-lanePositions >= 0) {
-            System.out.println("yes");
             return noteSequence[beat - lanePositions];
         }else{
             return new Note[]{Note.OPEN, Note.OPEN, Note.OPEN};

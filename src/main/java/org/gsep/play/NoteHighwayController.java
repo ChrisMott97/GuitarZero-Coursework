@@ -1,5 +1,13 @@
 package org.gsep.play;
 
+import java.awt.List;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -7,19 +15,91 @@ public class NoteHighwayController {
     private NoteHighwayModel model;
     private NoteHighwayView view;
     private int tempo;
-    //HM - WHAT IS SONG SEQUENCE
+    private ArrayList<Note[]> songSequenceHolder;
+    Note[] notesHolder; 
+    
     private Note[][] songSequence;
+    ArrayList<String[]> songNotes;
+   
+    
+    /**
+     * @author humzahmalik
+     * Method that reads a file, line by line, into an array.
+     * @return 
+     * @throws IOException 
+     *
+     */
+    public  ArrayList<String[]> readFile(String f) throws IOException {
+    	
+			BufferedReader in = new BufferedReader(new FileReader(f));
+			String str;
+			//Create ArrayList to hold the lists of notes
+		    songNotes = new ArrayList<String[]>();
 
+			
+			//While there is a line, add it to the list
+			while((str = in.readLine()) != null){
+				//split string
+				String[] split = str.split(",");
+				
+				//adds the note into a song arraylist
+				songNotes.add(split);
+				
+			}
+			
+			return songNotes;
+    }
+    
+
+    /**
+     * @author humzahmalik
+
+     * Converts arraylist into a notes array
+     * @return 
+     */
+    public ArrayList<Note[]> songToGameNotes(ArrayList<String[]> arrayList) {
+  
+    		songSequenceHolder = new ArrayList<Note[]>();
+    		
+	    	 for (String[] i : arrayList) { 
+	    		 	//Create array of array to hold every three notes
+	     		notesHolder=new Note[] {null, null, null};
+	     		
+	     		 if (i[2]=="0") {
+	     		 	notesHolder[2]=Note.WHITE;
+		     	 }
+		     	 
+		     	 if (i[2]=="1") {
+		     		 notesHolder[2]=Note.BLACK;
+		     	 }
+	            
+	             //if the list has empty elements, add an open note object to that index
+	             for(int p = 0; p < notesHolder.length; p++) {
+	            	 	if (notesHolder[p]==null) {
+	            	 		notesHolder[p]=Note.OPEN;
+	            	 	}
+	             }
+			
+	             
+	             //add the created arraylist to the large arraylist
+	             songSequenceHolder.add(notesHolder);
+	             
+	        }
+	    	 	    	 
+	    	 return songSequenceHolder;
+    }
+    
+    
     /**
      * constructor for {@link NoteHighwayController}
      *
      * @param model the NoteHighwayModel
      * @param view the NoteHighwayView
+     * @throws IOException 
      */
-    NoteHighwayController(NoteHighwayModel model, NoteHighwayView view){
+    NoteHighwayController(NoteHighwayModel model, NoteHighwayView view) throws IOException{
         this.model = model;
         this.view = view;
-        updateViewScore();
         //loads note sequence and tempo like this temporarily until proprietary files can be loaded
         this.tempo = 1000;
         this.songSequence = new Note[][] {
@@ -72,6 +152,11 @@ public class NoteHighwayController {
                 {Note.OPEN, Note.OPEN, Note.BLACK},
                 {Note.BLACK, Note.OPEN, Note.OPEN},
         };
+        
+        //System.out.println(readFile(getClass().getResource("/notes.txt").getFile()));
+        songToGameNotes(readFile(getClass().getResource("/notes.txt").getFile()));
+
+        
     }
 
     /**

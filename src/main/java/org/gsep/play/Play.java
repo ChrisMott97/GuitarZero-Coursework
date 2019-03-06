@@ -20,7 +20,7 @@ public class Play extends Application{
         
     }
 
-    public void start(Stage stage) throws FileNotFoundException{
+    public void start(Stage stage) throws IOException{
         stage.setTitle("Play");
 
         //initialise scene
@@ -37,10 +37,9 @@ public class Play extends Application{
         //hm- import image and assign to a image view, displaying it on the canvas
         root.getChildren().add(view.setBackground());
         root.getChildren().add(view.getCanvas());
-        
-    
    
         stage.show();
         controller.play();
+        
     }
 }

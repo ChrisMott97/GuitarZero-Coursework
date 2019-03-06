@@ -4,10 +4,13 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.gsep.carousel.Carousel;
 import org.gsep.carousel.ItemContainerModel;
 import org.gsep.carousel.ItemModel;
+
+import java.util.Stack;
 
 /*
  * Main.
@@ -19,26 +22,27 @@ public class Main extends Application {
 
     public void start (Stage stage) throws Exception{
 
-        //load FXML
-        FXMLLoader selectLoader = new FXMLLoader(getClass().getResource("/fxml/SelectView.fxml"));
-        Parent parent = selectLoader.load();
-
         //load main controller
-        SelectController selectController = selectLoader.getController();
+        SelectController selectController = new SelectController();
+        StackPane parent = selectController.fxmlLoader.load();
 
-        ItemModel iModel = new ItemModel<>();
-        ItemContainerModel<MusicItem> icModel = new ItemContainerModel<>();
+        ItemModel iModel = new ItemModel();
+        ItemContainerModel icModel = new ItemContainerModel();
 
         //load carousel controller and link models
-//        Carousel carousel = selectController.carousel;
-//        carousel.linkModels(iModel, icModel);
+        Carousel carousel = selectController.carousel;
+        carousel.linkModels(iModel, icModel);
+
+        selectController.loadData();
 
         Scene scene = new Scene(parent);
         scene.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
 
         stage.setTitle("Select Mode");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
+        //950x700
     }
 
     public static void main(String[] args) {

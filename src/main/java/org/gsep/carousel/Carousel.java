@@ -19,6 +19,8 @@ import java.util.List;
  */
 public class Carousel extends TilePane{
 
+    private static final int amountContainers = 5;
+
     private ItemModel iModel;
     private ItemContainerModel icModel;
 
@@ -62,20 +64,18 @@ public class Carousel extends TilePane{
      */
     public void initialize() {
         System.out.println("Constructed!");
-        //TODO: replace with better solution incl. finding children of parent
-//        for (Node node :
-//                parentContainer.getChildren()) {
-//            containers.add((ItemContainer)node);
-//        }
-        containers.add(icOne);
-        containers.add(icTwo);
-        containers.add(icThree);
-        containers.add(icFour);
-        containers.add(icFive);
-        for (int i = 0; i < containers.size(); i++) {
-            containers.get(i).setInitialPosition(i+1);
-        }
 
+        double tileWidth = (this.getPrefWidth()/amountContainers);
+        this.setPrefTileWidth(tileWidth);
+        this.setPrefTileHeight(tileWidth);
+
+        for (Node node :
+                this.getChildren()) {
+            ItemContainer ic = (ItemContainer) node;
+            containers.add(ic);
+            int ind = containers.indexOf(ic);
+            containers.get(ind).setInitialPosition(ind+1);
+        }
 
         //Event Handlers
 //        btnNext.setOnAction(e ->
@@ -102,6 +102,7 @@ public class Carousel extends TilePane{
     }
 
     public void ingest(List<Item> items){
+        System.out.println(iModel);
         iModel.loadData(items);
         icModel.loadData(containers);
         icModel.map(items);

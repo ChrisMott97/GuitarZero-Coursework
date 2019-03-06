@@ -16,11 +16,20 @@
  * @version 1.00, January 2019.
  -->
 <?import org.gsep.carousel.Carousel?>
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-           minWidth="-Infinity" prefHeight="400.0" prefWidth="610.0"
-           xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<!--<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"-->
+           <!--minWidth="-Infinity" prefHeight="400.0" prefWidth="610.0"-->
+           <!--xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">-->
+<fx:root type="javafx.scene.layout.StackPane" prefHeight="700.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+
    <children>
-      <Carousel fx:id="carousel" prefHeight="200.0" styleClass="carousel" prefRows="1" prefTileHeight="120.0" prefTileWidth="120.0" prefWidth="200.0"/>
+      <Carousel fx:id="carousel" styleClass="carousel" >
+         <StackPane.margin>
+            <Insets>
+               <top>200</top>
+               <bottom>200</bottom>
+            </Insets>
+         </StackPane.margin>
+      </Carousel>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" StackPane.alignment="CENTER">
         <buttons>
           <Button id="btn_previous" fx:id="btnPrevious" alignment="CENTER" mnemonicParsing="false" text="Previous" textAlignment="CENTER" />
@@ -34,4 +43,5 @@
          </padding>
       </ButtonBar>
    </children>
-</StackPane>
+</fx:root>
+<!--</StackPane>-->

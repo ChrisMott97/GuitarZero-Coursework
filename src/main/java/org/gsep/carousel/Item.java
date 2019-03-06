@@ -30,7 +30,7 @@ public abstract class Item {
     public Item(String text, String imageURL){
         this.text = text;
         this.imageURL = imageURL;
-    }
+    }//TODO: Change to new item based on ID
 
     /**
      * Getter for text.

@@ -62,23 +62,23 @@ public class NoteHighwayController {
     		songSequenceHolder = new ArrayList<Note[]>();
     		
 	    	 for (String[] i : arrayList) { 
+	    		 	String zero = "0";
 	    		 	//Create array of array to hold every three notes
 	     		notesHolder=new Note[] {null, null, null};
-	     		System.out.println(i[2].toString());
 	     		
-	     		 if (i[2].toString()=="0") {
+	     		 if (i[2].equals("0")) {
 	     		 	notesHolder[0]=Note.WHITE;
 	     		 	System.out.println("Row " + i + " is white");
 		     	 }
 		     	 
-		     	 if (i[2]=="1") {
+	     		 else if (i[2].equals("1")) {
 		     		 notesHolder[0]=Note.BLACK;
 		     	 }
 	            
 	             //if the list has empty elements, add an open note object to that index
 	             for(int p = 0; p < notesHolder.length; p++) {
 	            	 	if (notesHolder[p]==null) {
-	            	 		notesHolder[p]=Note.BLACK;
+	            	 		notesHolder[p]=Note.OPEN;
 	            	 	}
 	             }
 			

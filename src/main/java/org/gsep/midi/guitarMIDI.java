@@ -222,7 +222,8 @@ public class guitarMIDI {
         return null;
     }
 
-    public static void main (String[] args) {                       //To test file is written and passed back correctly
+    public static void main (String[] args) {
+        //To test file is written and passed back correctly
         //In real implementation, convertMIDI will be
     		guitarMIDI boi = new guitarMIDI();
         File noteFile = new File(boi.getClass().getResource("/MamaDo.mid").getFile());   //called from externally

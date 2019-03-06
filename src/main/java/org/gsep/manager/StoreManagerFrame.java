@@ -3,6 +3,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import javafx.scene.image.Image;
 import org.gsep.server.Server;
 import org.gsep.server.guitarMIDI;
 

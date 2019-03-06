@@ -87,7 +87,7 @@ public class SelectController {
     }
 
     /**
-     * The point of ingestion for data from files.
+     * The Point of ingestion for data from files.
      */
     private void loadData(){
         List<MusicItem> items = new ArrayList<>();

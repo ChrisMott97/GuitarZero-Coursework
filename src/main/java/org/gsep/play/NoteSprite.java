@@ -1,14 +1,15 @@
 package org.gsep.play;
 
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 import java.io.File;
 
 public class NoteSprite {
-    private Point position;
-    private Point source;
-    private Point destination;
+    private Point2D position;
+    private Point2D source;
+    private Point2D destination;
     private double spawnTime;
     private double initialSize = 40;
     private double finalSize = 80;
@@ -26,19 +27,18 @@ public class NoteSprite {
         }
         switch (laneType){
             case LEFT:
-                source = new Point(413, 0);
-                destination = new Point(318, 525);
+                source = new Point2D(413, 0);
+                destination = new Point2D(318, 525);
                 break;
             case MIDDLE:
-                source = new Point(474, 0);
-                destination = new Point(474, 525);
+                source = new Point2D(474, 0);
+                destination = new Point2D(474, 525);
                 break;
             case RIGHT:
-                source = new Point(529, 0);
-                destination = new Point(630, 525);
+                source = new Point2D(529, 0);
+                destination = new Point2D(630, 525);
                 break;
         }
-        this.position = new Point(source);
         this.spawnTime = System.currentTimeMillis();
     }
 
@@ -47,15 +47,18 @@ public class NoteSprite {
         this.image = new Image(file.toURI().toString());
     }
 
-    private void setPosition(double x, double y){
-        position.setX(x- size*0.5);
-        position.setY(y- size*0.9);
+    /**
+     * sets the position, compensating for the expected midpoint of the sprite
+     * @param newpos
+     */
+    private void setPosition(Point2D newpos){
+        position = new Point2D(newpos.getX()-size*0.5, newpos.getY()-size*0.9);
     }
 
     public void updateProgress(double progress) {
-        double newX = source.getX() + (destination.getX()-source.getX())*progress;
-        double newY = source.getY() + (destination.getY()-source.getY())*progress;
-        setPosition(newX, newY);
+        Point2D vector = destination.subtract(source);
+        Point2D newpos = source.add(vector.multiply(progress));
+        setPosition(newpos);
 
         size = initialSize + (finalSize-initialSize)*progress;
     }

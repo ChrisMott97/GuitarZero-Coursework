@@ -12,6 +12,7 @@ public class NoteHighwayView {
     private List<NoteSprite> noteSprites = Collections.synchronizedList(new ArrayList<NoteSprite>());
     private AnimationTimer animationTimer;
     private double noteHighwayPeriod;
+    private double noteHighwayLength = 4;
     
     /**
      * Constructor for {@link NoteHighwayView} which initialises the game clock
@@ -21,22 +22,20 @@ public class NoteHighwayView {
         //TODO handle rendering from different thread to logic
         this.animationTimer = new AnimationTimer() {
             public void handle(long currentNanoTime) {
-                if (noteSprites.size() > 1) {
-                    canvas.getGraphicsContext2D().clearRect(0,0, canvas.getWidth(), canvas.getHeight());
+            if (noteSprites.size() > 1) {
+                canvas.getGraphicsContext2D().clearRect(0,0, canvas.getWidth(), canvas.getHeight());
 
-                    for (NoteSprite noteSprite : noteSprites) {
-                        double currentTime = System.currentTimeMillis();
-                        double spawnTime = noteSprite.getSpawnTime();
-                        double progress = (currentTime-spawnTime)/noteHighwayPeriod;
+                for (NoteSprite noteSprite : noteSprites) {
+                    double currentTime = System.currentTimeMillis();
+                    double spawnTime = noteSprite.getSpawnTime();
+                    double progress = (currentTime-spawnTime)/noteHighwayPeriod;
 
-                        if (progress <= 1){
-                            noteSprite.updateProgress(progress);
-                        } else {
-                            noteSprites.remove(noteSprite);
-                        }
+                    if (progress <= 1){
+                        noteSprite.updateProgress(progress);
                         noteSprite.render(canvas.getGraphicsContext2D());
                     }
                 }
+            }
             }
         };
     }
@@ -46,7 +45,7 @@ public class NoteHighwayView {
     }
 
     public void setPeriod(double period){
-        this.noteHighwayPeriod = 4*period;
+        this.noteHighwayPeriod = noteHighwayLength*period;
     }
 
     /**
@@ -63,6 +62,12 @@ public class NoteHighwayView {
             if (notes[i] != Note.OPEN){
                 NoteSprite noteSprite = new NoteSprite(notes[i], lanes[i]);
                 noteSprites.add(noteSprite);
+            }
+        }
+        //if there are more notes than can be displayed, remove note sprites
+        if (noteSprites.size() > noteHighwayLength*notes.length) {
+            for (var i = 0; i < notes.length; i++){
+                noteSprites.remove(0);
             }
         }
     }

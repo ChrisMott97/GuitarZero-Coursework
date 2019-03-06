@@ -136,7 +136,7 @@ public class guitarMIDI {
         BufferedWriter bw = null;
         try {
 
-            File file = new File("noteFile.txt");
+            File file = new File("songs/notes/noteFile.txt");
 
             //CHECK THIS
             if (!file.exists()) {
@@ -226,7 +226,7 @@ public class guitarMIDI {
         //In real implementation, convertMIDI will be
         guitarMIDI boi = new guitarMIDI();
 
-        File noteFile = boi.convertMIDI("MamaDo.mid");      //called from externally
+        File noteFile = boi.convertMIDI("songs/midi/1.mid");      //called from externally
 //        ArrayList<String> arr = new ArrayList<>();
 
 //        arr.add("12345 567 677");

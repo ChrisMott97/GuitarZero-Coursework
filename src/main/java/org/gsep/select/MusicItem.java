@@ -9,6 +9,9 @@ import org.gsep.carousel.Item;
  * @version 1.00, January 2019.
  */
 public class MusicItem extends Item {
+    MusicItem(){
+        super();
+    }
     /**
      * Constructor for the Music Item that passes the arguments to the parent Item.
      *

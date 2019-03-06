@@ -26,22 +26,10 @@
          <StackPane.margin>
             <Insets>
                <top>200</top>
-               <bottom>200</bottom>
+               <bottom>300</bottom>
             </Insets>
          </StackPane.margin>
       </Carousel>
-      <ButtonBar prefHeight="40.0" prefWidth="200.0" StackPane.alignment="CENTER">
-        <buttons>
-          <Button id="btn_previous" fx:id="btnPrevious" alignment="CENTER" mnemonicParsing="false" text="Previous" textAlignment="CENTER" />
-            <Button id="btn_next" fx:id="btnNext" alignment="CENTER" layoutX="683.0" layoutY="16.0" mnemonicParsing="false" text="Next" textAlignment="CENTER" />
-        </buttons>
-         <StackPane.margin>
-            <Insets bottom="50.0" top="250.0" />
-         </StackPane.margin>
-         <padding>
-            <Insets right="300.0" />
-         </padding>
-      </ButtonBar>
    </children>
 </fx:root>
 <!--</StackPane>-->

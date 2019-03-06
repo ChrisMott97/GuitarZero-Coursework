@@ -25,25 +25,7 @@ public class Carousel extends TilePane{
     private ItemContainerModel icModel;
 
     @FXML
-    protected Button btnNext;
-
-    @FXML
-    protected Button btnPrevious;
-
-    @FXML
     protected ItemContainer icOne;
-
-    @FXML
-    protected ItemContainer icTwo;
-
-    @FXML
-    protected ItemContainer icThree;
-
-    @FXML
-    protected ItemContainer icFour;
-
-    @FXML
-    protected ItemContainer icFive;
 
     private List<ItemContainer> containers = new ArrayList<>();
 
@@ -63,12 +45,12 @@ public class Carousel extends TilePane{
      * Acts like a constructor and runs when the controller is created.
      */
     public void initialize() {
-        System.out.println("Constructed!");
-
+        //May need to be moved elsewhere (Model?)
         double tileWidth = (this.getPrefWidth()/amountContainers);
         this.setPrefTileWidth(tileWidth);
         this.setPrefTileHeight(tileWidth);
 
+        //Keeps track of containers
         for (Node node :
                 this.getChildren()) {
             ItemContainer ic = (ItemContainer) node;
@@ -77,14 +59,6 @@ public class Carousel extends TilePane{
             containers.get(ind).setInitialPosition(ind+1);
         }
 
-        //Event Handlers
-//        btnNext.setOnAction(e ->
-//                next()
-//        );
-//
-//        btnPrevious.setOnAction(e ->
-//                previous()
-//        );
     }
 
     /**
@@ -102,7 +76,7 @@ public class Carousel extends TilePane{
     }
 
     public void ingest(List<Item> items){
-        System.out.println(iModel);
+        //TODO: Handle no songs found
         iModel.loadData(items);
         icModel.loadData(containers);
         icModel.map(items);
@@ -125,6 +99,7 @@ public class Carousel extends TilePane{
      * Only works if there are no current animations running.
      */
     public void previous(){
+        //TODO: Create better way to check if animation is still going, or queue input.
         if(icOne.getStatus() == Animation.Status.RUNNING)
             return;
         iModel.previous();

@@ -35,8 +35,21 @@ public class Main extends Application {
 
         selectController.loadData();
 
+        //TODO: Turn controller into Scene so input can be inside controller
         Scene scene = new Scene(parent);
         scene.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
+
+        //temporary keyboard input
+        scene.setOnKeyPressed(keyEvent -> {
+            switch(keyEvent.getCode()){
+                case RIGHT:
+                    carousel.next();
+                    break;
+                case LEFT:
+                    carousel.previous();
+                    break;
+            }
+        });
 
         stage.setTitle("Select Mode");
         stage.setScene(scene);

@@ -180,13 +180,17 @@ public class ItemContainer extends Pane {
      * @param item the Item to be linked.
      */
     public void setItem(Item item){
-        File file = new File(getClass().getResource(item.getImageURL()).getFile());
+        //TODO: Move to ItemContainerModel?
+        System.out.println(item.getId()+".png");
+        File file = new File(getClass().getResource("/songs/img/"+item.getId()+".png").getFile());
         Image image = new Image(file.toURI().toString(), 65, 65, true, true, true);
 
         this.item = item;
-        this.label.setText(item.getText());
+        this.label.setText(item.getName());
         this.imageView.setImage(image);
         this.imageView.setPreserveRatio(true);
+        this.imageView.setSmooth(true);
+        this.imageView.setCache(true);
         this.imageView.fitWidthProperty().bind(this.widthProperty());
         this.imageView.fitHeightProperty().bind(this.heightProperty());
     }

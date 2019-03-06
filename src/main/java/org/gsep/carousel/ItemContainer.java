@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 /*
  * ItemContainer.
@@ -180,13 +181,22 @@ public class ItemContainer extends Pane {
      * @param item the Item to be linked.
      */
     public void setItem(Item item){
-        File file = new File(getClass().getResource(item.getImageURL()).getFile());
-        Image image = new Image(file.toURI().toString(), 65, 65, true, true, true);
+        //TODO: Move to ItemContainerModel?
+        File file;
+        Image image;
+        try{
+            file = new File(getClass().getResource("/songs/img/"+item.getId()+".png").getFile());
+        }catch(Exception e){
+            file = new File(getClass().getResource("/songs/img/error.png").getFile());
+        }
+        image = new Image(file.toURI().toString(), 65, 65, true, true, true);
 
         this.item = item;
-        this.label.setText(item.getText());
+        this.label.setText(item.getName());
         this.imageView.setImage(image);
         this.imageView.setPreserveRatio(true);
+        this.imageView.setSmooth(true);
+        this.imageView.setCache(true);
         this.imageView.fitWidthProperty().bind(this.widthProperty());
         this.imageView.fitHeightProperty().bind(this.heightProperty());
     }

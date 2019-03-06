@@ -76,6 +76,7 @@ public class ItemContainerModel<T extends Item> {
             }
         }else{
             for (int i = 0; i < items.size(); i++) {
+                System.out.println(items.get(i));
                 containers.get(i).setItem(items.get(i));
             }
         }

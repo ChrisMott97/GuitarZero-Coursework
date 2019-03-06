@@ -16,12 +16,20 @@ import javafx.scene.layout.*;
 public class Play extends Application{
     private final int CANVASWIDTH = 950;
     private final int CANVASHEIGHT = 700;
+    private ArrayList<Note[]> songSequenceHolder;
+    private String f= getClass().getResource("/noteFile.txt").getFile();
+    private Note[] notesHolder; 
+    private ArrayList<String[]> songNotes;
+    private ArrayList<Note[]> songSequence;
+    LinkedHashMap mapA;
 
     public static void main(String[] args) {
         launch(args);
     }
+    
 
     public void start(Stage stage) throws IOException{
+    	/*
         stage.setTitle("Play");
 
         //initialise scene
@@ -43,15 +51,18 @@ public class Play extends Application{
         NoteHighwayModel model = new NoteHighwayModel();
         NoteHighwayView view = new NoteHighwayView(canvas);
         NoteHighwayController controller = new NoteHighwayController(model, view);
+        controller.arraySetter(songToGameNotes(readFile(f)));
 
         stage.show();
         view.startRender();
         controller.play();
-        
+        */
+    	
+    		//Hash map function
+    		mapA=arrayToDictionary(songToGameNotes(readFile(f)), readFile(f));
+    	
     }
     
-    
-
     /**
      * @author humzahmalik
      * Setting image view
@@ -64,7 +75,109 @@ public class Play extends Application{
         imageView.setImage(image);
         imageView.setFitWidth(CANVASWIDTH);
         imageView.setPreserveRatio(true);
+        
 
         return imageView;
     }
+    
+    /**
+     * @author humzahmalik
+     * Method that reads a file, line by line, into an array.
+     * @return 
+     * @throws IOException 
+     *
+     */
+    public  ArrayList<String[]> readFile(String f) throws IOException {
+    			
+			BufferedReader in = new BufferedReader(new FileReader(f));
+			String str;
+			
+			//Create ArrayList to hold the lists of notes
+		    songNotes = new ArrayList<String[]>();
+		    
+		    in.readLine(); 
+			
+			//While there is a line, add it to the list
+		    while((str = in.readLine()) != null){
+				//split string
+				String[] split = str.split(",");
+				//adds the note into a song arraylist
+				songNotes.add(split);
+				
+			}
+			return songNotes;
+    }
+    
+    /**
+     * @author humzahmalik
+     * Method checking whether number corresponds to black, white or empty not
+     * @return Note value
+     */
+    
+    public Note checkNote(int num) {
+    		Note type = null;
+    		
+    		if(num==0) {
+    			type= Note.OPEN;
+    		}
+    		if(num==1) {
+    			type= Note.BLACK;
+    		}
+    		if(num==2) {
+    			type= Note.WHITE;
+    		}
+    		
+    		return type;
+    	
+    }
+
+    /**
+     * @author humzahmalik
+
+     * Converts arraylist into a notes array
+     * @return 
+     */
+    public ArrayList<Note[]> songToGameNotes(ArrayList<String[]> songNotes) {
+  
+    		songSequenceHolder = new ArrayList<Note[]>();
+    		
+    		//For each line of notes in the arraylist
+	    	 for (String[] i : songNotes) { 
+	    		 	//Create array of array to hold every three notes
+	     		notesHolder=new Note[] {null, null, null};
+	     		
+	     		//For each element s in the list {}
+	     		for (int s = 1; s < i.length; s++) {
+	     			notesHolder[s-1]=checkNote(Integer.parseInt(i[s]));
+	     		}
+			
+	             
+	             //add the created arraylist to the large arraylist
+	             songSequenceHolder.add(notesHolder);
+	             
+	        }
+	    	 
+	    	 //Return final array  	 
+	    	 return songSequenceHolder;
+    }
+
+    /**
+     * @author humzahmalik
+     * Takes the list of notes and converts it to a dictionary with the key equaling the tick time.
+     * 
+     */
+    public LinkedHashMap arrayToDictionary(ArrayList<Note[]> listInput, ArrayList<String[]> fileList){
+    		mapA = new LinkedHashMap();
+    		
+    		//For each element s in the list {}
+     		for (int i = 1; i < listInput.size(); i++) {
+     			mapA.put(fileList.get(i)[0], listInput.get(i));  
+     		}
+		
+    		return mapA;
+    		
+    		
+    		
+    }
+
 }

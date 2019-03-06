@@ -278,11 +278,13 @@ public class StoreManagerFrame {
 			invalid = true;
 			return;
 			}
+		break;
+		
 	case 2:
 		//Check file exists and is not a directory
 			if(f.exists() && !f.isDirectory()) { 
 			    //Ensure suffix is of correct notation
-				if (!s.endsWith(".png") || !s.endsWith(".jpg")) {
+				if (!(s.endsWith(".png") || s.endsWith(".jpg"))) {
 					System.out.println("The second submitted file must be of .png or of .jpg format.");
 					invalid = true;
 					return;
@@ -294,6 +296,7 @@ public class StoreManagerFrame {
 				invalid = true;
 				return;
 			}
+			break;
 		
 	case 3:
 		//Check file exists and is not a directory
@@ -310,8 +313,10 @@ public class StoreManagerFrame {
 			System.out.println("The third submitted file does not exist");
 			invalid = true;
 			return;
+			}
+			break;
 		}
-		}
+	
 	}
 	
 

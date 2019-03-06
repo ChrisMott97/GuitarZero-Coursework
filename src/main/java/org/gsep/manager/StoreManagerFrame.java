@@ -237,7 +237,7 @@ public class StoreManagerFrame {
 				song.filesSong = files;
 				//Run method within Client
 				try {
-					Client.run();
+					song.run();
 				} catch (Exception e1) {
 					e1.printStackTrace();
 					//remember to exit

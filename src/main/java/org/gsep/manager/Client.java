@@ -24,7 +24,7 @@ public class Client{
 	static ArrayList<File> filesSong = new ArrayList<File>();
 	static String name;
 	static Socket socket;
-	
+
 	/**
 	 * Method that calls the methods readFile() and zipFile(). The purpose of run() is to invoke the client side methods all at once.
 	 * @throws Exception
@@ -91,46 +91,6 @@ public class Client{
 	    }
 
 	  }
-	
-
-	/**
-	 * This method has not yet been fully completed. Its purpose will be to establish a connection to the server, and send the zip file over the network.
-	 * @param file: File to send to server.
-	 * @throws Exception
-	 */
-	public static void sendZip(File file) throws Exception {
-	         
-			//connect to server
-	        socket = new Socket("localhost", 3332);
-	        
-	        
-	        ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-	        oos.writeObject(file.getName());
-	        FileInputStream fis = new FileInputStream(file);
-	        byte [] buffer = new byte[2002];
-	        Integer bytesRead = 0;
-	 
-	        while ((bytesRead = fis.read(buffer)) > 0) {
-	            oos.writeObject(bytesRead);
-	            oos.writeObject(Arrays.copyOf(buffer, buffer.length));
-	        }
-	 
-	        oos.close();
-	        System.exit(0);    
-		
-
-    }
-	
-	/**
-	 * This method handles exceptions within the transfering of the zip file.
-	 * @param message
-	 * @throws Exception
-	 */
-	public static void throwException(String message) throws Exception {
-		//METHOD NOT INVOKED YET
-        throw new Exception(message);
-    }
-	
 	
 	
 }

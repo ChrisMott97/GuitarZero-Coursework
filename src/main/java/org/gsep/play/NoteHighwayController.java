@@ -16,10 +16,12 @@ public class NoteHighwayController {
     private NoteHighwayView view;
     private int tempo;
     private ArrayList<Note[]> songSequenceHolder;
-    Note[] notesHolder; 
-    
+    private String f= getClass().getResource("/notes.txt").getFile();
+    private Note[] notesHolder; 
+    private ArrayList<String[]> songNotes;
     private ArrayList<Note[]> songSequence;
-    ArrayList<String[]> songNotes;
+    
+    
    
     
     /**
@@ -46,10 +48,31 @@ public class NoteHighwayController {
 				songNotes.add(split);
 				
 			}
-			
 			return songNotes;
     }
     
+    /**
+     * @author humzahmalik
+     * Method checking whether number corresponds to black, white or empty not
+     * @return Note value
+     */
+    
+    public Note checkNote(int num) {
+    		Note type = null;
+    		
+    		if(num==0) {
+    			type= Note.OPEN;
+    		}
+    		if(num==1) {
+    			type= Note.BLACK;
+    		}
+    		if(num==2) {
+    			type= Note.WHITE;
+    		}
+    		
+    		return type;
+    	
+    }
 
     /**
      * @author humzahmalik
@@ -61,33 +84,23 @@ public class NoteHighwayController {
   
     		songSequenceHolder = new ArrayList<Note[]>();
     		
+    		//For each line of notes in the arraylist
 	    	 for (String[] i : arrayList) { 
-	    		 	String zero = "0";
 	    		 	//Create array of array to hold every three notes
 	     		notesHolder=new Note[] {null, null, null};
 	     		
-	     		 if (i[2].equals("0")) {
-	     		 	notesHolder[0]=Note.WHITE;
-	     		 	System.out.println("Row " + i + " is white");
-		     	 }
-		     	 
-	     		 else if (i[2].equals("1")) {
-		     		 notesHolder[0]=Note.BLACK;
-		     	 }
-	            
-	             //if the list has empty elements, add an open note object to that index
-	             for(int p = 0; p < notesHolder.length; p++) {
-	            	 	if (notesHolder[p]==null) {
-	            	 		notesHolder[p]=Note.OPEN;
-	            	 	}
-	             }
+	     		//For each element s in the list {}
+	     		for (int s = 1; s < i.length; s++) {
+	     			notesHolder[s-1]=checkNote(Integer.parseInt(i[s]));
+	     		}
 			
 	             
 	             //add the created arraylist to the large arraylist
 	             songSequenceHolder.add(notesHolder);
 	             
 	        }
-	    	 	    	 
+	    	 
+	    	 //Return final array  	 
 	    	 return songSequenceHolder;
     }
     
@@ -104,8 +117,8 @@ public class NoteHighwayController {
         this.view = view;
         //loads note sequence and tempo like this temporarily until proprietary files can be loaded
         this.tempo = 1000;
-        this.songSequence =   songToGameNotes(readFile(getClass().getResource("/notes.txt").getFile()));
-      
+        this.songSequence =  songToGameNotes(readFile(f));
+       
 
         
     }

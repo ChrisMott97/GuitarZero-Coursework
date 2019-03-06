@@ -1,14 +1,14 @@
 package org.gsep.midi;
 
 import java.io.*;
-import static org.gsep.midi.guitarMIDI.convertMIDI;
 
 public class Main {
 
 
     public static void main (String[] args) {                       //To test file is written and passed back correctly
         //In real implementation, convertMIDI will be
-        File noteFile = convertMIDI("queen.mid");      //called from externally
+        guitarMIDI boi = new guitarMIDI();
+        File noteFile = boi.convertMIDI("queen.mid");      //called from externally
 
         try {
             FileReader fr = new FileReader(noteFile);

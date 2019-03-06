@@ -17,11 +17,10 @@ public class Main {
 	 * @throws Exception
 	 */
 	public static void main( String[] argv ) throws Exception {
-		
+
 		StoreManagerFrame smf = new StoreManagerFrame();
 		smf.create();
 		
 			      
 	  }
-	
 }

@@ -4,10 +4,9 @@ import java.util.*;
 
 public class NoteHighwayModel {
 	//number of empty notes to run before the file is played
-    private final int lanePositions = 0;
-    private final int laneQuantity = 3;
+    private final int lanePositions = 4;
+    private int beat = lanePositions;
     private ArrayList<Note[]> noteSequence;
-    private int beat = 0;
     private int score = 0;
     
     /**
@@ -55,10 +54,11 @@ public class NoteHighwayModel {
      */
     public Note[] top(){
 
-        if (beat-lanePositions < noteSequence.size() && beat-lanePositions >= 0)
-            return noteSequence.get(beat-lanePositions);
-        else
+        if (beat-lanePositions < noteSequence.size() && beat-lanePositions >= 0) {
+            return noteSequence.get(beat - lanePositions);
+        }else{
             return new Note[]{Note.OPEN, Note.OPEN, Note.OPEN};
+        }
     }
 
     /**

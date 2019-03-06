@@ -5,6 +5,7 @@ import javax.sound.midi.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 /**
@@ -16,7 +17,6 @@ import java.util.List;
  */
 public class guitarMIDI {
 
-    public guitarMIDI self;
 
     /**
      * Returns the name of the synthesizer's nth instrument
@@ -36,7 +36,6 @@ public class guitarMIDI {
             return "";
         }
     }
-
 
     /**
      * Converts a given track of a MIDI file into an ArrayList containing the information used in play mode.
@@ -80,27 +79,7 @@ public class guitarMIDI {
                         for (int j = 0; j < guitarChannnel.size(); j++) {
                             currentArray.add(new ArrayList<>());
                             if (guitarChannnel.get(j) == chan) {
-
-                                switch (dat1 % 6) {
-                                    case 0:
-                                        currentArray.get(j).add(tick + " 1 0");
-                                        break;
-                                    case 1:
-                                        currentArray.get(j).add(tick + " 1 1");
-                                        break;
-                                    case 2:
-                                        currentArray.get(j).add(tick + " 2 0");
-                                        break;
-                                    case 3:
-                                        currentArray.get(j).add(tick + " 2 1");
-                                        break;
-                                    case 4:
-                                        currentArray.get(j).add(tick + " 3 0");
-                                        break;
-                                    case 5:
-                                        currentArray.get(j).add(tick + " 3 1");
-                                        break;
-                                }
+                                currentArray.get(j).add(tick + " " + dat1);
                                 break;
                             }
                         }
@@ -135,14 +114,11 @@ public class guitarMIDI {
 
         BufferedWriter bw = null;
         try {
-
             File file = new File("noteFile.txt");
-
             //CHECK THIS
             if (!file.exists()) {
                 file.createNewFile();
             }
-
             FileWriter fw = new FileWriter(file);
             bw = new BufferedWriter(fw);
 
@@ -165,21 +141,82 @@ public class guitarMIDI {
         return null;
     }
 
-    public static File xyz(ArrayList arr){
+    public static File addNotes(ArrayList arr, double perTick){
+        ArrayList<String> newArr = new ArrayList<>();
+        newArr.add(perTick + " ms/tick");
+        Random rand = new Random();
+
+        for(int i = 0; i < arr.size(); i++){
+            int count=0;
+            String[] iSplit = arr.get(i).toString().split("\\s+");
+            int iTick = Integer.parseInt(iSplit[0]);
+
+            for (Object anArr : arr) {
+                String[] jSplit = anArr.toString().split("\\s+");
+                int jTick = Integer.parseInt(jSplit[0]);
+                if (iTick == jTick) {
+                    count = count + 1;
+                }
+            }
+
+            if(count == 1){
+                int row = rand.nextInt(3) + 1;
+                if (row == 0){
+                    int colr = rand.nextInt(2) + 1;
+                    newArr.add(iTick + "," + colr + ",0,0");
+                }else if (row == 1) {
+                    int colr = rand.nextInt(2) + 1;
+                    newArr.add(iTick + ",0," + colr + ",0");
+                }else if(row == 2){
+                    int colr = rand.nextInt(2) + 1;
+                    newArr.add(iTick + ",0,0," + colr);
+                }
+            }else if(count == 2){
+                int row = rand.nextInt(3) + 1;
+                int row2;
+                do{
+                    row2 = rand.nextInt(3) + 1;
+                }while (row2 == row);
+                if (row == 0 && row2 == 1 || row == 1 && row2 == 0){
+                    int colr = rand.nextInt(2) + 1;
+                    int colr1 = rand.nextInt(2) + 1;
+                    newArr.add(iTick + "," + colr + "," + colr1 + ",0");
+                }else if (row == 1 && row2 == 2 || row == 2 && row2 == 1){
+                    int colr = rand.nextInt(2) + 1;
+                    int colr1 = rand.nextInt(2) + 1;
+                    newArr.add(iTick + ",0," + colr + "," + colr1);
+                }else if(row == 2 && row2 == 0 || row == 0 && row2 == 2){
+                    int colr = rand.nextInt(2) + 1;
+                    int colr1 = rand.nextInt(2) + 1;
+                    newArr.add(iTick + "," + colr + ",0," + colr1);
+                }
+            }else if (count > 2){
+                int colr = rand.nextInt(2) + 1;
+                int colr1 = rand.nextInt(2) + 1;
+                int colr2 = rand.nextInt(2) + 1;
+                newArr.add(iTick + "," + colr + "," + colr1 + "," + colr2 );
+            }
+            i = i + count - 1;
+        }
+
+        return writeToFile(newArr);
+        //It has nothing to do with notes, is that okay????
+    }
+
+    public static File concatArr(ArrayList arr, double perTick){
         for (int i =0; i <arr.size(); i++){
             if (i < arr.size() - 1) {
-                String[] j = arr.get(i).toString().split("\\s+");
-                String[] k = arr.get(i + 1).toString().split("\\s+");
-                int j1 = Integer.parseInt(j[0]);
-                int k1 = Integer.parseInt(k[0]);
-                if (k1 < j1 + 5 && k1 != j1) {
+                String[] iSplit = arr.get(i).toString().split("\\s+");
+                String[] nextSplit = arr.get(i + 1).toString().split("\\s+");
+                int iTick = Integer.parseInt(iSplit[0]);
+                int nextTick = Integer.parseInt(nextSplit[0]);
+                if (nextTick < iTick + 100 && nextTick != iTick) {
                     arr.remove(i + 1);
+                    i = i - 2;
                 }
             }
         }
-
-
-        return writeToFile(arr);
+        return addNotes(arr,perTick);
     }
 
     /**
@@ -195,15 +232,13 @@ public class guitarMIDI {
         //TODO make sure it handles when a) file not found b) input file in not a MIDI file
         try {
 
-            Sequence seq = MidiSystem.getSequence( new File(getClass().getResource(MIDIFileName).getFile()));
+            Sequence seq = MidiSystem.getSequence(new File(getClass().getResource(MIDIFileName).getFile()));
             Sequencer seqr = MidiSystem.getSequencer();
             seqr.setSequence(seq);
-//            long tickspermicrosec = seq.getMicrosecondLength()/seq.getTickLength();
-//            System.out.println(tickspermicrosec + " " + seq.getTickLength() + " " + seq.getMicrosecondLength());
             Track[] trks = seq.getTracks();
             int longestLen = 0;
             ArrayList <String> trackArray = new ArrayList<>();
-            System.out.println(seqr.getTempoInBPM());
+            double perTick = 60000/(seqr.getTempoInBPM()*seq.getResolution());
             for (Track trk : trks) {
 
                 ArrayList<String> currentTrack = getTrackNotes(trk);
@@ -214,8 +249,8 @@ public class guitarMIDI {
                     trackArray = currentTrack;
                 }
             }
+            return concatArr(trackArray, perTick);
 
-            return xyz(trackArray);
         } catch ( Exception exn ) {
             System.out.println( exn ); System.exit( 1 );
         }
@@ -226,26 +261,7 @@ public class guitarMIDI {
         //In real implementation, convertMIDI will be
         guitarMIDI boi = new guitarMIDI();
 
-        File noteFile = boi.convertMIDI("MamaDo.mid");      //called from externally
-//        ArrayList<String> arr = new ArrayList<>();
-
-//        arr.add("12345 567 677");
-//        arr.add("12345 567 677");
-//        arr.add("12345 567 677");
-//        arr.add("12345 567 677");
-//        arr.add("12347 434 674");
-//        arr.add("17282 574 267");
-//        arr.add("17292 574 267");
-//        arr.add("17305 363 992");
-//        arr.add("17309 574 267");
-//        arr.add("19827 363 992");
-//        arr.add("19923 574 267");
-//        arr.add("19927 363 992");
-//        arr.add("20123 363 992");
-//        xyz(arr);
-//        for(int i = 0; i < arr.size(); i ++){
-//            System.out.println(arr.get(i));
-//        }
+        File noteFile = boi.convertMIDI("/queen.mid");      //called from externally
         try {
             FileReader fr = new FileReader(noteFile);
             BufferedReader br = new BufferedReader(fr);

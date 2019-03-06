@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 /*
  * ItemContainer.
@@ -181,9 +182,14 @@ public class ItemContainer extends Pane {
      */
     public void setItem(Item item){
         //TODO: Move to ItemContainerModel?
-        System.out.println(item.getId()+".png");
-        File file = new File(getClass().getResource("/songs/img/"+item.getId()+".png").getFile());
-        Image image = new Image(file.toURI().toString(), 65, 65, true, true, true);
+        File file;
+        Image image;
+        try{
+            file = new File(getClass().getResource("/songs/img/"+item.getId()+".png").getFile());
+        }catch(Exception e){
+            file = new File(getClass().getResource("/songs/img/error.png").getFile());
+        }
+        image = new Image(file.toURI().toString(), 65, 65, true, true, true);
 
         this.item = item;
         this.label.setText(item.getName());

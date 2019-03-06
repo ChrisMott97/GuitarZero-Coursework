@@ -1,10 +1,22 @@
 [
   {
     "id": 0,
-    "name": "Another One Bites The Dust"
+    "name": "Exit"
   },
   {
     "id": 1,
-    "name": "Mama Do"
+    "name": "Play"
+  },
+  {
+    "id": 2,
+    "name": "Select"
+  },
+  {
+    "id": 3,
+    "name": "Store"
+  },
+  {
+    "id": 4,
+    "name": "Tutorial"
   }
 ]

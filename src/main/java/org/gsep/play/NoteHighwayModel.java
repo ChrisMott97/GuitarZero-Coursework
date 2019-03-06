@@ -6,7 +6,7 @@ public class NoteHighwayModel {
 	//number of empty notes to run before the file is played
     private final int lanePositions = 0;
     private final int laneQuantity = 3;
-    private Note[][] noteSequence;
+    private ArrayList<Note[]> noteSequence;
     private int beat = 0;
     private int score = 0;
     
@@ -33,10 +33,10 @@ public class NoteHighwayModel {
     /**
      * Sets the note sequence that the note highway plays
      *
-     * @param noteSequence 2D array of note types to set
+     * @param songSequence 2D array of note types to set
      */
-    public void setNoteSequence(Note[][] noteSequence){
-        this.noteSequence = noteSequence;
+    public void setNoteSequence(ArrayList<Note[]> songSequence){
+        this.noteSequence = songSequence;
         this.beat = 0;
     }
 
@@ -55,8 +55,8 @@ public class NoteHighwayModel {
      */
     public Note[] top(){
 
-        if (beat-lanePositions < noteSequence.length && beat-lanePositions >= 0)
-            return noteSequence[beat-lanePositions];
+        if (beat-lanePositions < noteSequence.size() && beat-lanePositions >= 0)
+            return noteSequence.get(beat-lanePositions);
         else
             return new Note[]{Note.OPEN, Note.OPEN, Note.OPEN};
     }
@@ -69,8 +69,8 @@ public class NoteHighwayModel {
      */
     public Note[] bottom(){
     		
-        if (beat < noteSequence.length)
-            return noteSequence[beat];
+        if (beat < noteSequence.size())
+            return noteSequence.get(beat);
         else
             return new Note[]{Note.OPEN, Note.OPEN, Note.OPEN};
     }

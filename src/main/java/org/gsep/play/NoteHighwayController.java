@@ -18,7 +18,7 @@ public class NoteHighwayController {
     private ArrayList<Note[]> songSequenceHolder;
     Note[] notesHolder; 
     
-    private Note[][] songSequence;
+    private ArrayList<Note[]> songSequence;
     ArrayList<String[]> songNotes;
    
     
@@ -78,7 +78,7 @@ public class NoteHighwayController {
 	             //if the list has empty elements, add an open note object to that index
 	             for(int p = 0; p < notesHolder.length; p++) {
 	            	 	if (notesHolder[p]==null) {
-	            	 		notesHolder[p]=Note.OPEN;
+	            	 		notesHolder[p]=Note.BLACK;
 	            	 	}
 	             }
 			
@@ -104,58 +104,8 @@ public class NoteHighwayController {
         this.view = view;
         //loads note sequence and tempo like this temporarily until proprietary files can be loaded
         this.tempo = 1000;
-        this.songSequence = new Note[][] {
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-        };
-        
-        songToGameNotes(readFile(getClass().getResource("/notes.txt").getFile()));
+        this.songSequence =   songToGameNotes(readFile(getClass().getResource("/notes.txt").getFile()));
+      
 
         
     }

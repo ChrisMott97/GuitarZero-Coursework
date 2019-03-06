@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
-<?import org.gsep.select.ItemContainer?>
+<?import org.gsep.carousel.ItemContainer?>
 <?import javafx.scene.layout.TilePane?>
 <!--
  * SelectView.
@@ -15,46 +15,21 @@
  * @author  Chris Mott.
  * @version 1.00, January 2019.
  -->
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-           minWidth="-Infinity" prefHeight="400.0" prefWidth="610.0"
-           xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="org.gsep.select.SelectController">
+<?import org.gsep.carousel.Carousel?>
+<!--<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"-->
+           <!--minWidth="-Infinity" prefHeight="400.0" prefWidth="610.0"-->
+           <!--xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">-->
+<fx:root type="javafx.scene.layout.StackPane" prefHeight="700.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+
    <children>
-      <TilePane fx:id="parentContainer" prefHeight="200.0" styleClass="parentContainer" prefRows="1" prefTileHeight="120.0" prefTileWidth="120.0" prefWidth="200.0">
+      <Carousel fx:id="carousel" styleClass="carousel" >
          <StackPane.margin>
-            <Insets bottom="150.0" left="4.0" right="4.0" top="150.0" />
+            <Insets>
+               <top>200</top>
+               <bottom>200</bottom>
+            </Insets>
          </StackPane.margin>
-         <children>
-            <ItemContainer fx:id="icOne" styleClass="itemContainer" prefHeight="200.0" prefWidth="200.0">
-               <TilePane.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </TilePane.margin>
-            </ItemContainer>
-            <ItemContainer fx:id="icTwo" styleClass="itemContainer" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0">
-               <TilePane.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </TilePane.margin>
-            </ItemContainer>
-            <ItemContainer fx:id="icThree" styleClass="itemContainer" layoutX="130.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0">
-               <TilePane.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </TilePane.margin>
-            </ItemContainer>
-            <ItemContainer fx:id="icFour" styleClass="itemContainer" layoutX="250.0" layoutY="11.0" prefHeight="200.0" prefWidth="200.0">
-               <TilePane.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </TilePane.margin>
-            </ItemContainer>
-            <ItemContainer fx:id="icFive" styleClass="itemContainer" layoutX="370.0" layoutY="11.0" prefHeight="200.0" prefWidth="200.0">
-               <TilePane.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </TilePane.margin>
-            </ItemContainer>
-         </children>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-      </TilePane>
+      </Carousel>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" StackPane.alignment="CENTER">
         <buttons>
           <Button id="btn_previous" fx:id="btnPrevious" alignment="CENTER" mnemonicParsing="false" text="Previous" textAlignment="CENTER" />
@@ -68,4 +43,5 @@
          </padding>
       </ButtonBar>
    </children>
-</StackPane>
+</fx:root>
+<!--</StackPane>-->

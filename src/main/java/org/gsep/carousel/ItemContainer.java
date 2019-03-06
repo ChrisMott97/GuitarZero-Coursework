@@ -1,4 +1,4 @@
-package org.gsep.select;
+package org.gsep.carousel;
 
 import javafx.animation.*;
 import javafx.beans.property.StringProperty;
@@ -12,7 +12,6 @@ import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
-
 /*
  * ItemContainer.
  *

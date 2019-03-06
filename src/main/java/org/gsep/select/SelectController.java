@@ -1,27 +1,20 @@
 package org.gsep.select;
 
-import javafx.animation.Animation;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import javafx.scene.layout.StackPane;
+import org.gsep.carousel.Carousel;
+import org.gsep.carousel.Item;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
- * SelectController.
- *
- * @author  Chris Mott.
- * @version 1.00, January 2019.
- */
-public class SelectController {
+public class SelectController extends StackPane {
 
-    private ItemModel iModel;
-    private ItemContainerModel icModel;
+    @FXML
+    protected Carousel carousel;
 
     @FXML
     protected Button btnNext;
@@ -29,68 +22,29 @@ public class SelectController {
     @FXML
     protected Button btnPrevious;
 
-    @FXML
-    protected ItemContainer icOne;
+    FXMLLoader fxmlLoader;
 
-    @FXML
-    protected ItemContainer icTwo;
-
-    @FXML
-    protected ItemContainer icThree;
-
-    @FXML
-    protected ItemContainer icFour;
-
-    @FXML
-    protected ItemContainer icFive;
-
-    private List<ItemContainer> containers = new ArrayList<>();
-
-    /**
-     * Acts like a constructor and runs when the controller is created.
-     */
-    public void initialize() {
-        containers.add(icOne);
-        containers.add(icTwo);
-        containers.add(icThree);
-        containers.add(icFour);
-        containers.add(icFive);
-        for (int i = 0; i < containers.size(); i++) {
-            containers.get(i).setInitialPosition(i+1);
-        }
-
-
-        //Event Handlers
-        btnNext.setOnAction(e ->
-                next()
-        );
-
-        btnPrevious.setOnAction(e ->
-                previous()
-        );
-    }
-
-    /**
-     * Injects the models needed into the controller.
-     *
-     * @param iModel the Item Model used for manipulating Items.
-     * @param icModel the Item Container Model used for manipulating Item Containers.
-     */
-    public void linkModels(ItemModel iModel, ItemContainerModel icModel){
-        if(this.icModel != null || this.iModel != null)
-            throw new IllegalStateException("Models can only be linked once!");
-
-        this.iModel = iModel;
-        this.icModel = icModel;
-        this.loadData();
+    public SelectController(){
+        fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SelectView.fxml"));
+        fxmlLoader.setRoot(this);
+        fxmlLoader.setController(this);
 
     }
 
-    /**
-     * The point of ingestion for data from files.
-     */
-    private void loadData(){
-        List<MusicItem> items = new ArrayList<>();
+    public void initialize(){
+        System.out.println("Select mode initializing...");
+
+        btnNext.setOnAction(e -> {
+            carousel.next();
+        });
+
+        btnPrevious.setOnAction(e -> {
+            carousel.previous();
+        });
+    }
+
+    public void loadData(){
+        List<Item> items = new ArrayList<>();
 
         for (int i = 0; i < 7; i++) {
             items.add(new MusicItem("Song "+(i+1), "/songs/Song1/song1.jpg"));
@@ -112,34 +66,6 @@ public class SelectController {
             e.printStackTrace();
         }
 
-
-        iModel.loadData(items);
-        icModel.loadData(containers);
-        icModel.map(items);
+        this.carousel.ingest(items);
     }
-
-    /**
-     * Cycles all item and item container lists to the next intended item.
-     * Only works if there are no current animations running.
-     */
-    public void next(){
-        if(icOne.getStatus() == Animation.Status.RUNNING)
-            return;
-        iModel.next();
-        icModel.next();
-        icModel.map(iModel.getVisible());
-    }
-
-    /**
-     * Cycles all item and item container lists to the previous intended item.
-     * Only works if there are no current animations running.
-     */
-    public void previous(){
-        if(icOne.getStatus() == Animation.Status.RUNNING)
-            return;
-        iModel.previous();
-        icModel.previous();
-        icModel.map(iModel.getVisible());
-    }
-
 }

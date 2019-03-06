@@ -1,4 +1,4 @@
-package org.gsep.select;
+package org.gsep.carousel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class ItemContainerModel<T extends Item> {
 
     private ItemContainer intendedContainer;
 
-    private final double betweenContainers = 120;
+    private double betweenContainers = 190;
 
     /**
      * Loads data into the model.
@@ -24,10 +24,11 @@ public class ItemContainerModel<T extends Item> {
      */
     public void loadData(List<ItemContainer> list){
         this.containers = list;
+//        betweenContainers = containers.get(1).getTranslateX() - containers.get(0).getTranslateX();
         for (ItemContainer ic : list) {
             ic.setMove(betweenContainers);
-            ic.setJumpLeft(ic.getTranslateX()-(120*(ic.getInitialPosition()-1)));
-            ic.setJumpRight(ic.getTranslateX()+(120*(5-ic.getInitialPosition())));
+            ic.setJumpLeft(ic.getTranslateX()-(betweenContainers*(ic.getInitialPosition()-1)));
+            ic.setJumpRight(ic.getTranslateX()+(betweenContainers*(5-ic.getInitialPosition())));
         }
     }
 
@@ -70,7 +71,8 @@ public class ItemContainerModel<T extends Item> {
         if(items.size() >= 5){
             for (int i = 0; i < 5; i++) {
                 System.out.println(items.get(i));
-                containers.get(i).setItem(items.get(i));
+                if(containers.get(i).getItem() != items.get(i))
+                    containers.get(i).setItem(items.get(i));
             }
         }else{
             for (int i = 0; i < items.size(); i++) {

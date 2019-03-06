@@ -1,4 +1,4 @@
-package org.gsep.select;
+package org.gsep.carousel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,32 +12,32 @@ import java.util.List;
 public class ItemModel<T extends Item> {
 //Theoretical Carousel
 
-    private List<T> all;
-    private List<T> visible = new ArrayList<T>();
-    private T intended;
+    private List<Item> all;
+    private List<Item> visible = new ArrayList<Item>();
+    private Item intended;
     private static final int maxVisibleLength = 5;
 
-    /**
-     * Allows ItemModel to be constructed with no arguments.
-     */
-    ItemModel(){}
-
-    /**
-     * Constructor for the ItemModel to initialize the list.
-     *
-     * @param all the list of Items to be loaded.
-     */
-    ItemModel(List<T> all){
-        this.all = all;
-        this.update();
-    }
+//    /**
+//     * Allows ItemModel to be constructed with no arguments.
+//     */
+//    ItemModel(){}
+//
+//    /**
+//     * Constructor for the ItemModel to initialize the list.
+//     *
+//     * @param all the list of Items to be loaded.
+//     */
+//    ItemModel(List<T> all){
+//        this.all = all;
+//        this.update();
+//    }
 
     /**
      * Used after an empty constructor to load the list.
      *
      * @param all the list of items to be loaded.
      */
-    public void loadData(List<T> all){
+    public void loadData(List<Item> all){
         this.all = all;
         this.update();
     }
@@ -48,7 +48,7 @@ public class ItemModel<T extends Item> {
      *
      * @return the visible list.
      */
-    private List<T> update(){
+    private List<Item> update(){
         if(all.size() >= maxVisibleLength){
             visible = all.subList(0, maxVisibleLength);
             intended = visible.get((int)Math.ceil(maxVisibleLength /2));
@@ -64,7 +64,7 @@ public class ItemModel<T extends Item> {
      *
      * @return the full list of Items.
      */
-    public List<T> getAll() {
+    public List<Item> getAll() {
         return all;
     }
 
@@ -73,7 +73,7 @@ public class ItemModel<T extends Item> {
      *
      * @return the list of visible Items.
      */
-    public List<T> getVisible() {
+    public List<Item> getVisible() {
         return visible;
     }
 
@@ -91,8 +91,8 @@ public class ItemModel<T extends Item> {
      *
      * @return the resulting visible list.
      */
-    public List<T> previous(){
-        T moving = all.remove(all.size()-1);
+    public List<Item> previous(){
+        Item moving = all.remove(all.size()-1);
         all.add(0, moving);
         update();
         return visible;
@@ -103,8 +103,8 @@ public class ItemModel<T extends Item> {
      *
      * @return the resulting visible list.
      */
-    public List<T> next(){
-        T moving = all.remove(0);
+    public List<Item> next(){
+        Item moving = all.remove(0);
         all.add(moving);
         update();
         return visible;

@@ -1,5 +1,7 @@
 package org.gsep.select;
 
+import org.gsep.carousel.Item;
+
 /*
  * MusicItem.
  *

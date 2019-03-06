@@ -28,6 +28,7 @@ public class Play extends Application{
         Group root = new Group();
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setResizable(false);
         Canvas canvas = new Canvas(CANVASWIDTH, CANVASHEIGHT);
 
         root.getChildren().add(createBackground());

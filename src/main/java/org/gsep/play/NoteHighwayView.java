@@ -9,7 +9,7 @@ import java.util.List;
 
 public class NoteHighwayView {
     private Canvas canvas;
-    private List<NoteSprite> noteSprites = Collections.synchronizedList(new ArrayList<>());
+    private List<NoteSprite> noteSprites = Collections.synchronizedList(new ArrayList<NoteSprite>());
     private AnimationTimer animationTimer;
     private double noteHighwayPeriod;
     
@@ -31,10 +31,10 @@ public class NoteHighwayView {
 
                         if (progress <= 1){
                             noteSprite.updateProgress(progress);
-                            noteSprite.render(canvas.getGraphicsContext2D());
                         } else {
                             noteSprites.remove(noteSprite);
                         }
+                        noteSprite.render(canvas.getGraphicsContext2D());
                     }
                 }
             }

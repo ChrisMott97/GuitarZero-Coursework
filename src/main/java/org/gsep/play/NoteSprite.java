@@ -10,8 +10,8 @@ public class NoteSprite {
     private Point source;
     private Point destination;
     private double spawnTime;
-    private double initialSize = 30;
-    private double finalSize = 70;
+    private double initialSize = 40;
+    private double finalSize = 80;
     private double size = initialSize;
     private Image image;
 
@@ -24,7 +24,6 @@ public class NoteSprite {
                 setImage("/play/white.png");
                 break;
         }
-
         switch (laneType){
             case LEFT:
                 source = new Point(413, 0);
@@ -49,8 +48,8 @@ public class NoteSprite {
     }
 
     private void setPosition(double x, double y){
-        position.setX(x- size /2);
-        position.setY(y- size);
+        position.setX(x- size*0.5);
+        position.setY(y- size*0.9);
     }
 
     public void updateProgress(double progress) {

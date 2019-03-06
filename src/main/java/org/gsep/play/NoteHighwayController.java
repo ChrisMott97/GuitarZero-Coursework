@@ -64,13 +64,15 @@ public class NoteHighwayController {
 	    	 for (String[] i : arrayList) { 
 	    		 	//Create array of array to hold every three notes
 	     		notesHolder=new Note[] {null, null, null};
+	     		System.out.println(i[2].toString());
 	     		
-	     		 if (i[2]=="0") {
-	     		 	notesHolder[2]=Note.WHITE;
+	     		 if (i[2].toString()=="0") {
+	     		 	notesHolder[0]=Note.WHITE;
+	     		 	System.out.println("Row " + i + " is white");
 		     	 }
 		     	 
 		     	 if (i[2]=="1") {
-		     		 notesHolder[2]=Note.BLACK;
+		     		 notesHolder[0]=Note.BLACK;
 		     	 }
 	            
 	             //if the list has empty elements, add an open note object to that index
@@ -153,7 +155,6 @@ public class NoteHighwayController {
                 {Note.BLACK, Note.OPEN, Note.OPEN},
         };
         
-        //System.out.println(readFile(getClass().getResource("/notes.txt").getFile()));
         songToGameNotes(readFile(getClass().getResource("/notes.txt").getFile()));
 
         

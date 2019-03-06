@@ -28,7 +28,6 @@ public class NoteHighwayModel {
      */
     public int getScore(){
     		return score;
-    		
 		}
 
     /**

@@ -3,40 +3,21 @@ package org.gsep.play;
 import java.util.*;
 
 public class NoteHighwayModel {
-	//number of empty notes to run before the file is played
-    private final int lanePositions = 4;
-    private int beat = lanePositions;
-    private ArrayList<Note[]> noteSequence;
-    private int score = 0;
-    
-    /**
-     * @author humzahmalik
-     * Sets the score of the game
-     *
-     * @param score - 
-     */
-    public void setScore(int score){
-        this.score=score;
-    }
-    
-    /**
-     * @author humzahmalik
-     * Gets the score of the game
-     *
-     * @param score - 
-     */
-    public int getScore(){
-    		return score;
-		}
+    private int beat = 0;
+    private int noteHighwayLength;
+    private Map<Integer, Note[]> songSequence;
 
     /**
      * Sets the note sequence that the note highway plays
      *
-     * @param songSequence 2D array of note types to set
+     * @param songSequence Dictionary of ticks
      */
-    public void setNoteSequence(ArrayList<Note[]> songSequence){
-        this.noteSequence = songSequence;
-        this.beat = 0;
+    public void setSongSequence(Map<Integer, Note[]> songSequence){
+        this.songSequence = songSequence;
+    }
+
+    public void setNoteHighwayLength(int noteHighwayLength){
+        this.noteHighwayLength = noteHighwayLength;
     }
 
     /**
@@ -54,10 +35,10 @@ public class NoteHighwayModel {
      */
     public Note[] top(){
 
-        if (beat-lanePositions < noteSequence.size() && beat-lanePositions >= 0) {
-            return noteSequence.get(beat - lanePositions);
+        if (beat < songSequence.size()) {
+            return songSequence.get(beat);
         }else{
-            return new Note[]{Note.OPEN, Note.OPEN, Note.OPEN};
+            return null;
         }
     }
 
@@ -69,9 +50,9 @@ public class NoteHighwayModel {
      */
     public Note[] bottom(){
     		
-        if (beat < noteSequence.size())
-            return noteSequence.get(beat);
+        if (beat < songSequence.size())
+            return songSequence.get(beat-noteHighwayLength);
         else
-            return new Note[]{Note.OPEN, Note.OPEN, Note.OPEN};
+            return null;
     }
 }

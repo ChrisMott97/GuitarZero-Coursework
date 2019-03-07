@@ -44,10 +44,12 @@ public class Play extends Application{
         NoteHighwayView view = new NoteHighwayView(canvas);
         NoteHighwayController controller = new NoteHighwayController(model, view);
 
+        Map<Integer, Note[]> song = new HashMap<>();
+        song.put(0, new Note[] {Note.OPEN, Note.BLACK, Note.WHITE});
+
         stage.show();
         view.startRender();
-        controller.play();
-        
+        controller.play(song, 100);
     }
 
     /**

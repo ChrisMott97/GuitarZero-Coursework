@@ -59,9 +59,12 @@ public class Carousel extends TilePane{
             containers.get(ind).setInitialPosition(ind+1);
         }
 
-        this.iModel = new ItemModel();
-        this.icModel = new ItemContainerModel();
 
+    }
+
+    public void linkModels(ItemModel itemModel, ItemContainerModel itemContainerModel){
+        this.iModel = itemModel;
+        this.icModel = itemContainerModel;
     }
 
     public void ingest(List<Item> items){

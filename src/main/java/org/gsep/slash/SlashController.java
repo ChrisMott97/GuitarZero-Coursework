@@ -11,8 +11,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.gsep.SceneController;
-import org.gsep.carousel.Carousel;
-import org.gsep.carousel.Item;
+import org.gsep.carousel.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,17 +33,22 @@ public class SlashController extends SceneController {
 
     private Scene nextScene;
 
-    public SlashController(Stage stage){
-        setStage(stage);
+    private ItemModel itemModel;
+    private ItemContainerModel itemContainerModel;
+
+    public SlashController(ItemModel itemModel, ItemContainerModel itemContainerModel){
 
         fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SlashView.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
+        this.itemModel = itemModel;
+        this.itemContainerModel = itemContainerModel;
 
     }
 
     public void initialize(){
         System.out.println("Slash mode initializing...");
+        carousel.linkModels(this.itemModel, this.itemContainerModel);
         this.loadData();
 
     }
@@ -60,7 +64,8 @@ public class SlashController extends SceneController {
                     carousel.previous();
                     break;
                 case SPACE:
-                    getStage().setScene(getNextScene());
+//                    getStage().setScene(getNextScene());
+                    break;
             }
         });
         return scene;

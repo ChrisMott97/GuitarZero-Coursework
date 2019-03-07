@@ -13,6 +13,8 @@ import javafx.stage.Stage;
 import org.gsep.SceneController;
 import org.gsep.carousel.Carousel;
 import org.gsep.carousel.Item;
+import org.gsep.carousel.ItemContainerModel;
+import org.gsep.carousel.ItemModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,16 +28,22 @@ public class SelectController extends SceneController {
 
     private FXMLLoader fxmlLoader;
 
-    public SelectController(Stage stage){
-        setStage(stage);
+    private ItemModel itemModel;
+    private ItemContainerModel itemContainerModel;
+
+    public SelectController(ItemModel itemModel, ItemContainerModel itemContainerModel){
         fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SelectView.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
+
+        this.itemModel = itemModel;
+        this.itemContainerModel = itemContainerModel;
 
     }
 
     public void initialize(){
         System.out.println("Select mode initializing...");
+        carousel.linkModels(itemModel,itemContainerModel);
         // Event handling/listeners go here!
         loadData();
 

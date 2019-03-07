@@ -16,12 +16,20 @@ import javafx.scene.layout.*;
 public class Play extends Application{
     private final int CANVASWIDTH = 950;
     private final int CANVASHEIGHT = 700;
+    private ArrayList<Note[]> songSequenceHolder;
+    private String f= getClass().getResource("/noteFile.txt").getFile();
+    private Note[] notesHolder; 
+    private ArrayList<String[]> songNotes;
+    private ArrayList<Note[]> songSequence;
+    private LinkedHashMap mapA;
 
     public static void main(String[] args) {
         launch(args);
     }
+    
 
     public void start(Stage stage) throws IOException{
+    	/*
         stage.setTitle("Play");
 
         //initialise scene
@@ -43,6 +51,7 @@ public class Play extends Application{
         NoteHighwayModel model = new NoteHighwayModel();
         NoteHighwayView view = new NoteHighwayView(canvas);
         NoteHighwayController controller = new NoteHighwayController(model, view);
+        controller.arraySetter(songToGameNotes(readFile(f)));
 
         Map<Integer, Note[]> song = new HashMap<>();
         song.put(0, new Note[] {Note.OPEN, Note.BLACK, Note.WHITE});
@@ -50,11 +59,12 @@ public class Play extends Application{
         stage.show();
         view.startRender();
         controller.play(song, 100);
+    		mapA=readFile(f);
     }
-
+    
     /**
      * @author humzahmalik
-     * Setting image view
+     * Setting bakckground image as the fret board
      */
     public ImageView createBackground(){
         File file = new File(getClass().getResource("/play/highway.png").getFile());
@@ -64,7 +74,77 @@ public class Play extends Application{
         imageView.setImage(image);
         imageView.setFitWidth(CANVASWIDTH);
         imageView.setPreserveRatio(true);
+        
 
         return imageView;
     }
+    
+    /**
+     * @author humzahmalik
+     * Method that reads notes file into an array
+     * @return 
+     * @throws IOException 
+     *
+     */
+    public  LinkedHashMap readFile(String f) throws IOException {
+    			
+			BufferedReader in = new BufferedReader(new FileReader(f));
+			String str;
+			
+			//Create ArrayList to hold the lists of notes
+		    songNotes = new ArrayList<String[]>();
+		    //Create dictionary
+		    mapA = new LinkedHashMap();
+		  
+		    
+		    in.readLine(); 
+			
+			//While there is a line, add it to the list
+		    while((str = in.readLine()) != null){
+		    		
+		    		//Create dictionary value list
+			    Note[] dictValue;
+		    		
+				//split string
+				String[] split = str.split(",");
+				//Create dictioanry value list
+				dictValue = new Note[] {null, null, null};
+				dictValue[0]=checkNote(Integer.parseInt(split[1]));
+
+				dictValue[1]=checkNote(Integer.parseInt(split[2]));
+
+				dictValue[2]=checkNote(Integer.parseInt(split[3]));
+
+				//add to dictionary
+				mapA.put(split[0], dictValue);
+
+				
+			}
+			return mapA;
+    }
+    
+    /**
+     * @author humzahmalik
+     * Method checking whether number corresponds to black, white or empty note
+     * @return Note value
+     */
+    public Note checkNote(int num) {
+    		Note type = null;
+    		
+    		if(num==0) {
+    			type= Note.OPEN;
+    		}
+    		if(num==1) {
+    			type= Note.BLACK;
+    		}
+    		if(num==2) {
+    			type= Note.WHITE;
+    		}
+    		
+    		return type;
+    	
+    }
+
+    
+
 }

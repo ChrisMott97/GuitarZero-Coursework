@@ -69,7 +69,7 @@ public class NoteHighwayView {
         }
         //if there are more notes than can be displayed, remove note sprites
         if (noteSprites.size() > noteHighwayLength*notes.length) {
-            for (var i = 0; i < notes.length; i++){
+            for (int i = 0; i < notes.length; i++){
                 noteSprites.remove(0);
             }
         }

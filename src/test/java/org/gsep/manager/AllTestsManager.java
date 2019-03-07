@@ -6,7 +6,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ StoreManagerFrameTest.class, SongTest.class })
-public class AllTests {
+public class AllTestsManager {
 	
 
 }

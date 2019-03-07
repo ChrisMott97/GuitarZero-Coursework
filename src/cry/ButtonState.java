@@ -1,3 +1,9 @@
+/**
+ * ButtonState constants.
+ *
+ * @author  Abigail Lilley
+ * @version 1.0, March 2019.
+ */
 public class ButtonState {
     public static final ButtonState ON   = new ButtonState( "on" );
     public static final ButtonState OFF = new ButtonState( "off" );

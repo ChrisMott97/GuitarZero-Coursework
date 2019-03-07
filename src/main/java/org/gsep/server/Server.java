@@ -26,6 +26,7 @@ public class Server extends Thread {
         while(true) {
             Socket soc = s1.accept();
             Worker wkr =new Worker(soc);
+            wkr.run();
         }
     }
 }  

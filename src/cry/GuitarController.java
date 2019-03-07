@@ -37,6 +37,9 @@ public class GuitarController {
 
 		for ( int i = 0; i < buttons.length; i = i + 1 ) {
 			buttons[ i ] = new Button( BUTTONNAMES[i], BUTTONNUMS[i]);
+//			if ( i==6 || i==7 || i==8 ) {
+//				button[ i ].addButtonListener ( slashMode );
+//			}
 			buttons[ i ].addButtonListener( playMode );			/* Adding listeners to Buttons depending on the mode */
 			Thread buttonThread = new Thread(buttons[ i ]);
 			buttonThread.start();								/* Starting a thread for each Button */

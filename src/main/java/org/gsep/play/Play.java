@@ -113,7 +113,6 @@ public class Play extends Application{
      * Method checking whether number corresponds to black, white or empty not
      * @return Note value
      */
-    
     public Note checkNote(int num) {
     		Note type = null;
     		

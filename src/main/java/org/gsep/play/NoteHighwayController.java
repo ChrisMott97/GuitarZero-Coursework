@@ -1,12 +1,16 @@
 package org.gsep.play;
 
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.Sequence;
+import javax.sound.midi.Sequencer;
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
 public class NoteHighwayController {
     private NoteHighwayModel model;
     private NoteHighwayView view;
-    private final int noteHighwayLength = 4;
+    private final int noteHighwayLength = 1000;
 
     /**
      * constructor for {@link NoteHighwayController}
@@ -28,25 +32,74 @@ public class NoteHighwayController {
         model.setSongSequence(songSequence);
         model.setNoteHighwayLength(noteHighwayLength);
         view.setNoteHighwayLength(noteHighwayLength);
-        view.setPeriod(tempo);
 
-        
-        TimerTask repeatedTask = new TimerTask() {
-            public void run() {
-                //advance model to next beat and takes the top of the model and gives it to the view
-                if (model.top() != null){
-                    view.sendNotes(model.top());
-                    model.advance();
-                }else{
-                    return;
+
+
+        File file = new File(getClass().getResource("/queen.mid").getFile());
+        try{
+            Sequence midiSequence = MidiSystem.getSequence(file);
+            Sequencer midiSequencer = MidiSystem.getSequencer();
+            midiSequencer.open();
+            midiSequencer.setSequence(midiSequence);
+            midiSequencer.start();
+
+            System.out.println((long)6000/midiSequencer.getTempoInMPQ()*midiSequence.getResolution());
+            view.setPeriod((long)6000/midiSequencer.getTempoInMPQ()*midiSequence.getResolution());
+
+            Thread thread = new Thread(){
+                @Override
+                public void run() {
+                    long lastTick = 0;
+                    while (midiSequencer.getTickPosition() < midiSequencer.getTickLength()) {
+                        if (lastTick < midiSequencer.getTickPosition()){
+                            advance(midiSequencer.getTickPosition());
+                            lastTick = midiSequencer.getTickPosition();
+                        }
+//                        Thread.sleep(1000);
+                    }
                 }
-            }
-        };
+            };
+            thread.start();
 
-        Timer timer = new Timer();
 
-        //This calls repeatedTask
-        long period = (long)(60f/(float)tempo*1000);
-        timer.scheduleAtFixedRate(repeatedTask,0, period);
+//            ControllerEventListener controllerEventListener = new ControllerEventListener() {
+//                public void controlChange(ShortMessage event) {
+//                    // TODO convert the event into a readable/desired output
+//                    System.out.println(event.);
+//                }
+//            };
+//
+//            int[] controllersOfInterest = { 1, 2, 4 };
+//            midiSequencer.addControllerEventListener(controllerEventListener, controllersOfInterest);
+        } catch (Exception exn) {
+            System.out.println(exn); System.exit(1);
+        }
+        
+//        TimerTask repeatedTask = new TimerTask() {
+//            public void run() {
+//                //advance model to next beat and takes the top of the model and gives it to the view
+//                if (model.top() != null){
+//                    view.sendNotes(model.top());
+//
+//                }
+//                model.advance();
+//            }
+//        };
+//
+//        Timer timer = new Timer();
+//
+//        //This calls repeatedTask
+////        long period = (long)(60f/(float)tempo*1000);
+//        timer.scheduleAtFixedRate(repeatedTask,0, (long)tempo);
+
+    }
+
+    public void advance(long tick) {
+        //advance model to next beat and takes the top of the model and gives it to the view
+        if (model.top(tick) != null){
+            view.sendNotes(model.top(tick));
+
+        }
+//        model.advance();
     }
 }

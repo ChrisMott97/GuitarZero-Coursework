@@ -16,9 +16,6 @@ public class SlashMode implements ButtonListener {
 
         if (event.state() == ButtonState.ON) {
             switch (buttonName) {
-                case "escape":
-                    System.out.println("******* Going to slash mode *********");
-                    break;
                 case "zeroPower":
                     System.out.println("******* Selecting the mode *********");
                     break;

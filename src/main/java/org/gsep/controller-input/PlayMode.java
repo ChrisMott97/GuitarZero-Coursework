@@ -38,6 +38,12 @@ public class PlayMode implements ButtonListener {
                 case "fret3_black":
                     currentPhysicalFretboard[2] = Note.BLACK;
                     break;
+                case "escape":
+                    System.out.println("******* Going to slash mode *********");
+                    break;
+                case "bender":
+                    System.out.println("*******   Guitar strummed   *********");
+                    break;
             }
 
         } else if (event.state() == ButtonState.OFF) {
@@ -62,7 +68,12 @@ public class PlayMode implements ButtonListener {
                     break;
             }
         }
-        if (!buttonName.equals("strumBar")) {
+        if (!buttonName.equals("strumBar")
+                && !buttonName.equals("whammy")
+                && !buttonName.equals("zeroPower")
+                && !buttonName.equals("escape")
+                && !buttonName.equals("bender")
+                && !buttonName.equals("power")) {
             printArray(currentPhysicalFretboard);
         }
     }

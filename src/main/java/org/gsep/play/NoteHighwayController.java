@@ -17,7 +17,15 @@ public class NoteHighwayController {
     private double tempo;
     private ArrayList<Note[]> songSequence;
     
-
+    /**
+     * @author humzahmalik
+     * Getter for the song sequence
+     * @return 
+     * @return 
+     */
+    public void arraySetter(ArrayList<Note[]> songSequence){
+    		this.songSequence=songSequence;
+    }
 
     
     

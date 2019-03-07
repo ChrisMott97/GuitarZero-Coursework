@@ -42,7 +42,7 @@ public class StoreManagerFrame {
 	
 	//Declare booleans used to validate file entry
 	static boolean empty;
-	
+	static boolean invalid;
 	
 	/**
 	 * Method calling create(), which in turn invokes the JFrame.
@@ -208,21 +208,16 @@ public class StoreManagerFrame {
 				}	
 				
 				//Validation 2- Ensure files both exist and are of the required format
-				//Do files exist
-				if (checkF(f1_path, 1,1).equals("falseString")||checkF(f2_path, 2,1).equals("falseString")||checkF(f3_path, 3,1).equals("falseString")) {
-					System.out.println("This application has closed. Please next time ensure the submited file exists.");
-					System.exit(0);
-					return;
-				}	
-
+				checkF(f1_path, 1);
+				checkF(f2_path, 2);
+				checkF(f3_path, 3);
+				
 				//If files are invalid, break.
-				if (checkF(f1_path, 1,2).equals("falseFormat")||checkF(f2_path, 2,2).equals("falseFormat")||checkF(f3_path, 3,2).equals("falseFormat")) {
-					System.out.println("This application has closed. Please next time ensure the submitted files contain the correct suffix.");
+				if (invalid==true) {
+					System.out.println("This application has closed. Please next time ensure all fields submit a VALID file.");
 					System.exit(0);
 					return;
 				}	
-				
-				
 				
 				//Add valid files to array list
 				for(int i=0; i< 3; i++){
@@ -237,18 +232,16 @@ public class StoreManagerFrame {
 				frame.dispose(); 
 				
 				//Create a Song object
-				Song song = new Song();
+				Client song = new Client();
 				
 				song.filesSong = files;
 				//Run method within Client
-
-					try {
-						song.run();
-					} catch (Exception e1) {
-						System.out.println("The song was not able to be created. The application will now close. Please try again later.");
-						System.exit(0);
-					}
-				
+				try {
+					song.run();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+					//remember to exit
+				}
 			}
 				
 			});
@@ -262,76 +255,69 @@ public class StoreManagerFrame {
 	 * Method validating the file submitted, within the first field, from the StoreManager application. 
 	 * Ensures it is in the correct format
 	 * @param s: The file path to be checked
-	 * @return 
-	 * @return 
-	 * @return 
 	 */
-	public static String checkF(String s, int Case, int Case2) {
-	String initial ="valid";
-	String format="falseFormat";
-	String valid="falseString";
+	public static void checkF(String s, int Case) {
 	File f = new File(s);
 	
 	//Switch statement
 	switch(Case) {
 	case 1:
-		
-		switch(Case2) {
-		
-		case 1: if(!f.exists() || f.isDirectory()) {
-			System.out.println("The first file does not exist");
-			return valid;
-		}
-		break;
-		
-		case 2: 
+
+		//Check file exists and is not a directory
+		if(f.exists() && !f.isDirectory()) { 
+			//Ensure suffix is of correct notation
 			if (!s.endsWith(".txt")) {
 				System.out.println("The first file must be of .txt format.");
-				return format;
+				invalid = true;
+				return;
+			}
+		}
+		
+		else{
+			System.out.println("The first file does not exist");
+			invalid = true;
+			return;
+			}
+		break;
+		
+	case 2:
+		//Check file exists and is not a directory
+			if(f.exists() && !f.isDirectory()) { 
+			    //Ensure suffix is of correct notation
+				if (!(s.endsWith(".png") || s.endsWith(".jpg"))) {
+					System.out.println("The second submitted file must be of .png or of .jpg format.");
+					invalid = true;
+					return;
+				}
+			}
+			
+			else{
+				System.out.println("The second submitted file does not exist");
+				invalid = true;
+				return;
 			}
 			break;
 		
-		}
-		break;
-
-	case 2:
-		switch(Case2) {
-				
-				case 1: if(!f.exists() || f.isDirectory()) {
-					System.out.println("The second file does not exist");
-					return valid;
-				}
-				break;
-				
-				case 2: 
-					if (!(s.endsWith(".png") || s.endsWith(".jpg"))){
-						System.out.println("The second file must be of .png or .jpg format.");
-						return format;
-					}
-					break;
-				}
-		break;
-		
 	case 3:
-		switch(Case2) {
-				
-				case 1: if(!f.exists() || f.isDirectory()) {
-					System.out.println("The third file does not exist");
-					return valid;
-				}
-					
-				break;
-				case 2: 
-					if (!s.endsWith(".mid")) {
-						System.out.println("The third file must be of .mid format.");
-						return format;
-					}
-					break;
-				
-				}
-		break;
+		//Check file exists and is not a directory
+		if(f.exists() && !f.isDirectory()) { 
+			//Ensure suffix is of correct notation
+			if (!s.endsWith(".mid")) {
+				System.out.println("The third submitted file must be of .mid format.");
+				invalid = true;
+				return;
+			}
 		}
-	return initial;
+		
+		else{
+			System.out.println("The third submitted file does not exist");
+			invalid = true;
+			return;
+			}
+			break;
+		}
+	
 	}
+	
 
 }

@@ -19,7 +19,7 @@ import java.util.zip.ZipOutputStream;
  * @version 1.0
  * 
  */
-public class Song{
+public class Client{
 	
 	static ArrayList<File> filesSong = new ArrayList<File>();
 	static String name;

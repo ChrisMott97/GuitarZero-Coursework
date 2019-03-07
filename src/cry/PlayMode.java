@@ -1,8 +1,9 @@
 /**
- * Place holder PlayMode to simulate real game action.
+ * Place holder Play Mode to simulate real game action.
  *
  * @author  Abigail Lilley
- * @version 1.0, March 2019.
+ * @author  Humzah Malik
+ * @version 2.0, March 2019.
  */
 public class PlayMode implements ButtonListener {
 
@@ -20,36 +21,46 @@ public class PlayMode implements ButtonListener {
         if (event.state() == ButtonState.ON) {
             switch (buttonName) {
                 case "fret1_white":
+                    currentPhysicalFretboard[0] = Note.WHITE;
+                    break;
+                case "fret1_black":
+                    currentPhysicalFretboard[0] = Note.BLACK;
+                    break;
+                case "fret2_white":
                     currentPhysicalFretboard[1] = Note.WHITE;
-
+                    break;
+                case "fret2_black":
+                    currentPhysicalFretboard[1] = Note.BLACK;
+                    break;
+                case "fret3_white":
+                    currentPhysicalFretboard[2] = Note.WHITE;
+                    break;
+                case "fret3_black":
+                    currentPhysicalFretboard[2] = Note.BLACK;
+                    break;
             }
 
         } else if (event.state() == ButtonState.OFF) {
             switch (buttonName) {
                 case "fret1_white":
+                    currentPhysicalFretboard[0] = Note.OPEN;
+                    break;
+                case "fret1_black":
+                    currentPhysicalFretboard[0] = Note.OPEN;
+                    break;
+                case "fret2_white":
                     currentPhysicalFretboard[1] = Note.OPEN;
+                    break;
+                case "fret2_black":
+                    currentPhysicalFretboard[1] = Note.OPEN;
+                    break;
+                case "fret3_white":
+                    currentPhysicalFretboard[2] = Note.OPEN;
+                    break;
+                case "fret3_black":
+                    currentPhysicalFretboard[2] = Note.OPEN;
+                    break;
             }
-
-
-//        if( event.state() == ButtonState.ON )
-//        {
-//            System.out.println( buttonName + " is ON" );
-//        }
-//        else if( event.state() == ButtonState.OFF )
-//        {
-//            System.out.println( buttonName + " is OFF" );
-//        }
-//        else if( event.state() == ButtonState.FORWARD )
-//        {
-//            System.out.println( buttonName + " moves forward" );
-//        }
-//        else if( event.state() == ButtonState.BACKWARD )
-//        {
-//            System.out.println( buttonName + " moves backward" );
-//        }
-//        else {
-//            System.out.println("Uh Oh!");
-//        }
         }
         printArray(currentPhysicalFretboard);
     }

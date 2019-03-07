@@ -203,7 +203,7 @@ public class StoreManagerFrame {
 				//If field does contain an empty string, close application and give warning.
 				if (empty==true) {
 					System.out.println("This application has closed. Please next time ensure ALL fields contain a file");
-					frame.dispose(); 
+					System.exit(0);
 					return;
 				}	
 				
@@ -215,7 +215,7 @@ public class StoreManagerFrame {
 				//If files are invalid, break.
 				if (invalid==true) {
 					System.out.println("This application has closed. Please next time ensure all fields submit a VALID file.");
-					frame.dispose(); 
+					System.exit(0);
 					return;
 				}	
 				

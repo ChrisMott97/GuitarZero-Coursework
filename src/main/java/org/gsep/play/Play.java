@@ -21,7 +21,7 @@ public class Play extends Application{
     private Note[] notesHolder; 
     private ArrayList<String[]> songNotes;
     private ArrayList<Note[]> songSequence;
-    LinkedHashMap mapA;
+    private LinkedHashMap mapA;
 
     public static void main(String[] args) {
         launch(args);
@@ -65,7 +65,7 @@ public class Play extends Application{
     
     /**
      * @author humzahmalik
-     * Setting image view
+     * Setting bakckground image as the fret board
      */
     public ImageView createBackground(){
         File file = new File(getClass().getResource("/play/highway.png").getFile());
@@ -82,7 +82,7 @@ public class Play extends Application{
     
     /**
      * @author humzahmalik
-     * Method that reads a file, line by line, into an array.
+     * Method that reads notes file into an array
      * @return 
      * @throws IOException 
      *
@@ -110,7 +110,7 @@ public class Play extends Application{
     
     /**
      * @author humzahmalik
-     * Method checking whether number corresponds to black, white or empty not
+     * Method checking whether number corresponds to black, white or empty note
      * @return Note value
      */
     public Note checkNote(int num) {
@@ -133,7 +133,7 @@ public class Play extends Application{
     /**
      * @author humzahmalik
 
-     * Converts arraylist into a notes array
+     * Method convertin String list to a list of Note objects, and holding them in an ArrayList
      * @return 
      */
     public ArrayList<Note[]> songToGameNotes(ArrayList<String[]> songNotes) {
@@ -162,7 +162,7 @@ public class Play extends Application{
 
     /**
      * @author humzahmalik
-     * Takes the list of notes and converts it to a dictionary with the key equaling the tick time.
+     * Method taking the list of notes and converting it to a dictionary with the key equaling the tick time.
      * 
      */
     public LinkedHashMap arrayToDictionary(ArrayList<Note[]> listInput, ArrayList<String[]> fileList){

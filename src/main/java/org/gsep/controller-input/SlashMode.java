@@ -24,7 +24,7 @@ public class SlashMode implements ButtonListener {
                     break;
             }
         } else if (event.state() == ButtonState.FORWARD) {
-            System.out.println("******* Scroll carousel forwards one place *********");
+            System.out.println("******* Scroll carousel forwards one place  *********");
         } else if (event.state() == ButtonState.BACKWARD) {
             System.out.println("******* Scroll carousel backwards one place *********");
         }

@@ -62,7 +62,9 @@ public class PlayMode implements ButtonListener {
                     break;
             }
         }
-        printArray(currentPhysicalFretboard);
+        if (!buttonName.equals("strumBar")) {
+            printArray(currentPhysicalFretboard);
+        }
     }
 
     public void printArray (Note[] notes) {

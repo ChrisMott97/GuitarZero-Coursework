@@ -117,7 +117,7 @@ public class Play extends Application{
 				dictValue[2]=checkNote(Integer.parseInt(split[3]));
 
 				//add to dictionary
-				mapA.put(split[0], dictValue);
+				mapA.put(Integer.parseInt(split[0]), dictValue);
 
 				
 			}

@@ -12,14 +12,14 @@ public class NoteHighwayView {
     private List<NoteSprite> noteSprites = Collections.synchronizedList(new ArrayList<NoteSprite>());
     private AnimationTimer animationTimer;
     private double noteHighwayPeriod;
-    private double noteHighwayLength = 4;
+    private int noteHighwayLength;
     
     /**
      * Constructor for {@link NoteHighwayView} which initialises the game clock
      */
     NoteHighwayView(Canvas canvas){
         this.canvas = canvas;
-        //TODO handle rendering from different thread to logic
+
         this.animationTimer = new AnimationTimer() {
             public void handle(long currentNanoTime) {
             if (noteSprites.size() > 1) {
@@ -48,13 +48,16 @@ public class NoteHighwayView {
         this.noteHighwayPeriod = noteHighwayLength*period;
     }
 
+    public void setNoteHighwayLength(int noteHighwayLength) {
+        this.noteHighwayLength = noteHighwayLength;
+    }
+
     /**
      * Sends notes down the highway, determining what colour they are based on their type
      * and queueing them to be rendered
      *
      * @param notes the notes corresponding to each lane
      */
-    
     //for each notes element (contains 3 element within it)
     public void sendNotes(Note[] notes){
         Lane[] lanes = Lane.values();

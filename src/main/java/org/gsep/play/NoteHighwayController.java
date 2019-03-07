@@ -5,18 +5,13 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class NoteHighwayController {
     private NoteHighwayModel model;
     private NoteHighwayView view;
     private final int noteHighwayLength = 1000;
 
-    
-    
     /**
      * constructor for {@link NoteHighwayController}
      *
@@ -24,19 +19,10 @@ public class NoteHighwayController {
      * @param view the NoteHighwayView
      * @throws IOException 
      */
-    NoteHighwayController(NoteHighwayModel model, NoteHighwayView view) throws IOException{
+    NoteHighwayController(NoteHighwayModel model, NoteHighwayView view){
         this.model = model;
         this.view = view;
-        //loads note sequence and tempo like this temporarily until proprietary files can be loaded
-        this.songSequence =  songSequence;
-       
-
-        
-        this.tempo = 100;
-        view.setPeriod((long)(60f/(float)tempo*1000));
     }
-
-
 
     /**
      * plays notes down the highway at a set tempo, mediating between the

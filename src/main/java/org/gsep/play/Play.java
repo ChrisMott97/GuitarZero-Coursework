@@ -59,7 +59,7 @@ public class Play extends Application{
         */
     	
     		//Hash map function
-    		mapA=arrayToDictionary(songToGameNotes(readFile(f)), readFile(f));
+    		mapA=readFile(f);
     	
     }
     
@@ -87,25 +87,41 @@ public class Play extends Application{
      * @throws IOException 
      *
      */
-    public  ArrayList<String[]> readFile(String f) throws IOException {
+    public  LinkedHashMap readFile(String f) throws IOException {
     			
 			BufferedReader in = new BufferedReader(new FileReader(f));
 			String str;
 			
 			//Create ArrayList to hold the lists of notes
 		    songNotes = new ArrayList<String[]>();
+		    //Create dictionary
+		    mapA = new LinkedHashMap();
+		  
 		    
 		    in.readLine(); 
 			
 			//While there is a line, add it to the list
 		    while((str = in.readLine()) != null){
+		    		
+		    		//Create dictionary value list
+			    Note[] dictValue;
+		    		
 				//split string
 				String[] split = str.split(",");
-				//adds the note into a song arraylist
-				songNotes.add(split);
+				//Create dictioanry value list
+				dictValue = new Note[] {null, null, null};
+				dictValue[0]=checkNote(Integer.parseInt(split[1]));
+
+				dictValue[1]=checkNote(Integer.parseInt(split[2]));
+
+				dictValue[2]=checkNote(Integer.parseInt(split[3]));
+
+				//add to dictionary
+				mapA.put(split[0], dictValue);
+
 				
 			}
-			return songNotes;
+			return mapA;
     }
     
     /**
@@ -130,53 +146,6 @@ public class Play extends Application{
     	
     }
 
-    /**
-     * @author humzahmalik
-
-     * Method convertin String list to a list of Note objects, and holding them in an ArrayList
-     * @return 
-     */
-    public ArrayList<Note[]> songToGameNotes(ArrayList<String[]> songNotes) {
-  
-    		songSequenceHolder = new ArrayList<Note[]>();
-    		
-    		//For each line of notes in the arraylist
-	    	 for (String[] i : songNotes) { 
-	    		 	//Create array of array to hold every three notes
-	     		notesHolder=new Note[] {null, null, null};
-	     		
-	     		//For each element s in the list {}
-	     		for (int s = 1; s < i.length; s++) {
-	     			notesHolder[s-1]=checkNote(Integer.parseInt(i[s]));
-	     		}
-			
-	             
-	             //add the created arraylist to the large arraylist
-	             songSequenceHolder.add(notesHolder);
-	             
-	        }
-	    	 
-	    	 //Return final array  	 
-	    	 return songSequenceHolder;
-    }
-
-    /**
-     * @author humzahmalik
-     * Method taking the list of notes and converting it to a dictionary with the key equaling the tick time.
-     * 
-     */
-    public LinkedHashMap arrayToDictionary(ArrayList<Note[]> listInput, ArrayList<String[]> fileList){
-    		mapA = new LinkedHashMap();
-    		
-    		//For each element s in the list {}
-     		for (int i = 1; i < listInput.size(); i++) {
-     			mapA.put(fileList.get(i)[0], listInput.get(i));  
-     		}
-		
-    		return mapA;
-    		
-    		
-    		
-    }
+    
 
 }

@@ -31,7 +31,7 @@ public class StoreManagerFrame {
 
 	private JFrame frame;
 	
-	///Declaring fields holding file paths as a String and files as a File object
+	//Declaring fields holding file paths as a String and files as a File object
 	JTextField textField_1, textField_2, textField_3 = null;
 	File f1, f2, f3;
 	String f1_path, f2_path, f3_path = null;

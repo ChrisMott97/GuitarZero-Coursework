@@ -52,13 +52,13 @@ public class NoteHighwayModel {
      *
      * @return list of note types
      */
-    public Note[] top(){
+    public Note[] top(long tick){
+        if (songSequence.containsKey((int)tick)){
 
-        if (beat-lanePositions < noteSequence.size() && beat-lanePositions >= 0) {
-            return noteSequence.get(beat - lanePositions);
-        }else{
-            return new Note[]{Note.OPEN, Note.OPEN, Note.OPEN};
+            System.out.println("note");
         }
+         return songSequence.get((int)tick+noteHighwayLength);
+
     }
 
     /**

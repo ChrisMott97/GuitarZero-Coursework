@@ -1,26 +1,24 @@
 package org.gsep.play;
 
-import javafx.animation.AnimationTimer;
-import javafx.event.EventHandler;
-import javafx.scene.*;
+import javafx.application.Application;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
-import java.io.*;
-import java.util.*;
-import javafx.application.Application;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import javafx.scene.image.ImageView; 
-import javafx.scene.layout.*;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class Play extends Application{
     private final int CANVASWIDTH = 950;
     private final int CANVASHEIGHT = 700;
-    private ArrayList<Note[]> songSequenceHolder;
     private String f= getClass().getResource("/noteFile.txt").getFile();
-    private Note[] notesHolder; 
-    private ArrayList<String[]> songNotes;
-    private ArrayList<Note[]> songSequence;
     private LinkedHashMap mapA;
 
     public static void main(String[] args) {
@@ -29,7 +27,6 @@ public class Play extends Application{
     
 
     public void start(Stage stage) throws IOException{
-    	/*
         stage.setTitle("Play");
 
         //initialise scene
@@ -51,16 +48,28 @@ public class Play extends Application{
         NoteHighwayModel model = new NoteHighwayModel();
         NoteHighwayView view = new NoteHighwayView(canvas);
         NoteHighwayController controller = new NoteHighwayController(model, view);
-        controller.arraySetter(songToGameNotes(readFile(f)));
+
+        Map<Integer, Note[]> song = readFile(f);
+
+
+//        Map<Integer, Note[]> song = new HashMap<>();
+//        song.put(1234, new Note[]{Note.OPEN, Note.OPEN, Note.OPEN});
+//        File file = new File(getClass().getResource("/queen.mid").getFile());
+//        try{
+//            Sequence midiSequence = MidiSystem.getSequence(file);
+//
+//            Sequencer midiSequencer = MidiSystem.getSequencer();
+//
+//            midiSequencer.open();
+//            midiSequencer.setSequence(midiSequence);
+//            midiSequencer.start();
+//        } catch (Exception exn) {
+//            System.out.println(exn); System.exit(1);
+//        }
 
         stage.show();
         view.startRender();
-        controller.play();
-        */
-    	
-    		//Hash map function
-    		mapA=readFile(f);
-    	
+        controller.play(song, 1.9054689407348633);
     }
     
     /**
@@ -93,7 +102,6 @@ public class Play extends Application{
 			String str;
 			
 			//Create ArrayList to hold the lists of notes
-		    songNotes = new ArrayList<String[]>();
 		    //Create dictionary
 		    mapA = new LinkedHashMap();
 		  

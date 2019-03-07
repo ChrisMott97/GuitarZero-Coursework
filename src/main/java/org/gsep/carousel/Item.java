@@ -14,6 +14,8 @@ public abstract class Item {
 
     private String imageURL;
 
+    private String prefix;
+
     /**
      * Constructor for an Item with no image.
      */
@@ -69,6 +71,14 @@ public abstract class Item {
      */
     public String getImageURL() {
         return imageURL;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
     }
 
     @Override

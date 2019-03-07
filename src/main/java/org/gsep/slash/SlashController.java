@@ -1,4 +1,4 @@
-package org.gsep.select;
+package org.gsep.slash;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,25 +19,33 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectController extends SceneController {
+public class SlashController extends SceneController {
 
     @FXML
-    private Carousel carousel;
+    protected Carousel carousel;
+
+    @FXML
+    protected Button btnNext;
+
+    @FXML
+    protected Button btnPrevious;
 
     private FXMLLoader fxmlLoader;
 
-    public SelectController(Stage stage){
+    private Scene nextScene;
+
+    public SlashController(Stage stage){
         setStage(stage);
-        fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SelectView.fxml"));
+
+        fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SlashView.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 
     }
 
     public void initialize(){
-        System.out.println("Select mode initializing...");
-        // Event handling/listeners go here!
-        loadData();
+        System.out.println("Slash mode initializing...");
+        this.loadData();
 
     }
 
@@ -51,27 +59,39 @@ public class SelectController extends SceneController {
                 case LEFT:
                     carousel.previous();
                     break;
+                case SPACE:
+                    getStage().setScene(getNextScene());
             }
         });
         return scene;
     }
 
-    private void loadData(){
+    //TODO: Reduce to parent method to prevent code duplication
+    public void loadData(){
         ObjectMapper objectMapper = new ObjectMapper();
         List<Item> items;
 
-        File file = new File(getClass().getResource("/songs/index.json").getFile());
+        File file = new File(getClass().getResource("/menu/index.json").getFile());
         try{
-            items = objectMapper.readValue(file, new TypeReference<List<MusicItem>>(){});
+            items = objectMapper.readValue(file, new TypeReference<List<MenuItem>>(){});
         }catch(IOException e){
             items = new ArrayList<>();
         }
 
         for (Item item :
                 items) {
-            item.setPrefix("songs");
+            item.setPrefix("menu");
+            //TODO: Refactor into something nicer
         }
-
+        
         this.carousel.ingest(items);
+    }
+
+    public Scene getNextScene() {
+        return nextScene;
+    }
+
+    public void setNextScene(Scene nextScene) {
+        this.nextScene = nextScene;
     }
 }

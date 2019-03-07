@@ -12,4 +12,6 @@ module GSE.Project {
     exports org.gsep.select;
     opens org.gsep.carousel to javafx.fxml, com.fasterxml.jackson.databind;
     exports org.gsep.carousel;
+    opens org.gsep.slash to javafx.fxml, com.fasterxml.jackson.databind;
+    exports org.gsep.slash;
 }

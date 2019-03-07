@@ -59,20 +59,9 @@ public class Carousel extends TilePane{
             containers.get(ind).setInitialPosition(ind+1);
         }
 
-    }
+        this.iModel = new ItemModel();
+        this.icModel = new ItemContainerModel();
 
-    /**
-     * Injects the models needed into the controller.
-     *
-     * @param iModel the Item Model used for manipulating Items.
-     * @param icModel the Item Container Model used for manipulating Item Containers.
-     */
-    public void linkModels(ItemModel iModel, ItemContainerModel icModel){
-        if(this.icModel != null || this.iModel != null)
-            throw new IllegalStateException("Models can only be linked once!");
-
-        this.iModel = iModel;
-        this.icModel = icModel;
     }
 
     public void ingest(List<Item> items){

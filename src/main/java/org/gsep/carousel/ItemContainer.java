@@ -185,9 +185,9 @@ public class ItemContainer extends Pane {
         File file;
         Image image;
         try{
-            file = new File(getClass().getResource("/songs/img/"+item.getId()+".png").getFile());
+            file = new File(getClass().getResource("/"+item.getPrefix()+"/img/"+item.getId()+".png").getFile());
         }catch(Exception e){
-            file = new File(getClass().getResource("/songs/img/error.png").getFile());
+            file = new File(getClass().getResource("/"+item.getPrefix()+"/img/error.png").getFile());
         }
         image = new Image(file.toURI().toString(), 65, 65, true, true, true);
 

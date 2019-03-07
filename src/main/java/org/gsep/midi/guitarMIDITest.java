@@ -22,6 +22,11 @@ public class guitarMIDITest {
     public void tearDown(){
 
     }
+
+    /**
+     * Creates an array and checks if the created file is the same as the array
+     * @throws IOException
+     */
     @Test
     public void testWriteToFile() throws IOException {
         arr.add("Hello World");
@@ -40,8 +45,14 @@ public class guitarMIDITest {
         assertEquals(arr,filearr);
     }
 
+    /**
+     * Compares the array returned by the getTrackNotes method to a file
+     * i've created that I know is correct
+     * @throws IOException
+     * @throws InvalidMidiDataException
+     */
     @Test
-    public void testDisplayTrackGuitar() throws IOException, InvalidMidiDataException {
+    public void testGetTrackNotesGuitar() throws IOException, InvalidMidiDataException {
 
         ClassLoader classLoader = new guitarMIDI().getClass().getClassLoader();
         FileReader fr = new FileReader(classLoader.getResource("actualMamaDo.txt").getFile());
@@ -57,7 +68,12 @@ public class guitarMIDITest {
         assertEquals(filearr,guitarMIDI.getTrackNotes(track[0]));
     }
     @Test
-    public void testDisplayTrackNoGuitar(){
+    public void testGetTrackNotesNoGuitar(){
+
+    }
+
+    @Test
+    public void testConcatArr(){
 
     }
 }

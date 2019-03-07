@@ -8,13 +8,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
- 
-/*
- * Server - THIS CLASS HAS NOT YET BEEN IMPLEMENTED
- * 
- * @author Humzah Malik
- * @version 1.0
- * 
+
+/**
+ * @author Niha Gummakonda
+ * @version 1.0 07/03/2019
  */
 public class Server extends Thread {
 	

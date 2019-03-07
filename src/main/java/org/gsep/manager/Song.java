@@ -36,6 +36,9 @@ public class Song{
 		
 		//Take files and make them into zip
 		zipFile(filesSong, name);
+
+
+
 	}
 	
 	/**
@@ -89,7 +92,6 @@ public class Song{
 	    } catch (FileNotFoundException e) {
 	      System.out.println("File not found : " + e);
 	    }
-
 	  }
 	
 	

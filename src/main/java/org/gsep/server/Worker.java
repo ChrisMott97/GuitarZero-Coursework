@@ -3,6 +3,10 @@ package org.gsep.server;
 import java.io.*;
 import java.net.Socket;
 
+/**
+ * @author Niha Gummakonda
+ * @version 1.0 07/03/2019
+ */
 public class Worker implements Runnable {
 
     private Socket soc;
@@ -23,13 +27,24 @@ public class Worker implements Runnable {
             String msg = dis.readUTF();
             System.out.println(msg);
 
+            String filename = dis.readUTF();
+            System.out.println("Sending File: "+filename);
+            dos.writeUTF(filename);
+            FileOutputStream fin=new FileOutputStream("server" + filename);
+            byte b[]=new byte [1024];
+            dis.read(b,0,b.length);
+            fin.write(b,0,b.length);
+            System.out.println("File has been created! \n Completed");
 
+            fin.close();
+            dos.close();
+            dis.close();
+            soc.close();
         }catch (Exception e){
             System.out.println(e);
         }
-    }
 
-    public void getFile(){
 
     }
+
 }

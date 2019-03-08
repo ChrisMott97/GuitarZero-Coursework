@@ -23,6 +23,14 @@ public class Play {
     private File midiFile;
     private Map<Integer, Note[]> songSequence;
 
+    /**
+     * @author Örs Barkanyi
+     * Constructor for Play Mode
+     *
+     * @param root the root object in the play mode scene
+     * @param noteFilePath the path to the selected note file
+     * @param midiFilePath the path to the selected midi file
+     */
     public Play(Group root, String noteFilePath, String midiFilePath){
         Canvas canvas = new Canvas(CANVASWIDTH, CANVASHEIGHT);
 
@@ -52,10 +60,15 @@ public class Play {
         }
     }
 
+
     public Scene getScene() {
         return scene;
     }
 
+    /**
+     * @author Örs Barkanyi
+     * Invokes the start play mode
+     */
     public void play(){
         view.startRender();
         controller.play(songSequence,midiFile);

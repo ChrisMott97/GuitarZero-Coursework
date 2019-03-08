@@ -7,7 +7,7 @@ import java.util.*;
 
 public class NoteHighwayView {
     private Canvas canvas;
-    private List<NoteSprite> noteSprites = Collections.synchronizedList(new LinkedList<>());
+    private List<NoteSprite> noteSprites = Collections.synchronizedList(new ArrayList<>());
     private AnimationTimer animationTimer;
     private double noteHighwayPeriod;
     private final int noteHighwayLength = 700;

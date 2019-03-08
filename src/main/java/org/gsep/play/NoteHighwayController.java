@@ -41,7 +41,7 @@ public class NoteHighwayController {
             midiSequencer.setSequence(midiSequence);
             midiSequencer.start();
 
-            view.setPeriod((long)6000/midiSequencer.getTempoInMPQ()*midiSequence.getResolution());
+            view.setPeriod((long)6000/midiSequencer.getTempoInMPQ()*midiSequence.getResolution()*midiSequencer.getTempoFactor());
 
             //advances the model when there is a change in the sequencer tick position
             Thread thread = new Thread(() -> {

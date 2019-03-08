@@ -34,7 +34,7 @@ public class NoteHighwayModel {
      * @return list of note types
      */
     public Note[] top(long tick){
-        if (songSequence.containsKey((int)tick)){
+        if (songSequence.containsKey((int)tick+noteHighwayLength)){
 
             System.out.println("note");
         }
@@ -49,10 +49,6 @@ public class NoteHighwayModel {
      * @return list of note types
      */
     public Note[] bottom(){
-    		
-        if (beat < songSequence.size())
-            return songSequence.get(beat-noteHighwayLength);
-        else
-            return null;
+        return songSequence.get(beat);
     }
 }

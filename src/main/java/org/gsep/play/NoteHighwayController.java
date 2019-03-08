@@ -35,7 +35,7 @@ public class NoteHighwayController {
 
 
 
-        File file = new File(getClass().getResource("/queen.mid").getFile());
+        File file = new File(getClass().getResource("/ORSMIDI.mid").getFile());
         try{
             Sequence midiSequence = MidiSystem.getSequence(file);
             Sequencer midiSequencer = MidiSystem.getSequencer();
@@ -43,15 +43,19 @@ public class NoteHighwayController {
             midiSequencer.setSequence(midiSequence);
             midiSequencer.start();
 
+
             System.out.println((long)6000/midiSequencer.getTempoInMPQ()*midiSequence.getResolution());
             view.setPeriod((long)6000/midiSequencer.getTempoInMPQ()*midiSequence.getResolution());
-
+//            view.setPeriod(4);
             Thread thread = new Thread(){
                 @Override
                 public void run() {
                     long lastTick = 0;
+//                    long time = System.nanoTime();
                     while (midiSequencer.getTickPosition() < midiSequencer.getTickLength()) {
                         if (lastTick < midiSequencer.getTickPosition()){
+//                            System.out.println(System.nanoTime() - time);
+//                            time = System.nanoTime();
                             advance(midiSequencer.getTickPosition());
                             lastTick = midiSequencer.getTickPosition();
                         }

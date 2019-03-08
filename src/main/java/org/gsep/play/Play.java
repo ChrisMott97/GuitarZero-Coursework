@@ -18,7 +18,7 @@ import java.util.Map;
 public class Play extends Application{
     private final int CANVASWIDTH = 950;
     private final int CANVASHEIGHT = 700;
-    private String f= getClass().getResource("/noteFile.txt").getFile();
+    private String f= getClass().getResource("/nf.txt").getFile();
     private LinkedHashMap mapA;
 
     public static void main(String[] args) {
@@ -106,7 +106,7 @@ public class Play extends Application{
 		    mapA = new LinkedHashMap();
 		  
 		    
-		    in.readLine(); 
+
 			
 			//While there is a line, add it to the list
 		    while((str = in.readLine()) != null){

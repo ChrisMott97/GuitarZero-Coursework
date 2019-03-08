@@ -23,7 +23,7 @@ public class guitarMIDI {
      * @param n     Position of the instrument in the synthesizer's array of instruments
      * @return      The name of the instrument
      */
-    private String instrumentName( int n ) {
+    private static String instrumentName( int n ) {
         try {
             final Synthesizer synth = MidiSystem.getSynthesizer();
             synth.open();
@@ -47,7 +47,7 @@ public class guitarMIDI {
      *
      */
 
-    public ArrayList <String> getTrackNotes( Track track ) {
+    public static ArrayList <String> getTrackNotes( Track track ) {
         ArrayList<Integer> guitarChannnel = new ArrayList<>();
         List<List<String>> currentArray = new ArrayList<>();
         //Goes through tracks
@@ -105,7 +105,7 @@ public class guitarMIDI {
      * @param arr   An ArrayList. Each element hold a string on information about a note in the order they're played
      * @return      A .txt file called 'noteFile.txt' where each line is an element of arr
      */
-    public File writeToFile ( ArrayList <String> arr ) {
+    public static File writeToFile ( ArrayList <String> arr ) {
 
         BufferedWriter bw = null;
         try {
@@ -177,7 +177,7 @@ public class guitarMIDI {
                     int colr = rand.nextInt(2) + 1;
                     newArr.add(iTick + ",0,0," + colr);
                 }
-            //If 2 notes are played at that tick
+                //If 2 notes are played at that tick
             }else if(count == 2){
                 int row = rand.nextInt(3);
                 int row2;
@@ -197,7 +197,7 @@ public class guitarMIDI {
                     int colr1 = rand.nextInt(2) + 1;
                     newArr.add(iTick + "," + colr + ",0," + colr1);
                 }
-             //If more than 2 notes are played at that tick
+                //If more than 2 notes are played at that tick
             }else if (count > 2){
                 int colr = rand.nextInt(2) + 1;
                 int colr1 = rand.nextInt(2) + 1;
@@ -276,8 +276,7 @@ public class guitarMIDI {
         return null;
     }
 
-    public static void main (String[] args) {
-        //To test file is written and passed back correctly
+    public static void main (String[] args) {                       //To test file is written and passed back correctly
         //In real implementation, convertMIDI will be
         guitarMIDI gm = new guitarMIDI();
 

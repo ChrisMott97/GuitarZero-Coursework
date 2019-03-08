@@ -11,7 +11,7 @@ public class Main extends Application{
         launch(args);
     }
 
-    public void start(Stage stage) throws IOException{
+    public void start(Stage stage){
         stage.setTitle("Play Mode Demo");
 
         Play play = new Play("/ComeOnEileen.txt", "/ComeOnEileen.mid");

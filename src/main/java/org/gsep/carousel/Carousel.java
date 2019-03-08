@@ -15,7 +15,7 @@ import java.util.List;
  * Carousel.
  *
  * @author  Chris Mott.
- * @version 1.00, January 2019.
+ * @version 2.00, March 2019.
  */
 public class Carousel extends TilePane{
 
@@ -29,6 +29,9 @@ public class Carousel extends TilePane{
 
     private List<ItemContainer> containers = new ArrayList<>();
 
+    /**
+     * Constructor for Carousel
+     */
     public Carousel(){
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/CarouselView.fxml"));
         fxmlLoader.setRoot(this);
@@ -59,22 +62,25 @@ public class Carousel extends TilePane{
             containers.get(ind).setInitialPosition(ind+1);
         }
 
+
     }
 
     /**
-     * Injects the models needed into the controller.
+     * Links the necessary models to the carousel.
      *
-     * @param iModel the Item Model used for manipulating Items.
-     * @param icModel the Item Container Model used for manipulating Item Containers.
+     * @param itemModel the Item Model to be linked.
+     * @param itemContainerModel the Item Container Model to be linked.
      */
-    public void linkModels(ItemModel iModel, ItemContainerModel icModel){
-        if(this.icModel != null || this.iModel != null)
-            throw new IllegalStateException("Models can only be linked once!");
-
-        this.iModel = iModel;
-        this.icModel = icModel;
+    public void linkModels(ItemModel itemModel, ItemContainerModel itemContainerModel){
+        this.iModel = itemModel;
+        this.icModel = itemContainerModel;
     }
 
+    /**
+     * Loads a list of items to the Item Model and loads the necessary items into the containers.
+     *
+     * @param items the items to be given to the models.
+     */
     public void ingest(List<Item> items){
         //TODO: Handle no songs found
         iModel.loadData(items);

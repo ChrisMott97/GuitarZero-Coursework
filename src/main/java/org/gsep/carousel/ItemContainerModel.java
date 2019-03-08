@@ -7,7 +7,7 @@ import java.util.List;
  * ItemContainerModel.
  *
  * @author  Chris Mott.
- * @version 1.00, January 2019.
+ * @version 2.00, March 2019.
  */
 public class ItemContainerModel<T extends Item> {
     private List<ItemContainer> containers = new ArrayList<>();

@@ -4,6 +4,7 @@
  * @author  Abigail Lilley
  * @version 1.0, March 2019.
  */
+package org.gsep.controller;
 import java.util.EventObject;
 public class ButtonEvent extends EventObject {
     private ButtonState _state;

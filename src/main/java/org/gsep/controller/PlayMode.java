@@ -5,6 +5,7 @@
  * @author  Humzah Malik
  * @version 2.0, March 2019.
  */
+package org.gsep.controller;
 public class PlayMode implements ButtonListener {
 
    static volatile Note[] currentPhysicalFretboard = {Note.OPEN, Note.OPEN, Note.OPEN};

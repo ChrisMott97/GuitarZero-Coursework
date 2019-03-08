@@ -4,6 +4,7 @@
  * @author  Abigail Lilley
  * @version 1.0, March 2019.
  */
+package org.gsep.controller;
 public class SlashMode implements ButtonListener {
 
     /**

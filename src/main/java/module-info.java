@@ -7,6 +7,7 @@ module GSE.Project {
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.databind;
+    requires jinput;
 
     opens org.gsep.select to javafx.fxml, com.fasterxml.jackson.databind;
     exports org.gsep.select;

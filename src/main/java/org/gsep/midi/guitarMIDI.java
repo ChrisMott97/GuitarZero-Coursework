@@ -249,7 +249,7 @@ public class guitarMIDI {
         //TODO make sure it handles when a) file not found b) input file in not a MIDI file
         try {
 
-            Sequence seq = MidiSystem.getSequence(new File (MIDIFileName));
+            Sequence seq = MidiSystem.getSequence(new File (getClass().getResource(MIDIFileName).getFile()));
             Sequencer seqr = MidiSystem.getSequencer();
             seqr.setSequence(seq);
             Track[] trks = seq.getTracks();

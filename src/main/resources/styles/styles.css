@@ -4,6 +4,6 @@
 .itemContainer {
     -fx-background-color: white;
 }
-.parentContainer {
-    -fx-background-color: black;
+.carousel {
+    -fx-background-color: #484f5d;
 }

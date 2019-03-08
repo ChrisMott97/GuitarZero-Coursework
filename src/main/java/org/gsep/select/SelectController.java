@@ -1,14 +1,18 @@
 package org.gsep.select;
 
-import javafx.animation.Animation;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import org.gsep.SceneController;
+import org.gsep.carousel.Carousel;
+import org.gsep.carousel.Item;
+import org.gsep.carousel.ItemContainerModel;
+import org.gsep.carousel.ItemModel;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,130 +20,90 @@ import java.util.List;
  * SelectController.
  *
  * @author  Chris Mott.
- * @version 1.00, January 2019.
+ * @version 2.00, March 2019.
  */
-public class SelectController {
-
-    private ItemModel iModel;
-    private ItemContainerModel icModel;
+public class SelectController extends SceneController {
 
     @FXML
-    protected Button btnNext;
+    private Carousel carousel;
 
-    @FXML
-    protected Button btnPrevious;
+    private FXMLLoader fxmlLoader;
 
-    @FXML
-    protected ItemContainer icOne;
-
-    @FXML
-    protected ItemContainer icTwo;
-
-    @FXML
-    protected ItemContainer icThree;
-
-    @FXML
-    protected ItemContainer icFour;
-
-    @FXML
-    protected ItemContainer icFive;
-
-    private List<ItemContainer> containers = new ArrayList<>();
+    private ItemModel itemModel;
+    private ItemContainerModel itemContainerModel;
+    private SelectModule module;
 
     /**
-     * Acts like a constructor and runs when the controller is created.
-     */
-    public void initialize() {
-        containers.add(icOne);
-        containers.add(icTwo);
-        containers.add(icThree);
-        containers.add(icFour);
-        containers.add(icFive);
-        for (int i = 0; i < containers.size(); i++) {
-            containers.get(i).setInitialPosition(i+1);
-        }
-
-
-        //Event Handlers
-        btnNext.setOnAction(e ->
-                next()
-        );
-
-        btnPrevious.setOnAction(e ->
-                previous()
-        );
-    }
-
-    /**
-     * Injects the models needed into the controller.
+     * Constructor.
      *
-     * @param iModel the Item Model used for manipulating Items.
-     * @param icModel the Item Container Model used for manipulating Item Containers.
+     * @param itemModel the Item model to be linked to the carousel.
+     * @param itemContainerModel the Item container model to be linked to the carousel.
+     * @param module the link back to the parent module to allow the controller to change to next scene.
      */
-    public void linkModels(ItemModel iModel, ItemContainerModel icModel){
-        if(this.icModel != null || this.iModel != null)
-            throw new IllegalStateException("Models can only be linked once!");
+    public SelectController(ItemModel itemModel, ItemContainerModel itemContainerModel, SelectModule module){
+        fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SelectView.fxml"));
+        fxmlLoader.setRoot(this);
+        fxmlLoader.setController(this);
 
-        this.iModel = iModel;
-        this.icModel = icModel;
-        this.loadData();
+        this.itemModel = itemModel;
+        this.itemContainerModel = itemContainerModel;
+        this.module = module;
 
     }
 
     /**
-     * The Point of ingestion for data from files.
+     * Is called as a result of loading as an FXML Controller.
+     */
+    public void initialize(){
+        System.out.println("Select mode initializing...");
+        carousel.linkModels(itemModel,itemContainerModel);
+        loadData();
+
+    }
+
+    /**
+     * Manages input and returns the scene.
+     *
+     * @return the associated scene.
+     * @throws Exception
+     */
+    public Scene load() throws Exception{
+        Scene scene = super.load(this.fxmlLoader, this.carousel);
+        scene.setOnKeyPressed(keyEvent -> {
+            switch(keyEvent.getCode()){
+                case RIGHT:
+                    carousel.next();
+                    break;
+                case LEFT:
+                    carousel.previous();
+                    break;
+                case ESCAPE:
+                    module.swapTo(module.getMediator().getModules().get(0));
+                    break;
+            }
+        });
+        return scene;
+    }
+
+    /**
+     * Loads data from the index json file.
      */
     private void loadData(){
-        List<MusicItem> items = new ArrayList<>();
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Item> items;
 
-        for (int i = 0; i < 7; i++) {
-            items.add(new MusicItem("Song "+(i+1), "/songs/Song1/song1.jpg"));
-        }
-//        Temporary Song population
-
-        try {
-            //TODO: Make loop for all song folders
-            //TODO: Correctly load images
-//            ClassLoader classLoader = getClass().getClassLoader();
-//            System.out.println(getClass().getResource("/songs/Song1/song1.png").getFile());
-
-            MusicItem i1 = new MusicItem("File Song 1", "/songs/Song1/song1.png");
-            items.add(i1);
-            MusicItem i2 = new MusicItem("File Song 2", "/songs/Song2/song2.png");
-            items.add(i2);
-
-        }catch(Exception e){
-            e.printStackTrace();
+        File file = new File(getClass().getResource("/songs/index.json").getFile());
+        try{
+            items = objectMapper.readValue(file, new TypeReference<List<MusicItem>>(){});
+        }catch(IOException e){
+            items = new ArrayList<>();
         }
 
+        for (Item item :
+                items) {
+            item.setPrefix("songs");
+        }
 
-        iModel.loadData(items);
-        icModel.loadData(containers);
-        icModel.map(items);
+        this.carousel.ingest(items);
     }
-
-    /**
-     * Cycles all item and item container lists to the next intended item.
-     * Only works if there are no current animations running.
-     */
-    public void next(){
-        if(icOne.getStatus() == Animation.Status.RUNNING)
-            return;
-        iModel.next();
-        icModel.next();
-        icModel.map(iModel.getVisible());
-    }
-
-    /**
-     * Cycles all item and item container lists to the previous intended item.
-     * Only works if there are no current animations running.
-     */
-    public void previous(){
-        if(icOne.getStatus() == Animation.Status.RUNNING)
-            return;
-        iModel.previous();
-        icModel.previous();
-        icModel.map(iModel.getVisible());
-    }
-
 }

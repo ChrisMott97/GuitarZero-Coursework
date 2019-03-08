@@ -24,7 +24,7 @@ public class Song{
 	static ArrayList<File> filesSong = new ArrayList<File>();
 	static String name;
 	static Socket socket;
-
+	
 	/**
 	 * Method that calls the methods readFile() and zipFile(). The purpose of run() is to invoke the client side methods all at once.
 	 * @throws Exception
@@ -36,6 +36,9 @@ public class Song{
 		
 		//Take files and make them into zip
 		zipFile(filesSong, name);
+
+
+
 	}
 	
 	/**
@@ -62,7 +65,7 @@ public class Song{
 	 * @throws IOException
 	 */
 	public static void zipFile(ArrayList<File> files, String name) throws IOException {
-		//METHOD NOT COMPLETED OR INVOKED YET
+
 	    try {
 	    		
 	    	  FileOutputStream   fos = new FileOutputStream(name+".zip");
@@ -89,8 +92,7 @@ public class Song{
 	    } catch (FileNotFoundException e) {
 	      System.out.println("File not found : " + e);
 	    }
-
 	  }
 	
 	
-}
+	}

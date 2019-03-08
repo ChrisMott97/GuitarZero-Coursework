@@ -51,7 +51,7 @@
 //        while ((line = br.readLine()) != null) {
 //            filearr.add(line);
 //        }
-//        String fileName = "MamaDo.mid";
+//        String fileName = "1.mid";
 //        Sequence seq = MidiSystem.getSequence( new File( classLoader.getResource(fileName).getFile() ) );
 //        Track[] track = seq.getTracks();
 //        assertEquals(filearr,guitarMIDI.displayTrack(track[0],0));

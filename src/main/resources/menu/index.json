@@ -1,0 +1,22 @@
+[
+  {
+    "id": 0,
+    "name": "Exit"
+  },
+  {
+    "id": 1,
+    "name": "Play"
+  },
+  {
+    "id": 2,
+    "name": "Select"
+  },
+  {
+    "id": 3,
+    "name": "Store"
+  },
+  {
+    "id": 4,
+    "name": "Tutorial"
+  }
+]

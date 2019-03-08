@@ -65,7 +65,7 @@ public class Song{
 	 * @throws IOException
 	 */
 	public static void zipFile(ArrayList<File> files, String name) throws IOException {
-		//METHOD NOT COMPLETED OR INVOKED YET
+
 	    try {
 	    		
 	    	  FileOutputStream   fos = new FileOutputStream(name+".zip");

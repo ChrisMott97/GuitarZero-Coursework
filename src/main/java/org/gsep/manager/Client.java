@@ -12,9 +12,9 @@ public class Client {
 
 
     public static void main(String[] args){
-
+        
         try {
-            Socket soc = new Socket("192.168.56.1",3332);
+            Socket soc = new Socket("localhost",3332);
             DataInputStream dis = new DataInputStream(soc.getInputStream());
             String msg = dis.readUTF();
             System.out.println(msg);

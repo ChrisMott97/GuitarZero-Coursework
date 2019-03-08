@@ -31,18 +31,22 @@ public class Play {
      * @param noteFilePath the path to the selected note file
      * @param midiFilePath the path to the selected midi file
      */
-    public Play(Group root, String noteFilePath, String midiFilePath){
+    public Play(String noteFilePath, String midiFilePath){
         Canvas canvas = new Canvas(CANVASWIDTH, CANVASHEIGHT);
 
+        //initialise scene
+        Group root = new Group();
         this.scene = new Scene(root);
 
         root.getChildren().add(createBackground());
         root.getChildren().add(canvas);
 
+        //set up mvc
         this.model = new NoteHighwayModel();
         this.view = new NoteHighwayView(canvas);
         this.controller = new NoteHighwayController(model, view);
 
+        //find files
         try{
             this.songSequence = readFile(getClass().getResource(noteFilePath).getFile());
         } catch (Exception e) {

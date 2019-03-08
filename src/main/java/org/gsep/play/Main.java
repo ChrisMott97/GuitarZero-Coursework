@@ -12,12 +12,9 @@ public class Main extends Application{
     }
 
     public void start(Stage stage) throws IOException{
-        stage.setTitle("Main");
+        stage.setTitle("Play Mode Demo");
 
-        //initialise scene
-        Group root = new Group();
-
-        Play play = new Play(root, "/ComeOnEileen.txt", "/ComeOnEileen.mid");
+        Play play = new Play("/ComeOnEileen.txt", "/ComeOnEileen.mid");
 
         stage.setScene(play.getScene());
         stage.setResizable(false);

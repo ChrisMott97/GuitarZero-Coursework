@@ -9,7 +9,7 @@ import javafx.scene.Group;
 import org.junit.Test;
 
 public class PlayTest {
-	Play p1 = new Play(new Group(), "testNoteFile.txt", "queen.mid");
+	Play p1 = new Play("testNoteFile.txt", "queen.mid");
 	private String f= getClass().getResource("/testNoteFile.txt").getFile();
 	
 	@Test

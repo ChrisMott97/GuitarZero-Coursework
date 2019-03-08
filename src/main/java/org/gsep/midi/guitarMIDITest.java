@@ -55,14 +55,14 @@ public class guitarMIDITest {
     public void testGetTrackNotesGuitar() throws IOException, InvalidMidiDataException {
 
         ClassLoader classLoader = new guitarMIDI().getClass().getClassLoader();
-        FileReader fr = new FileReader(classLoader.getResource("actualMamaDo.txt").getFile());
+        FileReader fr = new FileReader(classLoader.getResource("songs/notes/actualMamaDo.txt").getFile());
         BufferedReader br = new BufferedReader(fr);
         String line;
         ArrayList<String> filearr = new ArrayList<>();
         while ((line = br.readLine()) != null) {
             filearr.add(line);
         }
-        String fileName = "MamaDo.mid";
+        String fileName = "songs/midi/1.mid";
         Sequence seq = MidiSystem.getSequence( new File( classLoader.getResource(fileName).getFile() ) );
         Track[] track = seq.getTracks();
         assertEquals(filearr,guitarMIDI.getTrackNotes(track[0]));

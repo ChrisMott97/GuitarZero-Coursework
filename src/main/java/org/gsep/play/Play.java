@@ -20,16 +20,13 @@ public class Play {
     private NoteHighwayModel model;
     private NoteHighwayView view;
     private NoteHighwayController controller;
-    private String noteFilePath;
-    private String midiFilePath;
-    private LinkedHashMap mapA;
+    private File midiFile;
+    private Map<Integer, Note[]> songSequence;
 
     public Play(Group root, String noteFilePath, String midiFilePath){
         Canvas canvas = new Canvas(CANVASWIDTH, CANVASHEIGHT);
 
         this.scene = new Scene(root);
-        this.noteFilePath = noteFilePath;
-        this.midiFilePath = midiFilePath;
 
         root.getChildren().add(createBackground());
         root.getChildren().add(canvas);
@@ -38,13 +35,30 @@ public class Play {
         this.view = new NoteHighwayView(canvas);
         this.controller = new NoteHighwayController(model, view);
 
-        String f = getClass().getResource(noteFilePath).getFile();
-        Map<Integer, Note[]> song = readFile(f);
+        try{
+            this.songSequence = readFile(getClass().getResource(noteFilePath).getFile());
+        } catch (Exception e) {
+            System.out.println("Note file not found");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        try{
+            this.midiFile = new File(getClass().getResource(midiFilePath).getFile());
+        } catch (Exception e){
+            System.out.println("MIDI file Not found");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    public Scene getScene() {
+        return scene;
     }
 
     public void play(){
         view.startRender();
-        controller.play(song);
+        controller.play(songSequence,midiFile);
     }
 
     /**
@@ -77,7 +91,7 @@ public class Play {
 
         //Create ArrayList to hold the lists of notes
         //Create dictionary
-        mapA = new LinkedHashMap();
+        LinkedHashMap mapA = new LinkedHashMap();
 
         //While there is a line, add it to the list
         while((str = in.readLine()) != null){

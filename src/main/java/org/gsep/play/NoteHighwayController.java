@@ -30,13 +30,11 @@ public class NoteHighwayController {
      * position of the sequencer
      * {@link NoteHighwayModel} and {@link NoteHighwayView}
      */
-    public void play(Map<Integer, Note[]> songSequence){
+    public void play(Map<Integer, Note[]> songSequence, File midiFile){
         model.setSongSequence(songSequence);
 
         try{
-            File file = new File(getClass().getResource("/ORSMIDI.mid").getFile());
-
-            Sequence midiSequence = MidiSystem.getSequence(file);
+            Sequence midiSequence = MidiSystem.getSequence(midiFile);
             Sequencer midiSequencer = MidiSystem.getSequencer();
 
             midiSequencer.open();

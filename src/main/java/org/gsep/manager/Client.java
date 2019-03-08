@@ -12,7 +12,7 @@ public class Client {
 
 
     public static void main(String[] args){
-        
+
         try {
             Socket soc = new Socket("localhost",3332);
             DataInputStream dis = new DataInputStream(soc.getInputStream());

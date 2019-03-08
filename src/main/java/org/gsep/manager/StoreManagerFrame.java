@@ -195,20 +195,20 @@ public class StoreManagerFrame {
 					System.out.println("This application has closed. Please next time ensure ALL fields contain a file");
 					frame.dispose(); 
 					return;
-				}	
-				
+				}
+				System.out.println("1");
 				//Validation 2- Ensure files both exist and are of the required format
 				checkF(f1_path, 1);
-				checkF(f1_path, 2);
-				checkF(f1_path, 3);
+				checkF(f2_path, 2);
+				checkF(f3_path, 3);
 				
 				//If files are invalid, break.
 				if (invalid==true) {
 					System.out.println("This application has closed. Please next time ensure all fields submit a VALID file.");
 					frame.dispose(); 
 					return;
-				}	
-				
+				}
+				System.out.println("2");
 				//Add valid files to array list
 				for(int i=0; i< 3; i++){
 					files.add(new File(filePaths[i]));  
@@ -219,15 +219,16 @@ public class StoreManagerFrame {
 				 files.add(noteFile);  
 				 
 				//Close frame
-				frame.dispose(); 
-				
+				frame.dispose();
+				System.out.println("3");
 				//Create a Song object
-				Client song = new Client();
-				song.filesSong = files;
+				Song song = new Song();
+				Song.filesSong = files;
 				//Run method within Client
 				try {
-					Client.run();
+					song.run();
 				} catch (Exception e1) {
+					System.out.println("HELLO");
 					e1.printStackTrace();
 				}
 			}
@@ -266,11 +267,12 @@ public class StoreManagerFrame {
 			invalid = true;
 			return;
 			}
+        break;
 	case 2:
 		//Check file exists and is not a directory
 			if(f.exists() && !f.isDirectory()) { 
 			    //Ensure suffix is of correct notation
-				if (!s.endsWith(".png") && !s.endsWith(".jpg")) {
+				if (!(s.endsWith(".png") || s.endsWith(".jpg"))) {
 					System.out.println("The second submitted file must be of .png or of .jpg format.");
 					invalid = true;
 					return;
@@ -282,6 +284,7 @@ public class StoreManagerFrame {
 				invalid = true;
 				return;
 			}
+			break;
 		
 	case 3:
 		//Check file exists and is not a directory
@@ -299,7 +302,8 @@ public class StoreManagerFrame {
 			invalid = true;
 			return;
 		}
-		}
+        break;
+	}
 	}
 	
 

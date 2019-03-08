@@ -5,6 +5,7 @@ import javax.sound.midi.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 /**
@@ -12,11 +13,10 @@ import java.util.List;
  *
  * @author Abigail Lilley
  * @author Niha Gummakonda
- * @version 1.0, February 21st 2019
+ * @version 2.0, March 7th 2019
  */
 public class guitarMIDI {
 
-    public guitarMIDI self;
 
     /**
      * Returns the name of the synthesizer's nth instrument
@@ -37,26 +37,20 @@ public class guitarMIDI {
         }
     }
 
-
     /**
-     * Converts a given track of a MIDI file into an ArrayList containing the information used in play mode.
-     * A note's lane is decided by it's relative position within the range of notes (i.e. highest third in lane one,
-     * lowest in lane three).
-     * A note's colour is decided by it's relative position within the range on it's lane (i.e. higher half black,
-     * lower half white). 0 corresponds to black, and 1 to white.
+     * Converts a given track of a MIDI file into an ArrayList containing the ticks and notes of
+     * an instrument that contains strings
      *
      * Future development:
      * @param track     Track from a MIDI file
-     * @return          ArrayList of strings in the form "timing, lane, colour"
-     *                      n.b. lane refers to the path the note will take down the fret board in play mode
-     *                           colour refers to whether the note is black or white
+     * @return          ArrayList of strings in the form "ticks note" which is the longest for that track
+     *
      */
-    //TODO Change note colour logic so sharp and flat notes are black, all others are white (like a piano)
 
     public static ArrayList <String> getTrackNotes( Track track ) {
         ArrayList<Integer> guitarChannnel = new ArrayList<>();
         List<List<String>> currentArray = new ArrayList<>();
-
+        //Goes through tracks
         for ( int i = 0; i < track.size(); i = i +1 ) {
             MidiEvent midiEvent = track.get( i );
             MidiMessage midiMessage = midiEvent.getMessage();
@@ -80,27 +74,7 @@ public class guitarMIDI {
                         for (int j = 0; j < guitarChannnel.size(); j++) {
                             currentArray.add(new ArrayList<>());
                             if (guitarChannnel.get(j) == chan) {
-
-                                switch (dat1 % 6) {
-                                    case 0:
-                                        currentArray.get(j).add(tick + " 1 0");
-                                        break;
-                                    case 1:
-                                        currentArray.get(j).add(tick + " 1 1");
-                                        break;
-                                    case 2:
-                                        currentArray.get(j).add(tick + " 2 0");
-                                        break;
-                                    case 3:
-                                        currentArray.get(j).add(tick + " 2 1");
-                                        break;
-                                    case 4:
-                                        currentArray.get(j).add(tick + " 3 0");
-                                        break;
-                                    case 5:
-                                        currentArray.get(j).add(tick + " 3 1");
-                                        break;
-                                }
+                                currentArray.get(j).add(tick + " " + dat1);
                                 break;
                             }
                         }
@@ -114,7 +88,7 @@ public class guitarMIDI {
         }
         ArrayList<String> longestArray = new ArrayList<>();
         int arrayLen = 0;
-
+        //Finds longest instrument in the track
         for (List<String> aCurrentArray : currentArray) {
 
             if (arrayLen < aCurrentArray.size()) {
@@ -135,14 +109,11 @@ public class guitarMIDI {
 
         BufferedWriter bw = null;
         try {
-
-            File file = new File("songs/notes/noteFile.txt");
-
+            File file = new File("noteFile.txt");
             //CHECK THIS
             if (!file.exists()) {
                 file.createNewFile();
             }
-
             FileWriter fw = new FileWriter(file);
             bw = new BufferedWriter(fw);
 
@@ -165,21 +136,104 @@ public class guitarMIDI {
         return null;
     }
 
-    public static File xyz(ArrayList arr){
+    /**
+     * It randomly assigns where the note will be coming down in play mode. Its in the format ticks,
+     * row1,row2,row3. It puts either 0,1 or 2 in each row. 0 means the row is empty/open. 1 means
+     * the black button should be pressed on that row and 2 means white.
+     * @param arr the longest array after its been concatenated
+     * @return the new array created is going into writeToFile method
+     */
+
+    //TODO could change it so that what button is pressed is determined by how high/low the note is
+    public static File addNotes(ArrayList arr){
+        ArrayList<String> newArr = new ArrayList<>();
+        Random rand = new Random();
+
+        for(int i = 0; i < arr.size(); i++){
+            int count=0;
+            //Gets the ticks
+            String[] iSplit = arr.get(i).toString().split("\\s+");
+            int iTick = Integer.parseInt(iSplit[0]);
+
+            for (Object anArr : arr) {
+                String[] jSplit = anArr.toString().split("\\s+");
+                int jTick = Integer.parseInt(jSplit[0]);
+                //Compares the ticks with themselves
+                if (iTick == jTick) {
+                    count = count + 1;
+                }
+            }
+            //All randomly assigned
+            //If only 1 note is played at that tick
+            if(count == 1){
+                int row = rand.nextInt(3);
+                if (row == 0){
+                    int colr = rand.nextInt(2) + 1;
+                    newArr.add(iTick + "," + colr + ",0,0");
+                }else if (row == 1) {
+                    int colr = rand.nextInt(2) + 1;
+                    newArr.add(iTick + ",0," + colr + ",0");
+                }else if(row == 2){
+                    int colr = rand.nextInt(2) + 1;
+                    newArr.add(iTick + ",0,0," + colr);
+                }
+            //If 2 notes are played at that tick
+            }else if(count == 2){
+                int row = rand.nextInt(3);
+                int row2;
+                do{
+                    row2 = rand.nextInt(3);
+                }while (row2 == row);
+                if (row == 0 && row2 == 1 || row == 1 && row2 == 0){
+                    int colr = rand.nextInt(2) + 1;
+                    int colr1 = rand.nextInt(2) + 1;
+                    newArr.add(iTick + "," + colr + "," + colr1 + ",0");
+                }else if (row == 1 && row2 == 2 || row == 2 && row2 == 1){
+                    int colr = rand.nextInt(2) + 1;
+                    int colr1 = rand.nextInt(2) + 1;
+                    newArr.add(iTick + ",0," + colr + "," + colr1);
+                }else if(row == 2 && row2 == 0 || row == 0 && row2 == 2){
+                    int colr = rand.nextInt(2) + 1;
+                    int colr1 = rand.nextInt(2) + 1;
+                    newArr.add(iTick + "," + colr + ",0," + colr1);
+                }
+             //If more than 2 notes are played at that tick
+            }else if (count > 2){
+                int colr = rand.nextInt(2) + 1;
+                int colr1 = rand.nextInt(2) + 1;
+                int colr2 = rand.nextInt(2) + 1;
+                newArr.add(iTick + "," + colr + "," + colr1 + "," + colr2 );
+            }
+            i = i + count - 1;
+        }
+
+        return writeToFile(newArr);
+
+    }
+
+    /**
+     * If the notes are too close together that it is impossible for someone to play
+     * the game, this method restricts the notes so that there is a minimum distance
+     * berween the ticks
+     * @param arr The longest instrument notes array in whole midi file
+     * @return calls the addNotes function with the concatenated array
+     */
+    public static File concatArr(ArrayList arr){
         for (int i =0; i <arr.size(); i++){
+            //Checks current tick with next tick
             if (i < arr.size() - 1) {
-                String[] j = arr.get(i).toString().split("\\s+");
-                String[] k = arr.get(i + 1).toString().split("\\s+");
-                int j1 = Integer.parseInt(j[0]);
-                int k1 = Integer.parseInt(k[0]);
-                if (k1 < j1 + 5 && k1 != j1) {
+                String[] iSplit = arr.get(i).toString().split("\\s+");
+                String[] nextSplit = arr.get(i + 1).toString().split("\\s+");
+                int iTick = Integer.parseInt(iSplit[0]);
+                int nextTick = Integer.parseInt(nextSplit[0]);
+                if (nextTick < iTick + 100 && nextTick != iTick) {
+                    //Removes it if the ticks are too close
                     arr.remove(i + 1);
+                    i = i - 2;
                 }
             }
         }
-
-
-        return writeToFile(arr);
+        return addNotes(arr);
     }
 
     /**
@@ -195,15 +249,15 @@ public class guitarMIDI {
         //TODO make sure it handles when a) file not found b) input file in not a MIDI file
         try {
 
-            Sequence seq = MidiSystem.getSequence( new File(getClass().getResource(MIDIFileName).getFile()));
+            Sequence seq = MidiSystem.getSequence(new File (MIDIFileName));
             Sequencer seqr = MidiSystem.getSequencer();
             seqr.setSequence(seq);
-//            long tickspermicrosec = seq.getMicrosecondLength()/seq.getTickLength();
-//            System.out.println(tickspermicrosec + " " + seq.getTickLength() + " " + seq.getMicrosecondLength());
             Track[] trks = seq.getTracks();
             int longestLen = 0;
             ArrayList <String> trackArray = new ArrayList<>();
-            System.out.println(seqr.getTempoInBPM());
+//            double perTick = 60000/(seqr.getTempoInBPM()*seq.getResolution());
+//            double bperms = seqr.getTempoInBPM()*1/60000;
+//            double tickperbeat = 1/(bperms*perTick);
             for (Track trk : trks) {
 
                 ArrayList<String> currentTrack = getTrackNotes(trk);
@@ -214,8 +268,8 @@ public class guitarMIDI {
                     trackArray = currentTrack;
                 }
             }
+            return concatArr(trackArray);
 
-            return xyz(trackArray);
         } catch ( Exception exn ) {
             System.out.println( exn ); System.exit( 1 );
         }
@@ -224,28 +278,9 @@ public class guitarMIDI {
 
     public static void main (String[] args) {                       //To test file is written and passed back correctly
         //In real implementation, convertMIDI will be
-        guitarMIDI boi = new guitarMIDI();
+        guitarMIDI gm = new guitarMIDI();
 
-        File noteFile = boi.convertMIDI("songs/midi/1.mid");      //called from externally
-//        ArrayList<String> arr = new ArrayList<>();
-
-//        arr.add("12345 567 677");
-//        arr.add("12345 567 677");
-//        arr.add("12345 567 677");
-//        arr.add("12345 567 677");
-//        arr.add("12347 434 674");
-//        arr.add("17282 574 267");
-//        arr.add("17292 574 267");
-//        arr.add("17305 363 992");
-//        arr.add("17309 574 267");
-//        arr.add("19827 363 992");
-//        arr.add("19923 574 267");
-//        arr.add("19927 363 992");
-//        arr.add("20123 363 992");
-//        xyz(arr);
-//        for(int i = 0; i < arr.size(); i ++){
-//            System.out.println(arr.get(i));
-//        }
+        File noteFile = gm.convertMIDI("/queen.mid");      //called from externally
         try {
             FileReader fr = new FileReader(noteFile);
             BufferedReader br = new BufferedReader(fr);

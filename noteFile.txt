@@ -1,5 +1,0 @@
-Hello World
-Hello
-This is a test
-The test is done
-Bye

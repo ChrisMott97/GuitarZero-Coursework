@@ -10,14 +10,13 @@ import java.util.*;
 public class NoteHighwayController {
     private NoteHighwayModel model;
     private NoteHighwayView view;
-    private final int noteHighwayLength = 700;
 
     /**
-     * constructor for {@link NoteHighwayController}
+     * @author Örs Barkanyi
+     * Constructor for {@link NoteHighwayController}
      *
      * @param model the NoteHighwayModel
      * @param view the NoteHighwayView
-     * @throws IOException 
      */
     NoteHighwayController(NoteHighwayModel model, NoteHighwayView view){
         this.model = model;
@@ -25,86 +24,49 @@ public class NoteHighwayController {
     }
 
     /**
-     * plays notes down the highway at a set tempo, mediating between the
+     * @author Örs Barkanyi
+     *
+     * Plays a midi file and advances the model and updates the view using a separate thread that polls the current
+     * position of the sequencer
      * {@link NoteHighwayModel} and {@link NoteHighwayView}
      */
-    public void play(Map<Integer, Note[]> songSequence, double tempo){
+    public void play(Map<Integer, Note[]> songSequence){
         model.setSongSequence(songSequence);
-        model.setNoteHighwayLength(noteHighwayLength);
-        view.setNoteHighwayLength(noteHighwayLength);
 
-
-
-        File file = new File(getClass().getResource("/ORSMIDI.mid").getFile());
         try{
+            File file = new File(getClass().getResource("/ORSMIDI.mid").getFile());
+
             Sequence midiSequence = MidiSystem.getSequence(file);
             Sequencer midiSequencer = MidiSystem.getSequencer();
+
             midiSequencer.open();
             midiSequencer.setSequence(midiSequence);
             midiSequencer.start();
 
-
-            System.out.println((long)6000/midiSequencer.getTempoInMPQ()*midiSequence.getResolution());
             view.setPeriod((long)6000/midiSequencer.getTempoInMPQ()*midiSequence.getResolution());
-//            view.setPeriod(4);
-            Thread thread = new Thread(){
-                @Override
-                public void run() {
-                    long lastTick = 0;
-//                    long time = System.nanoTime();
-                    while (midiSequencer.getTickPosition() < midiSequencer.getTickLength()) {
-                        if (lastTick < midiSequencer.getTickPosition()){
-//                            System.out.println(System.nanoTime() - time);
-//                            time = System.nanoTime();
-                            advance(midiSequencer.getTickPosition());
-                            lastTick = midiSequencer.getTickPosition();
+
+            //advances the model when there is a change in the sequencer tick position
+            Thread thread = new Thread(() -> {
+                long lastTick = 0;
+                while (midiSequencer.getTickPosition() < midiSequencer.getTickLength()) {
+                    if (lastTick < midiSequencer.getTickPosition()){
+                        long tick = midiSequencer.getTickPosition();
+
+                        //synchronise view with current tick from model
+                        if (model.top(tick) != null){
+                            view.sendNotes(model.top(tick));
                         }
-//                        Thread.sleep(1000);
+
+                        lastTick = tick;
                     }
                 }
-            };
+            });
+
             thread.start();
-
-
-//            ControllerEventListener controllerEventListener = new ControllerEventListener() {
-//                public void controlChange(ShortMessage event) {
-//                    // TODO convert the event into a readable/desired output
-//                    System.out.println(event.);
-//                }
-//            };
-//
-//            int[] controllersOfInterest = { 1, 2, 4 };
-//            midiSequencer.addControllerEventListener(controllerEventListener, controllersOfInterest);
-        } catch (Exception exn) {
-            System.out.println(exn); System.exit(1);
+        } catch (Exception e) {
+            System.out.println("Invalid MIDI file");
+            e.printStackTrace();
+            System.exit(1);
         }
-        
-//        TimerTask repeatedTask = new TimerTask() {
-//            public void run() {
-//                //advance model to next beat and takes the top of the model and gives it to the view
-//                if (model.top() != null){
-//                    view.sendNotes(model.top());
-//
-//                }
-//                model.advance();
-//            }
-//        };
-//
-//        Timer timer = new Timer();
-//
-//        //This calls repeatedTask
-////        long period = (long)(60f/(float)tempo*1000);
-//        timer.scheduleAtFixedRate(repeatedTask,0, (long)tempo);
-
-    }
-
-    public void advance(long tick) {
-        //advance model to next beat and takes the top of the model and gives it to the view
-        if (model.top(tick) != null){
-            view.sendNotes(model.top(tick));
-
-        }
-        model.bottom(tick);
-//        model.advance();
     }
 }

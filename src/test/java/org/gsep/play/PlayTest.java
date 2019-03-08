@@ -8,7 +8,7 @@ import java.util.LinkedHashMap;
 import org.junit.Test;
 
 public class PlayTest {
-	Play p1 = new Play();
+	Main p1 = new Main();
 	private String f= getClass().getResource("/testNoteFile.txt").getFile();
 	
 	@Test

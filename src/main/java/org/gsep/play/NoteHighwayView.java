@@ -3,13 +3,11 @@ package org.gsep.play;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class NoteHighwayView {
     private Canvas canvas;
-    private List<NoteSprite> noteSprites = Collections.synchronizedList(new ArrayList<NoteSprite>());
+    private List<NoteSprite> noteSprites = Collections.synchronizedList(new LinkedList<>());
     private AnimationTimer animationTimer;
     private double noteHighwayPeriod;
     private int noteHighwayLength;
@@ -64,13 +62,13 @@ public class NoteHighwayView {
         for (int i = 0; i < notes.length; i++){
             if (notes[i] != Note.OPEN){
                 NoteSprite noteSprite = new NoteSprite(notes[i], lanes[i]);
-                noteSprites.add(noteSprite);
+                noteSprites.add(0,noteSprite);
             }
         }
         //if there are more notes than can be displayed, remove note sprites
         if (noteSprites.size() > noteHighwayLength*notes.length) {
             for (int i = 0; i < notes.length; i++){
-                noteSprites.remove(0);
+                noteSprites.remove(noteSprites.size()-1);
             }
         }
     }

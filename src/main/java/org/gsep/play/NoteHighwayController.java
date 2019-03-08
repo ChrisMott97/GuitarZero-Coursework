@@ -10,7 +10,7 @@ import java.util.*;
 public class NoteHighwayController {
     private NoteHighwayModel model;
     private NoteHighwayView view;
-    private final int noteHighwayLength = 1000;
+    private final int noteHighwayLength = 700;
 
     /**
      * constructor for {@link NoteHighwayController}
@@ -104,6 +104,7 @@ public class NoteHighwayController {
             view.sendNotes(model.top(tick));
 
         }
+        model.bottom(tick);
 //        model.advance();
     }
 }

@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
+import javax.sound.midi.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;

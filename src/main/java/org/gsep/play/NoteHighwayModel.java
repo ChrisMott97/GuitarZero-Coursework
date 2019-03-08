@@ -27,16 +27,24 @@ public class NoteHighwayModel {
         beat++;
     }
 
-    /**
-     * returns the notes that appear at the top of the note highway
-     * so that notes can be sent down the highway
-     *
-     * @return list of note types
-     */
+//    /**
+//     * returns the notes that appear at the top of the note highway
+//     * so that notes can be sent down the highway
+//     *
+//     * @return list of note types
+//     */
+//    public Note[] top(long tick){
+//        if (songSequence.containsKey((int)tick+noteHighwayLength)){
+//
+//            System.out.println("note");
+//        }
+//         return songSequence.get((int)tick+noteHighwayLength);
+//
+//    }
     public Note[] top(long tick){
         if (songSequence.containsKey((int)tick+noteHighwayLength)){
 
-            System.out.println("note");
+
         }
          return songSequence.get((int)tick+noteHighwayLength);
 
@@ -48,7 +56,10 @@ public class NoteHighwayModel {
      *
      * @return list of note types
      */
-    public Note[] bottom(){
-        return songSequence.get(beat);
+    public Note[] bottom(long tick){
+        if (songSequence.containsKey((int)tick)){
+            System.out.println("note");
+        }
+        return songSequence.get(tick);
     }
 }

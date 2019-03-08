@@ -1,16 +1,19 @@
 package org.gsep.play;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.Sequence;
+import javax.sound.midi.Sequencer;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 public class NoteHighwayController {
     private NoteHighwayModel model;
     private NoteHighwayView view;
-    private int tempo;
-    private Note[][] songSequence;
 
     /**
-     * constructor for {@link NoteHighwayController}
+     * @author Örs Barkanyi
+     * Constructor for {@link NoteHighwayController}
      *
      * @param model the NoteHighwayModel
      * @param view the NoteHighwayView
@@ -18,78 +21,50 @@ public class NoteHighwayController {
     NoteHighwayController(NoteHighwayModel model, NoteHighwayView view){
         this.model = model;
         this.view = view;
-        //loads note sequence and tempo like this temporarily until proprietary files can be loaded
-        this.tempo = 120;
-        this.songSequence = new Note[][] {
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.BLACK, Note.WHITE, Note.BLACK},
-                {Note.OPEN, Note.WHITE, Note.OPEN},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-                {Note.OPEN, Note.OPEN, Note.BLACK},
-                {Note.BLACK, Note.OPEN, Note.OPEN},
-        };
     }
 
     /**
-     * plays notes down the highway at a set tempo, mediating between the
+     * @author Örs Barkanyi
+     *
+     * Plays a midi file and advances the model and updates the view using a separate thread that polls the current
+     * position of the sequencer
      * {@link NoteHighwayModel} and {@link NoteHighwayView}
      */
-    public void play(){
-        model.setNoteSequence(songSequence);
+    public void play(Map<Integer, Note[]> songSequence, File midiFile){
+        model.setSongSequence(songSequence);
 
-        TimerTask repeatedTask = new TimerTask() {
-            public void run() {
-                model.advance();
-                view.sendNotes(model.top());
-            }
-        };
+        try{
+            Sequence midiSequence = MidiSystem.getSequence(midiFile);
+            Sequencer midiSequencer = MidiSystem.getSequencer();
 
-        Timer timer = new Timer();
+            midiSequencer.open();
+            midiSequencer.setSequence(midiSequence);
+            midiSequencer.start();
 
-        long period = (long)(60f/(float)tempo*1000);
-        timer.scheduleAtFixedRate(repeatedTask,0, period);
+            view.setPeriod((long)6000/midiSequencer.getTempoInMPQ()*midiSequence.getResolution()*midiSequencer.getTempoFactor());
+
+            //advances the model when there is a change in the sequencer tick position
+            Thread thread = new Thread(() -> {
+                long lastTick = 0;
+                while (midiSequencer.getTickPosition() < midiSequencer.getTickLength()) {
+                    if (lastTick < midiSequencer.getTickPosition()){
+                        long tick = midiSequencer.getTickPosition();
+
+                        //synchronise view with current tick from model
+                        if (model.top(tick) != null){
+                            view.sendNotes(model.top(tick));
+                        }
+
+                        lastTick = tick;
+                    }
+                }
+            });
+
+            thread.start();
+        } catch (Exception e) {
+            System.out.println("Invalid MIDI file");
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
-
 }

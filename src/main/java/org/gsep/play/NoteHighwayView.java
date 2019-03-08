@@ -2,79 +2,86 @@ package org.gsep.play;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class NoteHighwayView {
-    private int canvasWidth = 500;
-    private int canvasHeight = 500;
-    private Canvas canvas = new Canvas (canvasWidth, canvasHeight);
-    private GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-    private List<Sprite> noteSprites = Collections.synchronizedList(new ArrayList<>());
-
+    private Canvas canvas;
+    private List<NoteSprite> noteSprites = Collections.synchronizedList(new ArrayList<>());
+    private AnimationTimer animationTimer;
+    private double noteHighwayPeriod;
+    private final int noteHighwayLength = 700;
+    private final int numberOfLanes = 3;
+    
     /**
-     * Constructor for {@link NoteHighwayView} which starts rendering all the sprites within it
+     * @author Örs Barkanyi
+     *
+     * Constructor for {@link NoteHighwayView} which initialises the game render clock
      */
-    NoteHighwayView(){
-        new AnimationTimer()
-        {
-            public void handle(long currentNanoTime)
-            {
+    NoteHighwayView(Canvas canvas){
+        this.canvas = canvas;
+
+        this.animationTimer = new AnimationTimer() {
+            public void handle(long currentNanoTime) {
                 if (noteSprites.size() > 1) {
-                    graphicsContext.clearRect(0,0, canvasWidth, canvasHeight);
-                    for (Sprite noteSprite : noteSprites) {
-                        noteSprite.render(graphicsContext);
-                        noteSprite.setPos(noteSprite.getPosX(), noteSprite.getPosY() + 2);
+                    canvas.getGraphicsContext2D().clearRect(0,0, canvas.getWidth(), canvas.getHeight()); //clear the canvas
+
+                    //render each sprite in the queue
+                    for (NoteSprite noteSprite : noteSprites) {
+                        double currentTime = System.currentTimeMillis();
+                        double spawnTime = noteSprite.getSpawnTime();
+                        double progress = (currentTime-spawnTime)/noteHighwayPeriod;
+
+                        if (progress <= 1){
+                            noteSprite.updateProgress(progress);
+                            noteSprite.render(canvas.getGraphicsContext2D());
+                        }
                     }
                 }
             }
-        }.start();
+        };
     }
 
     /**
-     * gets the canvas
+     * @author Örs Barkanyi
      *
-     * @return the canvas
+     * Starts the game render clock
      */
-    public Canvas getCanvas() {
-        return canvas;
+    public void startRender(){
+        this.animationTimer.start();
     }
 
     /**
+     * @author Örs Barkanyi
+     * @param period the time taken for notes travel from top to bottom
+     */
+    public void setPeriod(double period){
+        this.noteHighwayPeriod = noteHighwayLength*period;
+    }
+
+    /**
+     * @author Örs Barkanyi
+     *
      * Sends notes down the highway, determining what colour they are based on their type
-     * and queueing them to be rendered
+     * and queueing them to be rendered and manages the size of the render queue
      *
      * @param notes the notes corresponding to each lane
      */
     public void sendNotes(Note[] notes){
-
+        //initialise note sprites and queue them to render
+        Lane[] lanes = Lane.values();
         for (int i = 0; i < notes.length; i++){
-            Sprite sprite = new Sprite();
-            sprite.setDim(10, 10);
-            sprite.setPos(canvasWidth/2 - 3*15/2 + 15*i,0);
-            switch (notes[i]){
-                case OPEN:
-                    sprite.setFill(Color.LIGHTGRAY);
-                    sprite.setStroke(Color.LIGHTGRAY);
-                    break;
-                case BLACK:
-                    sprite.setFill(Color.BLACK);
-                    sprite.setStroke(Color.BLACK);
-                    break;
-                case WHITE:
-                    sprite.setFill(Color.LIGHTGRAY);
-                    sprite.setStroke(Color.BLACK);
+            if (notes[i] != Note.OPEN){
+                NoteSprite noteSprite = new NoteSprite(notes[i], lanes[i]);
+                noteSprites.add(0,noteSprite);
             }
-            noteSprites.add(sprite);
         }
-        if (noteSprites.size() > 8*3){
-            noteSprites.remove(0);
-            noteSprites.remove(0);
-            noteSprites.remove(0);
+
+        //if there are more notes than can be displayed, remove note sprites
+        if (noteSprites.size() > noteHighwayLength*numberOfLanes) {
+            for (int i = 0; i < notes.length; i++){
+                noteSprites.remove(noteSprites.size()-1);
+            }
         }
     }
 }

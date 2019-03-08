@@ -1,33 +1,156 @@
 package org.gsep.play;
 
-import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
-public class Play extends Application{
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+public class Play {
+    private final int CANVASWIDTH = 950;
+    private final int CANVASHEIGHT = 700;
+    private Scene scene;
+    private NoteHighwayModel model;
+    private NoteHighwayView view;
+    private NoteHighwayController controller;
+    private File midiFile;
+    private Map<Integer, Note[]> songSequence;
 
-    public void start(Stage stage){
-        stage.setTitle("Play");
+    /**
+     * @author Örs Barkanyi
+     * Constructor for Play Mode
+     *
+     * @param root the root object in the play mode scene
+     * @param noteFilePath the path to the selected note file
+     * @param midiFilePath the path to the selected midi file
+     */
+    public Play(String noteFilePath, String midiFilePath){
+        Canvas canvas = new Canvas(CANVASWIDTH, CANVASHEIGHT);
 
         //initialise scene
         Group root = new Group();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
+        this.scene = new Scene(root);
 
-        NoteHighwayModel model = new NoteHighwayModel();
-        NoteHighwayView view = new NoteHighwayView();
-        NoteHighwayController controller = new NoteHighwayController(model, view);
+        root.getChildren().add(createBackground());
+        root.getChildren().add(canvas);
+
+        //set up mvc
+        this.model = new NoteHighwayModel();
+        this.view = new NoteHighwayView(canvas);
+        this.controller = new NoteHighwayController(model, view);
+
+        //find files
+        try{
+            this.songSequence = readFile(getClass().getResource(noteFilePath).getFile());
+        } catch (Exception e) {
+            System.out.println("Note file not found");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        try{
+            this.midiFile = new File(getClass().getResource(midiFilePath).getFile());
+        } catch (Exception e){
+            System.out.println("MIDI file Not found");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
 
 
-        root.getChildren().add(view.getCanvas());
+    public Scene getScene() {
+        return scene;
+    }
 
+    /**
+     * @author Örs Barkanyi
+     * Invokes the start play mode
+     */
+    public void play(){
+        view.startRender();
+        controller.play(songSequence,midiFile);
+    }
 
-        stage.show();
-        controller.play();
+    /**
+     * @author humzahmalik
+     * Setting bakckground image as the fret board
+     */
+    public ImageView createBackground(){
+        File file = new File(getClass().getResource("/play/highway.png").getFile());
+        Image image = new Image(file.toURI().toString());
+
+        ImageView imageView = new ImageView();
+        imageView.setImage(image);
+        imageView.setFitWidth(CANVASWIDTH);
+        imageView.setPreserveRatio(true);
+
+        return imageView;
+    }
+
+    /**
+     * @author humzahmalik
+     * Method that reads notes file into an array
+     * @return
+     * @throws IOException
+     *
+     */
+    public LinkedHashMap readFile(String f) throws IOException {
+
+        BufferedReader in = new BufferedReader(new FileReader(f));
+        String str;
+
+        //Create ArrayList to hold the lists of notes
+        //Create dictionary
+        LinkedHashMap mapA = new LinkedHashMap();
+
+        //While there is a line, add it to the list
+        while((str = in.readLine()) != null){
+
+            //Create dictionary value list
+            Note[] dictValue;
+
+            //split string
+            String[] split = str.split(",");
+            //Create dictioanry value list
+            dictValue = new Note[] {null, null, null};
+            dictValue[0]=checkNote(Integer.parseInt(split[1]));
+
+            dictValue[1]=checkNote(Integer.parseInt(split[2]));
+
+            dictValue[2]=checkNote(Integer.parseInt(split[3]));
+
+            //add to dictionary
+            mapA.put(Integer.parseInt(split[0]), dictValue);
+        }
+        return mapA;
+    }
+
+    /**
+     * @author humzahmalik
+     * Method checking whether number corresponds to black, white or empty note
+     * @return Note value
+     */
+    public Note checkNote(int num) {
+        Note type = null;
+
+        if(num==0) {
+            type= Note.OPEN;
+        }
+        if(num==1) {
+            type= Note.BLACK;
+        }
+        if(num==2) {
+            type= Note.WHITE;
+        }
+
+        return type;
+
     }
 }

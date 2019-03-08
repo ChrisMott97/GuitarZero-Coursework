@@ -12,6 +12,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.gsep.SceneController;
 import org.gsep.carousel.*;
+import org.gsep.mediator.Mediator;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,14 +36,16 @@ public class SlashController extends SceneController {
 
     private ItemModel itemModel;
     private ItemContainerModel itemContainerModel;
+    private SlashModule module;
 
-    public SlashController(ItemModel itemModel, ItemContainerModel itemContainerModel){
+    public SlashController(ItemModel itemModel, ItemContainerModel itemContainerModel, SlashModule module){
 
         fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SlashView.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
         this.itemModel = itemModel;
         this.itemContainerModel = itemContainerModel;
+        this.module = module;
 
     }
 
@@ -64,7 +67,13 @@ public class SlashController extends SceneController {
                     carousel.previous();
                     break;
                 case SPACE:
-//                    getStage().setScene(getNextScene());
+                    //TODO: Replace indexing with a getByName poss. using dictionaries
+                    switch(itemModel.getIntended().getName()){
+                        //TODO: Use enums for modes or include functionality in a Model
+                        case "Select":
+                            module.swapTo(module.getMediator().getModules().get(1));
+                            break;
+                    }
                     break;
             }
         });

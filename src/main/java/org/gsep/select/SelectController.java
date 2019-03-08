@@ -15,6 +15,7 @@ import org.gsep.carousel.Carousel;
 import org.gsep.carousel.Item;
 import org.gsep.carousel.ItemContainerModel;
 import org.gsep.carousel.ItemModel;
+import org.gsep.mediator.Mediator;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,21 +31,22 @@ public class SelectController extends SceneController {
 
     private ItemModel itemModel;
     private ItemContainerModel itemContainerModel;
+    private SelectModule module;
 
-    public SelectController(ItemModel itemModel, ItemContainerModel itemContainerModel){
+    public SelectController(ItemModel itemModel, ItemContainerModel itemContainerModel, SelectModule module){
         fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SelectView.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 
         this.itemModel = itemModel;
         this.itemContainerModel = itemContainerModel;
+        this.module = module;
 
     }
 
     public void initialize(){
         System.out.println("Select mode initializing...");
         carousel.linkModels(itemModel,itemContainerModel);
-        // Event handling/listeners go here!
         loadData();
 
     }
@@ -58,6 +60,9 @@ public class SelectController extends SceneController {
                     break;
                 case LEFT:
                     carousel.previous();
+                    break;
+                case ESCAPE:
+                    module.swapTo(module.getMediator().getModules().get(0));
                     break;
             }
         });

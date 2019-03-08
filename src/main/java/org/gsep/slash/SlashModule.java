@@ -8,7 +8,6 @@ import org.gsep.mediator.SceneModule;
 
 public class SlashModule extends SceneModule {
     public SlashController controller;
-    public Scene scene;
     public ItemModel itemModel;
     public ItemContainerModel itemContainerModel;
 
@@ -17,7 +16,7 @@ public class SlashModule extends SceneModule {
         itemModel = new ItemModel();
         itemContainerModel = new ItemContainerModel();
 
-        controller = new SlashController(itemModel, itemContainerModel);
+        controller = new SlashController(itemModel, itemContainerModel, this);
         scene = controller.load();
     }
 }

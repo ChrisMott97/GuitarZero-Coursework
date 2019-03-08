@@ -10,14 +10,13 @@ public class SelectModule extends SceneModule {
     public SelectController controller;
     public ItemModel itemModel;
     public ItemContainerModel itemContainerModel;
-    public Scene scene;
 
     public SelectModule(Mediator mediator) throws Exception{
         super(mediator);
         itemModel = new ItemModel();
         itemContainerModel = new ItemContainerModel();
 
-        controller = new SelectController(itemModel, itemContainerModel);
+        controller = new SelectController(itemModel, itemContainerModel, this);
         scene = controller.load();
 
     }

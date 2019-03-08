@@ -5,7 +5,14 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.gsep.carousel.Carousel;
-
+/*
+ * SceneController.
+ *
+ * Temporary parent controller.
+ *
+ * @author  Chris Mott.
+ * @version 2.00, March 2019.
+ */
 public class SceneController extends StackPane {
 
     private Stage stage;

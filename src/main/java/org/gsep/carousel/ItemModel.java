@@ -7,7 +7,7 @@ import java.util.List;
  * ItemModel.
  *
  * @author  Chris Mott.
- * @version 1.00, January 2019.
+ * @version 2.00, March 2019.
  */
 public class ItemModel<T extends Item> {
 //Theoretical Carousel
@@ -17,20 +17,6 @@ public class ItemModel<T extends Item> {
     private Item intended;
     private static final int maxVisibleLength = 5;
 
-//    /**
-//     * Allows ItemModel to be constructed with no arguments.
-//     */
-//    ItemModel(){}
-//
-//    /**
-//     * Constructor for the ItemModel to initialize the list.
-//     *
-//     * @param all the list of Items to be loaded.
-//     */
-//    ItemModel(List<T> all){
-//        this.all = all;
-//        this.update();
-//    }
 
     /**
      * Used after an empty constructor to load the list.

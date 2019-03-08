@@ -2,33 +2,28 @@ package org.gsep.slash;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 import org.gsep.SceneController;
 import org.gsep.carousel.*;
-import org.gsep.mediator.Mediator;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * SlashController.
+ *
+ * @author  Chris Mott.
+ * @version 2.00, March 2019.
+ */
 public class SlashController extends SceneController {
 
     @FXML
     protected Carousel carousel;
-
-    @FXML
-    protected Button btnNext;
-
-    @FXML
-    protected Button btnPrevious;
 
     private FXMLLoader fxmlLoader;
 
@@ -38,6 +33,13 @@ public class SlashController extends SceneController {
     private ItemContainerModel itemContainerModel;
     private SlashModule module;
 
+    /**
+     * Constructor.
+     *
+     * @param itemModel the Item Model to be linked with the carousel.
+     * @param itemContainerModel the Item Container Model to be linked with the carousel.
+     * @param module the parent module to allow links back to change module etc...
+     */
     public SlashController(ItemModel itemModel, ItemContainerModel itemContainerModel, SlashModule module){
 
         fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SlashView.fxml"));
@@ -49,6 +51,9 @@ public class SlashController extends SceneController {
 
     }
 
+    /**
+     * Is called due to FXML Controller, after constructor.
+     */
     public void initialize(){
         System.out.println("Slash mode initializing...");
         carousel.linkModels(this.itemModel, this.itemContainerModel);
@@ -56,6 +61,12 @@ public class SlashController extends SceneController {
 
     }
 
+    /**
+     * Handles input and triggers swapping scenes.
+     *
+     * @return the given scene.
+     * @throws Exception
+     */
     public Scene load() throws Exception{
         Scene scene = super.load(this.fxmlLoader, this.carousel);
         scene.setOnKeyPressed(keyEvent -> {
@@ -80,6 +91,9 @@ public class SlashController extends SceneController {
         return scene;
     }
 
+    /**
+     * Loads data from an index json which links metadata with images and other files.
+     */
     //TODO: Reduce to parent method to prevent code duplication
     public void loadData(){
         ObjectMapper objectMapper = new ObjectMapper();
@@ -101,11 +115,4 @@ public class SlashController extends SceneController {
         this.carousel.ingest(items);
     }
 
-    public Scene getNextScene() {
-        return nextScene;
-    }
-
-    public void setNextScene(Scene nextScene) {
-        this.nextScene = nextScene;
-    }
 }

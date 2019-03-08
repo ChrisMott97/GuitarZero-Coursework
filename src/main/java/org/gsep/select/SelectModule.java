@@ -6,11 +6,23 @@ import org.gsep.carousel.ItemModel;
 import org.gsep.mediator.Mediator;
 import org.gsep.mediator.SceneModule;
 
+/*
+ * SelectModule.
+ *
+ * @author  Chris Mott.
+ * @version 2.00, March 2019.
+ */
 public class SelectModule extends SceneModule {
-    public SelectController controller;
-    public ItemModel itemModel;
-    public ItemContainerModel itemContainerModel;
+    private SelectController controller;
+    private ItemModel itemModel;
+    private ItemContainerModel itemContainerModel;
 
+    /**
+     * Constructor.
+     *
+     * @param mediator the link back to the parent mediator.
+     * @throws Exception
+     */
     public SelectModule(Mediator mediator) throws Exception{
         super(mediator);
         itemModel = new ItemModel();

@@ -15,7 +15,7 @@ import java.util.List;
  * Carousel.
  *
  * @author  Chris Mott.
- * @version 1.00, January 2019.
+ * @version 2.00, March 2019.
  */
 public class Carousel extends TilePane{
 
@@ -29,6 +29,9 @@ public class Carousel extends TilePane{
 
     private List<ItemContainer> containers = new ArrayList<>();
 
+    /**
+     * Constructor for Carousel
+     */
     public Carousel(){
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/CarouselView.fxml"));
         fxmlLoader.setRoot(this);
@@ -62,11 +65,22 @@ public class Carousel extends TilePane{
 
     }
 
+    /**
+     * Links the necessary models to the carousel.
+     *
+     * @param itemModel the Item Model to be linked.
+     * @param itemContainerModel the Item Container Model to be linked.
+     */
     public void linkModels(ItemModel itemModel, ItemContainerModel itemContainerModel){
         this.iModel = itemModel;
         this.icModel = itemContainerModel;
     }
 
+    /**
+     * Loads a list of items to the Item Model and loads the necessary items into the containers.
+     *
+     * @param items the items to be given to the models.
+     */
     public void ingest(List<Item> items){
         //TODO: Handle no songs found
         iModel.loadData(items);

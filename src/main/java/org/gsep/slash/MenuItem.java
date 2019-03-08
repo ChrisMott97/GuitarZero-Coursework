@@ -3,7 +3,7 @@ package org.gsep.slash;
 import org.gsep.carousel.Item;
 
 /*
- * MusicItem.
+ * MenuItem.
  *
  * @author  Chris Mott.
  * @version 1.00, January 2019.

@@ -17,7 +17,7 @@ import java.io.IOException;
  * ItemContainer.
  *
  * @author  Chris Mott.
- * @version 1.00, January 2019.
+ * @version 2.00, March 2019.
  */
 public class ItemContainer extends Pane {
 

@@ -4,7 +4,7 @@ package org.gsep.carousel;
  * Item.
  *
  * @author  Chris Mott.
- * @version 1.00, January 2019.
+ * @version 2.00, March 2019.
  */
 public abstract class Item {
 
@@ -43,14 +43,29 @@ public abstract class Item {
         return this.name;
     }
 
+    /**
+     * Setter for name
+     *
+     * @param name the name to set.
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Getter for ID, mainly for JSON reading.
+     *
+     * @return the id.
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Setter for the ID, mainly for JSON writing.
+     *
+     * @param id the id to set.
+     */
     public void setId(int id) {
         this.id = id;
     }
@@ -73,10 +88,20 @@ public abstract class Item {
         return imageURL;
     }
 
+    /**
+     * Gets the correct file prefix for finding images.
+     *
+     * @return the string prefix.
+     */
     public String getPrefix() {
         return prefix;
     }
 
+    /**
+     * Sets the correct file prefix for images.
+     *
+     * @param prefix the prefix to set.
+     */
     public void setPrefix(String prefix) {
         this.prefix = prefix;
     }

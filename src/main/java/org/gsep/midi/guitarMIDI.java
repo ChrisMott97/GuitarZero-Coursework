@@ -53,7 +53,7 @@ public class guitarMIDI {
      */
     //TODO Change note colour logic so sharp and flat notes are black, all others are white (like a piano)
 
-    public static ArrayList <String> getTrackNotes( Track track ) {
+    public ArrayList <String> getTrackNotes( Track track ) {
         ArrayList<Integer> guitarChannnel = new ArrayList<>();
         List<List<String>> currentArray = new ArrayList<>();
 

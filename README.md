@@ -1,7 +1,7 @@
 # Group Software Engineering Project
 
+[![Build Status](https://travis-ci.com/ChrisMott97/GSE-Project.svg?token=LmzTsQZrvN9xFGcnThmu&branch=master)](https://travis-ci.com/ChrisMott97/GSE-Project)
 ## Directories
-
 ```
 .
 ├── src

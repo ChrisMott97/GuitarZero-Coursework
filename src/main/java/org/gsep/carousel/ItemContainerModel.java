@@ -9,9 +9,9 @@ import java.util.List;
  * @author  Chris Mott.
  * @version 2.00, March 2019.
  */
-public class ItemContainerModel<T extends Item> {
+public class ItemContainerModel {
     private List<ItemContainer> containers = new ArrayList<>();
-    private List<T> items = new ArrayList<>();
+    private List<? extends Item> items = new ArrayList<>();
 
     private ItemContainer intendedContainer;
 
@@ -64,7 +64,7 @@ public class ItemContainerModel<T extends Item> {
      *
      * @param items the list of items to be mapped.
      */
-    public void map(List<T> items){
+    public void map(List<? extends Item> items){
         this.items = items;
         if(items.isEmpty())
             return;

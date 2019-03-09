@@ -95,9 +95,9 @@ public class SlashController extends SceneController {
      * Loads data from an index json which links metadata with images and other files.
      */
     //TODO: Reduce to parent method to prevent code duplication
-    public void loadData(){
+    private void loadData(){
         ObjectMapper objectMapper = new ObjectMapper();
-        List<Item> items;
+        List<MenuItem> items;
 
         File file = new File(getClass().getResource("/menu/index.json").getFile());
         try{

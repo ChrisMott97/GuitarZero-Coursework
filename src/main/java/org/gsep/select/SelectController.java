@@ -88,9 +88,9 @@ public class SelectController extends SceneController {
     /**
      * Loads data from the index json file.
      */
-    private void loadData(){
+    private void loadData() {
         ObjectMapper objectMapper = new ObjectMapper();
-        List<Item> items;
+        List<MusicItem> items;
 
         File file = new File(getClass().getResource("/songs/index.json").getFile());
         try{

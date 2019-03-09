@@ -81,7 +81,7 @@ public class Carousel extends TilePane{
      *
      * @param items the items to be given to the models.
      */
-    public void ingest(List<Item> items){
+    public void ingest(List<? extends Item> items){
         //TODO: Handle no songs found
         iModel.loadData(items);
         icModel.loadData(containers);

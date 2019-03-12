@@ -15,7 +15,7 @@ import java.net.Socket;
  */
 public class Server extends Thread {
 	
-    public static final int PORT = 3332;
+    public static final int PORT = 5332;
     public static final int BUFFER_SIZE = 2002;
  
     public static void main(String[] args) throws IOException {

@@ -20,6 +20,7 @@ public class StoreManagerFrame {
 
 	private JFrame frame;
 	private guitarMIDI gM;
+	
 	///Declaring fields holding file paths as a String and files as a File object
 	JTextField textField_1, textField_2, textField_3 = null;
 	File f1, f2, f3;

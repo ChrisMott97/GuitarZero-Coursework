@@ -37,6 +37,14 @@ public class guitarMIDI {
         }
     }
 
+    public static String noteName( int n ) {
+        final String[] NAMES =
+                { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+        final int octave = (n / 12) - 1;
+        final int note   = n % 12;
+        return NAMES[ note ] + octave;
+    }
+
     /**
      * Converts a given track of a MIDI file into an ArrayList containing the ticks and notes of
      * an instrument that contains strings
@@ -74,7 +82,7 @@ public class guitarMIDI {
                         for (int j = 0; j < guitarChannnel.size(); j++) {
                             currentArray.add(new ArrayList<>());
                             if (guitarChannnel.get(j) == chan) {
-                                currentArray.get(j).add(tick + " " + dat1);
+                                currentArray.get(j).add(tick + " " + noteName(dat1));
                                 break;
                             }
                         }
@@ -154,6 +162,7 @@ public class guitarMIDI {
             //Gets the ticks
             String[] iSplit = arr.get(i).toString().split("\\s+");
             int iTick = Integer.parseInt(iSplit[0]);
+            System.out.println(iSplit[1]);
 
             for (Object anArr : arr) {
                 String[] jSplit = anArr.toString().split("\\s+");

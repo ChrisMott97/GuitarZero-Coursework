@@ -14,7 +14,7 @@ public class Main extends Application{
     public void start(Stage stage){
         stage.setTitle("Play Mode Demo");
 
-        Play play = new Play("/ComeOnEileen.txt", "/ComeOnEileen.mid");
+        Play play = new Play("/untitled2.txt", "/untitled2.mid");
 
         stage.setScene(play.getScene());
         stage.setResizable(false);

@@ -6,6 +6,9 @@ import javax.sound.midi.Sequencer;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class NoteHighwayController {
     private NoteHighwayModel model;
@@ -39,32 +42,29 @@ public class NoteHighwayController {
 
             midiSequencer.open();
             midiSequencer.setSequence(midiSequence);
+
+            long period = (long)midiSequencer.getTempoInMPQ()/midiSequence.getResolution();
+
+            view.setPeriod(period);
+
+            //advances model to next beat and takes the top of the model and gives it to the view
+            Runnable helloRunnable = () -> {
+                if (model.top() != null) {
+                    view.sendNotes(model.top());
+
+                }
+                model.advance();
+            };
+
+            ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+            executor.scheduleAtFixedRate(helloRunnable, 0, period, TimeUnit.MICROSECONDS);
             midiSequencer.start();
 
-            view.setPeriod((long)6000/midiSequencer.getTempoInMPQ()*midiSequence.getResolution()*midiSequencer.getTempoFactor());
-
-            //advances the model when there is a change in the sequencer tick position
-            Thread thread = new Thread(() -> {
-                long lastTick = 0;
-                while (midiSequencer.getTickPosition() < midiSequencer.getTickLength()) {
-                    if (lastTick < midiSequencer.getTickPosition()){
-                        long tick = midiSequencer.getTickPosition();
-
-                        //synchronise view with current tick from model
-                        if (model.top(tick) != null){
-                            view.sendNotes(model.top(tick));
-                        }
-
-                        lastTick = tick;
-                    }
-                }
-            });
-
-            thread.start();
         } catch (Exception e) {
             System.out.println("Invalid MIDI file");
             e.printStackTrace();
             System.exit(1);
         }
     }
+
 }

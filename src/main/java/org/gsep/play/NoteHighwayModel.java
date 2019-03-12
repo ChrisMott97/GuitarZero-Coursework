@@ -4,7 +4,7 @@ import java.util.*;
 
 public class NoteHighwayModel {
     private int beat = 0;
-    private int noteHighwayLength = 700;
+    private final int noteHighwayLength = 700;
     private Map<Integer, Note[]> songSequence;
 
     /**
@@ -17,15 +17,19 @@ public class NoteHighwayModel {
         this.songSequence = songSequence;
     }
 
+    public void advance(){
+        beat++;
+    }
+
     /**
      * @author Örs Barkanyi
      * Returns the row of notes in the given tick at the top of the highway
      *
      * @param tick the current tick number
-     * @return list of notes in that tick
+     * @return list of notes in that tick or null
      */
-    public Note[] top(long tick){
-        return songSequence.get((int)tick+noteHighwayLength);
+    public Note[] top(){
+        return songSequence.get(beat+noteHighwayLength);
     }
 
     /**
@@ -33,9 +37,9 @@ public class NoteHighwayModel {
      * returns the notes that appear at the bottom of the note highway
      * so that user input can be checked against it
      *
-     * @return list of note types
+     * @return list of note types or null
      */
-    public Note[] bottom(long tick){
-        return songSequence.get(tick);
+    public Note[] bottom(){
+        return songSequence.get(beat);
     }
 }

@@ -84,6 +84,9 @@ public class SlashController extends SceneController {
                         case "Select":
                             module.swapTo(Modules.SELECT);
                             break;
+                        case "Store":
+                            module.swapTo(Modules.STORE);
+                            break;
                     }
                     break;
             }

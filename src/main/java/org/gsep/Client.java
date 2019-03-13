@@ -20,9 +20,12 @@ public class Client extends Application {
 
         SceneModule slashModule = Modules.SLASH.getModule();
         SceneModule selectModule = Modules.SELECT.getModule();
+        SceneModule storeModule = Modules.STORE.getModule();
+
 
         slashModule.setMediator(mediator);
         selectModule.setMediator(mediator);
+        storeModule.setMediator(mediator);
 
         mediator.setCurrentModule(slashModule);
 

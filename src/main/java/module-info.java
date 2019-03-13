@@ -11,6 +11,8 @@ module GSE.Project {
 
     opens org.gsep.play to javafx.fxml, com.fasterxml.jackson.databind;
     exports org.gsep.play;
+    opens org.gsep.store to javafx.fxml, com.fasterxml.jackson.databind;
+    exports org.gsep.store;
     opens org.gsep.select to javafx.fxml, com.fasterxml.jackson.databind;
     exports org.gsep.select;
     opens org.gsep.carousel to javafx.fxml, com.fasterxml.jackson.databind;

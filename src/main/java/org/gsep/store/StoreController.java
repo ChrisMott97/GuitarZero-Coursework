@@ -1,4 +1,4 @@
-package org.gsep.select;
+package org.gsep.store;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,7 +23,7 @@ import java.util.List;
  * @author  Chris Mott.
  * @version 2.00, March 2019.
  */
-public class SelectController extends SceneController {
+public class StoreController extends SceneController {
 
     @FXML
     private Carousel carousel;
@@ -32,7 +32,7 @@ public class SelectController extends SceneController {
 
     private ItemModel itemModel;
     private ItemContainerModel itemContainerModel;
-    private SelectModule module;
+    private StoreModule module;
 
     /**
      * Constructor.
@@ -41,8 +41,8 @@ public class SelectController extends SceneController {
      * @param itemContainerModel the Item container model to be linked to the carousel.
      * @param module the link back to the parent module to allow the controller to change to next scene.
      */
-    public SelectController(ItemModel itemModel, ItemContainerModel itemContainerModel, SelectModule module){
-        fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SelectView.fxml"));
+    public StoreController(ItemModel itemModel, ItemContainerModel itemContainerModel, StoreModule module){
+        fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/StoreView.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 
@@ -56,7 +56,7 @@ public class SelectController extends SceneController {
      * Is called as a result of loading as an FXML Controller.
      */
     public void initialize(){
-        System.out.println("Select mode initializing...");
+        System.out.println("Store mode initializing...");
         carousel.linkModels(itemModel,itemContainerModel);
         loadData();
 
@@ -92,11 +92,11 @@ public class SelectController extends SceneController {
      */
     private void loadData() {
         ObjectMapper objectMapper = new ObjectMapper();
-        List<MusicItem> items;
+        List<StoreItem> items;
 
         File file = new File(getClass().getResource("/songs/index.json").getFile());
         try{
-            items = objectMapper.readValue(file, new TypeReference<List<MusicItem>>(){});
+            items = objectMapper.readValue(file, new TypeReference<List<StoreItem>>(){});
         }catch(IOException e){
             items = new ArrayList<>();
         }
@@ -105,6 +105,8 @@ public class SelectController extends SceneController {
                 items) {
             item.setPrefix("songs");
         }
+        
+        //TODO: Read files from network.
 
         this.carousel.ingest(items);
     }

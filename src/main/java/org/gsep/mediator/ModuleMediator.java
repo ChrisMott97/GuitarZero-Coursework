@@ -52,7 +52,9 @@ public class ModuleMediator implements Mediator{
      * @param currentModule the module to set as current.
      */
     public void setCurrentModule(SceneModule currentModule) {
-        view.setScene(currentModule.scene);
+        //TODO: Fade out scene, change, then fade in new to prevent stutter
+        view.setScene(currentModule.getScene());
+        view.setTitle(currentModule.getTitle());
         this.currentModule = currentModule;
     }
 

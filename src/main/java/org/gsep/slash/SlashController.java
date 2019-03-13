@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import org.gsep.Modules;
 import org.gsep.SceneController;
 import org.gsep.carousel.*;
 
@@ -78,11 +79,13 @@ public class SlashController extends SceneController {
                     carousel.previous();
                     break;
                 case SPACE:
-                    //TODO: Replace indexing with a getByName poss. using dictionaries
+                    //TODO: Make itemModel store enum reference so switch not necessary!
                     switch(itemModel.getIntended().getName()){
-                        //TODO: Use enums for modes or include functionality in a Model
                         case "Select":
-                            module.swapTo(module.getMediator().getModules().get(1));
+                            module.swapTo(Modules.SELECT);
+                            break;
+                        case "Store":
+                            module.swapTo(Modules.STORE);
                             break;
                     }
                     break;

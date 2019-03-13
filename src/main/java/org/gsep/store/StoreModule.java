@@ -1,9 +1,7 @@
-package org.gsep.select;
+package org.gsep.store;
 
-import javafx.scene.Scene;
 import org.gsep.carousel.ItemContainerModel;
 import org.gsep.carousel.ItemModel;
-import org.gsep.mediator.Mediator;
 import org.gsep.mediator.SceneModule;
 
 /*
@@ -12,30 +10,31 @@ import org.gsep.mediator.SceneModule;
  * @author  Chris Mott.
  * @version 2.00, March 2019.
  */
-public class SelectModule extends SceneModule {
-    private SelectController controller;
+public class StoreModule extends SceneModule {
+    private StoreController controller;
     private ItemModel itemModel;
     private ItemContainerModel itemContainerModel;
 
-    private static SelectModule instance;
+    private static StoreModule instance;
 
-    private SelectModule(){
+    private StoreModule(){
         itemModel = new ItemModel();
         itemContainerModel = new ItemContainerModel();
-        controller = new SelectController(itemModel, itemContainerModel, this);
+        controller = new StoreController(itemModel, itemContainerModel, this);
         try{
             setScene(controller.load());
         }catch(Exception e){
-            System.out.println("Select controller could not load.");
+            e.printStackTrace();
+            System.out.println("Store controller could not load.");
         }
-        setTitle("Select Mode");
+        setTitle("Store Mode");
     }
 
-    public static SelectModule getInstance(){
+    public static StoreModule getInstance(){
         if(instance == null){
-            synchronized (SelectModule.class){
+            synchronized (StoreModule.class){
                 if(instance == null){
-                    instance = new SelectModule();
+                    instance = new StoreModule();
                 }
             }
         }

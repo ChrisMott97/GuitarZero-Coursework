@@ -1,10 +1,12 @@
 package org.gsep.play;
 
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,6 +39,14 @@ public class Play {
         //initialise scene
         Group root = new Group();
         this.scene = new Scene(root);
+
+        scene.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                System.out.println(mouseEvent.getSceneY());
+                System.out.println(mouseEvent.getSceneX());
+            }
+        });
 
         root.getChildren().add(createBackground());
         root.getChildren().add(canvas);

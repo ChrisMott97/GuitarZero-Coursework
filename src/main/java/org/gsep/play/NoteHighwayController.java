@@ -51,7 +51,6 @@ public class NoteHighwayController {
             Runnable helloRunnable = () -> {
                 if (model.top() != null) {
                     view.sendNotes(model.top());
-
                 }
                 model.advance();
             };
@@ -67,4 +66,7 @@ public class NoteHighwayController {
         }
     }
 
+    //lane 1 pass type
+    //lane 2 pass type
+    //lane 3 pass type
 }

@@ -29,18 +29,18 @@ public class Song{
 	 * Method that calls the methods readFile() and zipFile(). The purpose of run() is to invoke the client side methods all at once.
 	 * @throws Exception
 	 */
-	public static void run() throws Exception {
-
-		Socket soc = new Socket("192.168.56.1",3332);
-		DataInputStream dis = new DataInputStream(soc.getInputStream());
-		String msg = dis.readUTF();
-		System.out.println(msg);
-		DataOutputStream dos = new DataOutputStream((soc.getOutputStream()));
-		String file = readFile(filesSong.get(0).toString(), StandardCharsets.UTF_8 );
-		System.out.println(file);
-		dos.writeUTF("File has been created of length: " + file.length());
-		zipFile(filesSong, name);
-		sendFile(name,soc);
+	public void run() throws Exception {
+		synchronized (this) {
+			Socket soc = new Socket("192.168.56.1", 3332);
+			DataInputStream dis = new DataInputStream(soc.getInputStream());
+			String msg = dis.readUTF();
+			System.out.println(msg);
+			DataOutputStream dos = new DataOutputStream((soc.getOutputStream()));
+			String file = readFile(filesSong.get(0).toString(), StandardCharsets.UTF_8);
+			System.out.println(file);
+			zipFile(filesSong, name);
+			sendFile(name, soc);
+		}
 
 	}
 
@@ -96,13 +96,14 @@ public class Song{
 	}
 
 	public static void sendFile(String file, Socket soc) throws IOException {
-
+		File f = new File(file+".zip");
 		DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
 		System.out.println("Receving file..");
-		FileInputStream fos =new FileInputStream(file+".zip");
-		dos.writeUTF(file);
-		byte[] b = new byte[1024];
-		fos.read(b,0,b.length);
+		DataInputStream dis = new DataInputStream(new FileInputStream(file+".zip"));
+		dos.writeUTF("Send-"+file+".zip");
+		dos.writeLong(f.length());
+		byte[] b = new byte[(int)f.length()];
+		dis.readFully(b,0,b.length);
 		dos.write(b,0,b.length);
 		System.out.println("Comleted");
 

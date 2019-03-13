@@ -15,14 +15,16 @@ import java.net.Socket;
  */
 public class Server extends Thread {
 	
-    public static final int PORT = 5421;
+    public static final int PORT = 5435;
  
     public static void main(String[] args) throws IOException {
         ServerSocket s1 = new ServerSocket(PORT);
         while(true) {
             Socket soc = s1.accept();
             Worker wkr =new Worker(soc);
+            System.out.println("Server Accepted");
             wkr.run();
+            
         }
     }
 }  

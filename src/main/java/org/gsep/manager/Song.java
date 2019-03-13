@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -26,7 +27,7 @@ public class Song{
     static BufferedWriter writer;
     static BufferedReader reader;
     public static final int BUFFER_SIZE = 3000;
-    public static final int PORT_NUMBER=5421;
+    public static final int PORT_NUMBER=5434;
 
     /**
      * Method that calls the methods readFile() and zipFile(). The purpose of run() is to invoke the client side methods all at once.
@@ -44,7 +45,8 @@ public class Song{
        
         
         //Run methods
-        createFolder(file, soc);
+        //createFolder(file, soc);
+        sendFile(soc);
        
 
     }
@@ -72,20 +74,40 @@ public class Song{
     		reader = new BufferedReader(new InputStreamReader(soc.getInputStream()));
         writer = new BufferedWriter(new OutputStreamWriter(soc.getOutputStream()));
         
-      //Notify that file is being sent
-	    System.out.println("Sending file");
-	    writer.write("fileSend");
-	    writer.flush();
-
         // creating folder
         System.out.println("Creating remote folder");
         writer.write("mkdir"+","+name);
         writer.flush();
-        
-        //Send file
-        
-        
     	
+    }
+    
+    public static void sendFile(Socket soc) throws IOException {
+    	  
+	    writer = new BufferedWriter(new OutputStreamWriter(soc.getOutputStream()));
+	    ObjectOutputStream oos = new ObjectOutputStream(soc.getOutputStream());
+	    
+	    //Notify that file is being sent
+	    System.out.println("Sending file");
+	    writer.write("fileSend");
+	    writer.flush();
+	    
+        String file_name = "/Users/humzahmalik/Bohemian Rhapsody File/title.txt";
+        File file = new File(file_name);
+       
+        oos.writeObject(file.getName());
+ 
+        FileInputStream fis = new FileInputStream(file);
+        byte [] buffer = new byte[100];
+        Integer bytesRead = 0;
+ 
+        while ((bytesRead = fis.read(buffer)) > 0) {
+            oos.writeObject(bytesRead);
+            oos.writeObject(Arrays.copyOf(buffer, buffer.length));
+        }
+ 
+        oos.close();
+        System.exit(0);  
+        
     }
 
 

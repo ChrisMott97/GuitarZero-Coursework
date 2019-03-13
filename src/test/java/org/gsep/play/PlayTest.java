@@ -5,12 +5,11 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 
-import javafx.scene.Group;
 import org.junit.Test;
 
 public class PlayTest {
-	Play p1 = new Play("testNoteFile.txt", "queen.mid");
-	private String f= getClass().getResource("/testNoteFile.txt").getFile();
+	Play p1 = new Play("queen.txt", "queen.mid");
+	private String f= getClass().getResource("/queen.txt").getFile();
 	
 	@Test
 	public void testCheckNote() {

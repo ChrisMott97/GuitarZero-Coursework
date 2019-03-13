@@ -53,10 +53,10 @@ public class NoteHighwayView {
 
     /**
      * @author Örs Barkanyi
-     * @param period the time taken for notes travel from top to bottom
+     * @param period the time in microseconds taken for notes travel from top to bottom
      */
     public void setPeriod(double period){
-        this.noteHighwayPeriod = noteHighwayLength*period;
+        this.noteHighwayPeriod = noteHighwayLength*period/1000;
     }
 
     /**

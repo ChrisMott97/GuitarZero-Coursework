@@ -15,7 +15,7 @@ import java.net.Socket;
  */
 public class Server extends Thread {
 	
-    public static final int PORT = 5408;
+    public static final int PORT = 5421;
  
     public static void main(String[] args) throws IOException {
         ServerSocket s1 = new ServerSocket(PORT);

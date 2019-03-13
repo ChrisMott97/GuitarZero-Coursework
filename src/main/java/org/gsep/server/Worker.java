@@ -22,10 +22,11 @@ public class Worker implements Runnable {
         
     		
         try {
-        		saveFile(soc);
+        		
         		//For creating a directory
-        		reader = new BufferedReader(new InputStreamReader(soc.getInputStream()));
+        	    reader = new BufferedReader(new InputStreamReader(soc.getInputStream()));
             writer = new BufferedWriter(new OutputStreamWriter(soc.getOutputStream()));
+            
             
             System.out.println("Connected!!");
             DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
@@ -36,7 +37,7 @@ public class Worker implements Runnable {
 	            
 	            if(command.contains("mkdir"))
 	            {
-	                System.out.println("Creating a new directory" + command);
+	                System.out.println("Creating a new directory");
 	                String toSplit = command;
 	                String[] values = toSplit.split(",");
 	                new File(values[1]).mkdirs();
@@ -44,10 +45,11 @@ public class Worker implements Runnable {
 	            
 	            if(command.contains("fileSend"))
 	            {
-	            		
+	            		System.out.println("Recieved send request");
 	            }	    
 	            
             soc.close();
+            System.out.println("Socket has been closed");
             
         }catch (Exception e){
             System.out.println(e);
@@ -58,8 +60,9 @@ public class Worker implements Runnable {
 
     
     private void saveFile(Socket soc) throws Exception {
+    		ObjectInputStream ois = new ObjectInputStream(soc.getInputStream());
         ObjectOutputStream oos = new ObjectOutputStream(soc.getOutputStream());
-        ObjectInputStream ois = new ObjectInputStream(soc.getInputStream());
+        
         FileOutputStream fos = null;
         byte [] buffer = new byte[BUFFER_SIZE];
  

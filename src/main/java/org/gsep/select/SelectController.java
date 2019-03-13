@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import org.gsep.Modules;
 import org.gsep.SceneController;
 import org.gsep.carousel.Carousel;
 import org.gsep.carousel.Item;
@@ -69,6 +70,7 @@ public class SelectController extends SceneController {
      */
     public Scene load() throws Exception{
         Scene scene = super.load(this.fxmlLoader, this.carousel);
+
         scene.setOnKeyPressed(keyEvent -> {
             switch(keyEvent.getCode()){
                 case RIGHT:
@@ -78,7 +80,7 @@ public class SelectController extends SceneController {
                     carousel.previous();
                     break;
                 case ESCAPE:
-                    module.swapTo(module.getMediator().getModules().get(0));
+                    module.swapTo(Modules.SLASH);
                     break;
             }
         });

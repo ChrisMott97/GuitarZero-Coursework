@@ -17,18 +17,28 @@ public class SlashModule extends SceneModule {
     private ItemModel itemModel;
     private ItemContainerModel itemContainerModel;
 
-    /**
-     * Constructor.
-     *
-     * @param mediator a link back to the parent mediator.
-     * @throws Exception
-     */
-    public SlashModule(Mediator mediator) throws Exception{
-        super(mediator);
+    private static SlashModule instance;
+
+    private SlashModule(){
         itemModel = new ItemModel();
         itemContainerModel = new ItemContainerModel();
-
         controller = new SlashController(itemModel, itemContainerModel, this);
-        scene = controller.load();
+        try{
+            setScene(controller.load());
+        }catch(Exception e){
+            System.out.println("Slash controller could not load.");
+        }
+        setTitle("Slash Mode");
+    }
+
+    public static SlashModule getInstance(){
+        if(instance == null){
+            synchronized (SlashModule.class){
+                if(instance == null){
+                    instance = new SlashModule();
+                }
+            }
+        }
+        return instance;
     }
 }

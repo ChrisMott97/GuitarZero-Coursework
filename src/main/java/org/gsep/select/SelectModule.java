@@ -17,19 +17,29 @@ public class SelectModule extends SceneModule {
     private ItemModel itemModel;
     private ItemContainerModel itemContainerModel;
 
-    /**
-     * Constructor.
-     *
-     * @param mediator the link back to the parent mediator.
-     * @throws Exception
-     */
-    public SelectModule(Mediator mediator) throws Exception{
-        super(mediator);
+    private static SelectModule instance;
+
+    private SelectModule(){
         itemModel = new ItemModel();
         itemContainerModel = new ItemContainerModel();
-
         controller = new SelectController(itemModel, itemContainerModel, this);
-        scene = controller.load();
-
+        try{
+            setScene(controller.load());
+        }catch(Exception e){
+            System.out.println("Select controller could not load.");
+        }
+        setTitle("Select Mode");
     }
+
+    public static SelectModule getInstance(){
+        if(instance == null){
+            synchronized (SelectModule.class){
+                if(instance == null){
+                    instance = new SelectModule();
+                }
+            }
+        }
+        return instance;
+    }
+
 }

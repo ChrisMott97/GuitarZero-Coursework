@@ -1,0 +1,9 @@
+.button {
+    -fx-font-weight: bold;
+}
+.itemContainer {
+    -fx-background-color: white;
+}
+.carousel {
+    -fx-background-color: #484f5d;
+}

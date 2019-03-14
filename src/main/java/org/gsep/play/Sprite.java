@@ -26,6 +26,7 @@ abstract class Sprite {
      * @param newpos
      */
     public void setPosition(Point2D newpos){
+        //TODO variable offsets
         position = new Point2D(newpos.getX()-width*0.5, newpos.getY()-height*0.95);
     }
 

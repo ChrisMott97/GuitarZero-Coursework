@@ -65,7 +65,7 @@ public class Play {
         try{
             this.songSequence = readFile(getClass().getResource(noteFilePath).getFile());
         } catch (Exception e) {
-            System.out.println("Note file not found");
+            System.out.println("Note file not found or invalid");
             e.printStackTrace();
             System.exit(1);
         }
@@ -90,7 +90,13 @@ public class Play {
      */
     public void play(){
         view.startRender();
-        controller.play(songSequence,midiFile);
+        try{
+            controller.play(songSequence,midiFile);
+        } catch (Exception e){
+            System.out.println("Couldn't play MIDI file");
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
     /**

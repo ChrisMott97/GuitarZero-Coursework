@@ -4,6 +4,7 @@ import java.util.*;
 
 public class NoteHighwayModel {
     private int beat = 0;
+    private final int countInBeats = 4;
     private final int noteHighwayLength = 700;
     private Map<Integer, Note[]> songSequence;
     private final int pointTickRange = noteHighwayLength/10;
@@ -51,5 +52,13 @@ public class NoteHighwayModel {
 //        }
         System.out.println(Arrays.toString(notes));
 ////            System.out.println(Arrays.toString(bottom()));
+    }
+
+    public int getCountInBeats() {
+        return countInBeats;
+    }
+
+    public long getNoteHighwayPeriod(long tickPeriod) {
+        return noteHighwayLength*tickPeriod;
     }
 }

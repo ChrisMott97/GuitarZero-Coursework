@@ -8,6 +8,7 @@ public class NoteSprite extends Sprite{
     private double spawnTime;
     private double initialSize = 45;
     private double finalSize = 109;
+    //TODO Shadows
 
     public NoteSprite(Note noteType, Lane laneType){
         setImage(noteType.getImageSource());

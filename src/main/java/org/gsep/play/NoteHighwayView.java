@@ -8,6 +8,7 @@ import java.util.*;
 public class NoteHighwayView {
     private Canvas canvas;
     private List<NoteSprite> noteSprites = Collections.synchronizedList(new ArrayList<>());
+    private NoteShieldSprite[] noteShieldSprites;
     private AnimationTimer animationTimer;
     private double noteHighwayPeriod;
     private final int noteHighwayLength = 700;
@@ -23,10 +24,10 @@ public class NoteHighwayView {
 
         this.animationTimer = new AnimationTimer() {
             public void handle(long currentNanoTime) {
-                if (noteSprites.size() > 1) {
-                    canvas.getGraphicsContext2D().clearRect(0,0, canvas.getWidth(), canvas.getHeight()); //clear the canvas
+                canvas.getGraphicsContext2D().clearRect(0,0, canvas.getWidth(), canvas.getHeight()); //clear the canvas
 
-                    //render each sprite in the queue
+                if (noteSprites.size() > 0) {
+                    //render each note in the queue
                     for (NoteSprite noteSprite : noteSprites) {
                         double currentTime = System.currentTimeMillis();
                         double spawnTime = noteSprite.getSpawnTime();
@@ -38,7 +39,18 @@ public class NoteHighwayView {
                         }
                     }
                 }
+
+                //render each note shield in the queue
+                for (NoteShieldSprite noteShieldSprite : noteShieldSprites){
+                    noteShieldSprite.render(canvas.getGraphicsContext2D());
+                }
             }
+        };
+
+        noteShieldSprites = new NoteShieldSprite[] {
+                new NoteShieldSprite(Lane.LEFT),
+                new NoteShieldSprite(Lane.MIDDLE),
+                new NoteShieldSprite(Lane.RIGHT)
         };
     }
 
@@ -83,5 +95,17 @@ public class NoteHighwayView {
                 noteSprites.remove(noteSprites.size()-1);
             }
         }
+    }
+
+    public void leftLaneActive(Boolean status, Note note){
+        this.noteShieldSprites[0].setVisible(status, note);
+    }
+
+    public void rightLaneActive(Boolean status, Note note){
+        this.noteShieldSprites[2].setVisible(status, note);
+    }
+
+    public void middleLaneActive(Boolean status, Note note){
+        this.noteShieldSprites[1].setVisible(status, note);
     }
 }

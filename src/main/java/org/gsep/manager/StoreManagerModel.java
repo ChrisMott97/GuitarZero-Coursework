@@ -77,11 +77,12 @@ public class StoreManagerModel {
 		dos.writeUTF("Send-" +filesSong.size());
 		System.out.println("Receving file..");
 		for(int i =0; i <filesSong.size(); i++) {
-			dos.writeUTF(filesSong.get(i).getName());
-			FileInputStream fos = new FileInputStream(filesSong.get(i));
-			byte[] b = new byte[1024];
-			fos.read(b, 0, b.length);
-			dos.write(b, 0, b.length);
+			FileInputStream fis = new FileInputStream(filesSong.get(i));
+			dos.writeUTF(filesSong.get(i).getName() + "-" + (int) filesSong.get(i).length());
+			byte[] b = new byte[(int) filesSong.get(i).length()];
+			fis.read(b, 0, b.length);
+			OutputStream os = soc.getOutputStream();
+			os.write(b,0,b.length);
 			System.out.println("Comleted" + filesSong.get(i).getName());
 		}
 

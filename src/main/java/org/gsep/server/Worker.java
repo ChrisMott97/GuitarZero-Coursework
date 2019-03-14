@@ -1,6 +1,7 @@
 package org.gsep.server;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -31,9 +32,9 @@ public class Worker implements Runnable {
                     System.out.println("2");
                     while (size > 0) {
                         System.out.println("3");
-                        String fileName = dis.readUTF();
-                        System.out.println(fileName);
-                        storeFile(fileName);
+                        String[] file = dis.readUTF().split("-");
+                        System.out.println(file[0]);
+                        storeFile(file[0], Integer.parseInt(file[1]));
                         System.out.println("4");
                         size -= 1;
                     }
@@ -51,24 +52,18 @@ public class Worker implements Runnable {
         }
     }
 
-    public void storeFile(String fileName) throws IOException {
+    public void storeFile(String fileName, int fileLength) throws IOException {
 
-        FileOutputStream inFile = new FileOutputStream(fileName);
 
-        byte[] b = new byte[3000];
-        int len = 0;
-        int bytcount = 1024;
+        byte[] b = new byte[fileLength];
+
         //Initialise input stream for file
         InputStream is = soc.getInputStream();
-        BufferedInputStream bis = new BufferedInputStream(is, 1024);
-
-        //Read file and write to created file
-        while ((len = bis.read(b, 0, 1024)) != -1) {
-            bytcount = bytcount + 1024;
-            inFile.write(b, 0, len);
-        }
+        FileOutputStream fos = new FileOutputStream(fileName);
+        is.read(b,0,b.length);
+        fos.write(b,0,b.length);
         System.out.println("File called " +fileName+" has been written" );
-            System.out.println("File has been created! \n Completed");
+        System.out.println("File has been created! \n Completed");
 
 
     }

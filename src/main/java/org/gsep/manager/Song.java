@@ -27,7 +27,7 @@ public class Song{
     static BufferedWriter writer;
     static BufferedReader reader;
     public static final int BUFFER_SIZE = 3000;
-    public static final int PORT_NUMBER=5466;
+    public static final int PORT_NUMBER=5469;
     static DataOutputStream dos;
 
     /**
@@ -45,6 +45,8 @@ public class Song{
 	        //Run methods
 			sendName(soc, "/Users/humzahmalik/Bohemian Rhapsody File/title.txt");
 	        sendFile(soc, "/Users/humzahmalik/Bohemian Rhapsody File/coverArt.jpg");
+	        
+	        //sendFile(soc, "/Users/humzahmalik/Bohemian Rhapsody File/title.txt");
 	        
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
@@ -118,7 +120,6 @@ public class Song{
 	    }
 	    return name.substring(lastIndexOf);
     }
-    
     
     /**
      * @author humzahmalik

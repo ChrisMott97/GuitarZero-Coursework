@@ -15,6 +15,8 @@ public class NoteHighwayController {
     private LaneStatus leftLaneStatus = new LaneStatus();
     private LaneStatus middleLaneStatus = new LaneStatus();
     private LaneStatus rightLaneStatus = new LaneStatus();
+    private final int noteHighwayLength = 700;
+    private final int countInBeats = 4;
 
     /**
      * @author Örs Barkanyi
@@ -46,6 +48,8 @@ public class NoteHighwayController {
             midiSequencer.setSequence(midiSequence);
 
             long period = (long)midiSequencer.getTempoInMPQ()/midiSequence.getResolution();
+            long countInTime = (long)(countInBeats*midiSequencer.getTempoInMPQ());
+            System.out.println(countInTime);
 
             view.setPeriod(period);
 
@@ -57,9 +61,15 @@ public class NoteHighwayController {
                 model.advance();
             };
 
-            ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-            executor.scheduleAtFixedRate(helloRunnable, 0, period, TimeUnit.MICROSECONDS);
-            midiSequencer.start();
+            ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+            executor.scheduleAtFixedRate(helloRunnable, countInTime, period, TimeUnit.MICROSECONDS);
+            executor.schedule(new Runnable() {
+                @Override
+                public void run() {
+                    midiSequencer.start();
+                }
+            }, countInTime+noteHighwayLength*period, TimeUnit.MICROSECONDS);
+
 
         } catch (Exception e) {
             System.out.println("Invalid MIDI file");
@@ -84,6 +94,7 @@ public class NoteHighwayController {
     }
 
     public void strum(){
-        //TODO
+        Note[] notes = new Note[] {leftLaneStatus.getNote(), middleLaneStatus.getNote(), rightLaneStatus.getNote()};
+        model.strum(notes);
     }
 }

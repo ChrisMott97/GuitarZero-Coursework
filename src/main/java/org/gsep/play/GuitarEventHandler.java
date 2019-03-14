@@ -34,7 +34,7 @@ public class GuitarEventHandler implements EventHandler<KeyEvent>{
         }
 
         if (firstCall){
-            System.out.println(keycode);
+//            System.out.println(keycode);
             switch (keycode){
                 case Q:
                     controller.setLeftLaneStatus(setStatus, Note.BLACK);

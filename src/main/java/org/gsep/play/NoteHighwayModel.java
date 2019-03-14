@@ -6,6 +6,7 @@ public class NoteHighwayModel {
     private int beat = 0;
     private final int noteHighwayLength = 700;
     private Map<Integer, Note[]> songSequence;
+    private final int pointTickRange = noteHighwayLength/10;
 
     /**
      * @author Örs Barkanyi
@@ -29,7 +30,7 @@ public class NoteHighwayModel {
      * @return list of notes in that tick or null
      */
     public Note[] top(){
-        return songSequence.get(beat+noteHighwayLength);
+        return songSequence.get(beat);
     }
 
     /**
@@ -39,7 +40,16 @@ public class NoteHighwayModel {
      *
      * @return list of note types or null
      */
-    public Note[] bottom(){
-        return songSequence.get(beat);
+//    public Boolean inBottomRange(Note[] notes){
+//        songSequence.va
+//    }
+
+    public void strum(Note[] notes){
+//        if (inBottomRange(notes)){
+//            System.out.println("point");
+//        } else {
+//        }
+        System.out.println(Arrays.toString(notes));
+////            System.out.println(Arrays.toString(bottom()));
     }
 }

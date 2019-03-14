@@ -26,7 +26,7 @@ public class NoteHighwayView {
             public void handle(long currentNanoTime) {
                 canvas.getGraphicsContext2D().clearRect(0,0, canvas.getWidth(), canvas.getHeight()); //clear the canvas
 
-                if (noteSprites.size() > 1) {
+                if (noteSprites.size() > 0) {
                     //render each note in the queue
                     for (NoteSprite noteSprite : noteSprites) {
                         double currentTime = System.currentTimeMillis();

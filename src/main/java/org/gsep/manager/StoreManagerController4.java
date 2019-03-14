@@ -69,9 +69,9 @@ public class StoreManagerController4 implements ActionListener {
 
         //Run method within Client
         try {
-            String file = StoreManagerModel.readFile();
-            StoreManagerModel.zipFile(file);
-            StoreManagerModel.sendFile(file);
+            StoreManagerModel storeManagerModel = new StoreManagerModel(files);
+
+            storeManagerModel.sendFile();
 
         } catch (IOException e1) {
             e1.printStackTrace();

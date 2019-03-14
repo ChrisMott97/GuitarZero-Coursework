@@ -21,7 +21,8 @@ import java.util.zip.ZipOutputStream;
  */
 public class StoreManagerModel {
 
-	static ArrayList<File> filesSong = new ArrayList<File>();
+	static ArrayList<File> filesSong = new ArrayList<>();
+	static Socket soc;
 
 	/**
 	 * Method that calls the methods readFile() and zipFile(). The purpose of run() is to invoke the client side methods all at once.
@@ -31,11 +32,16 @@ public class StoreManagerModel {
 
 	StoreManagerModel(ArrayList<File> filesSong){
 		this.filesSong = filesSong;
+		try {
+			soc = new Socket("192.168.56.1", 3332);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 //	public void run() throws Exception {
 //
-//		Socket soc = new Socket("192.168.56.1", 3332);
+
 //		boolean valid = true;
 //		DataInputStream dis = new DataInputStream(soc.getInputStream());
 //		String msg = dis.readUTF();
@@ -62,52 +68,20 @@ public class StoreManagerModel {
 		return new String(encoded, encoding);
 	}
 
-	/**
-	 * Method that zips an array of files, with the zip file assigned a given name.
-	 * @param name: String to name the Zip file.
-	 * @throws IOException
-	 */
-	public static void zipFile(String name) throws IOException {
 
-		try {
 
-			FileOutputStream   fos = new FileOutputStream(name+".zip");
-			ZipOutputStream zos = new ZipOutputStream(fos);
-			byte[] buffer = new byte[128];
+	public static void sendFile() throws IOException {
 
-			for (File currentFile : filesSong) {
-				if (!currentFile.isDirectory()) {
-					ZipEntry entry = new ZipEntry(currentFile.getName());
-					FileInputStream fis = new FileInputStream(currentFile);
-					zos.putNextEntry(entry);
-					int read;
-					while ((read = fis.read(buffer)) != -1) {
-						zos.write(buffer, 0, read);
-					}
-					zos.closeEntry();
-
-				}
-			}
-		} catch (FileNotFoundException e) {
-			System.out.println("File not found : " + e);
-		}
-	}
-
-	public static void sendFile(String file) throws IOException {
-		Socket soc = new Socket("192.168.56.1", 3332);
-		File f = new File(file+".zip");
 		DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
 		System.out.println("Receving file..");
-		DataInputStream dis = new DataInputStream(new FileInputStream(file + ".zip"));
-		dos.writeUTF("Send-" + file + ".zip");
-		dos.writeLong(f.length());
-		byte[] b = new byte[(int) f.length()];
-		dis.readFully(b, 0, b.length);
-		dos.write(b, 0, b.length);
-		System.out.println("Comleted");
-
-		dis.close();
-		dos.close();
+		for(int i =0; i <filesSong.size(); i++) {
+			FileInputStream fos = new FileInputStream(filesSong.get(i));
+			dos.writeUTF("Send-" + filesSong.get(i).getName());
+			byte[] b = new byte[1024];
+			fos.read(b, 0, b.length);
+			dos.write(b, 0, b.length);
+			System.out.println("Comleted");
+		}
 
 
 	}

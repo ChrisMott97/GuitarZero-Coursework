@@ -66,8 +66,6 @@ public class StoreManagerController4 implements ActionListener {
         //Create proprietry file from midi file and add that to list of files
         File noteFile = gM.convertMIDI(files.get(2).getAbsolutePath());
         files.add(noteFile);
-        System.out.println("3");
-
 
         //Run method within Client
         try {

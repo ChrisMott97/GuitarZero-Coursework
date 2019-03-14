@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 import java.io.BufferedReader;
@@ -40,13 +41,13 @@ public class Play {
         Group root = new Group();
         this.scene = new Scene(root);
 
-        scene.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                System.out.println(mouseEvent.getSceneY());
-                System.out.println(mouseEvent.getSceneX());
-            }
-        });
+//        scene.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent mouseEvent) {
+//                System.out.println(mouseEvent.getSceneY());
+//                System.out.println(mouseEvent.getSceneX());
+//            }
+//        });
 
         root.getChildren().add(createBackground());
         root.getChildren().add(canvas);
@@ -55,6 +56,10 @@ public class Play {
         this.model = new NoteHighwayModel();
         this.view = new NoteHighwayView(canvas);
         this.controller = new NoteHighwayController(model, view);
+
+        GuitarEventHandler guitarEventHandler = new GuitarEventHandler(controller);
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, guitarEventHandler);
+        scene.addEventHandler(KeyEvent.KEY_RELEASED, guitarEventHandler);
 
         //find files
         try{

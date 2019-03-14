@@ -4,7 +4,6 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -13,6 +12,9 @@ import java.util.concurrent.TimeUnit;
 public class NoteHighwayController {
     private NoteHighwayModel model;
     private NoteHighwayView view;
+    private LaneStatus leftLaneStatus = new LaneStatus();
+    private LaneStatus middleLaneStatus = new LaneStatus();
+    private LaneStatus rightLaneStatus = new LaneStatus();
 
     /**
      * @author Örs Barkanyi
@@ -66,7 +68,22 @@ public class NoteHighwayController {
         }
     }
 
-    //lane 1 pass type
-    //lane 2 pass type
-    //lane 3 pass type
+    public void setLeftLaneStatus(Boolean status, Note note){
+        leftLaneStatus.change(status, note);
+        view.leftLaneActive(leftLaneStatus.getActive(), leftLaneStatus.getNote());
+    }
+
+    public void setMiddleLaneStatus(Boolean status, Note note){
+        middleLaneStatus.change(status, note);
+        view.middleLaneActive(middleLaneStatus.getActive(), middleLaneStatus.getNote());
+    }
+
+    public void setRightLaneStatus(Boolean status, Note note){
+        rightLaneStatus.change(status, note);
+        view.rightLaneActive(rightLaneStatus.getActive(), rightLaneStatus.getNote());
+    }
+
+    public void strum(){
+        //TODO
+    }
 }

@@ -8,7 +8,8 @@ import java.io.File;
 
 abstract class Sprite {
     private Point2D position;
-    private double size;
+    private double width;
+    private double height;
     private Image image;
 
     public void setImage(String url){
@@ -16,17 +17,36 @@ abstract class Sprite {
         this.image = new Image(file.toURI().toString());
     }
 
+    public void setImage(Image img){
+        this.image = img;
+    }
+
     /**
      * sets the position, compensating for the expected midpoint of the sprite
      * @param newpos
      */
     public void setPosition(Point2D newpos){
-        position = new Point2D(newpos.getX()-size*0.5, newpos.getY()-size*0.9);
+        position = new Point2D(newpos.getX()-width*0.5, newpos.getY()-height*0.95);
     }
 
-    public void setSize(double size) {
-        this.size = size;
+    public void setWidth(double width) {
+        this.width = width;
     }
+
+    public void setWidthPreserveRatio(double width) {
+        this.width = width;
+        this.height = image.getHeight()/image.getWidth()*width;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    public void setHeightPreserveRatio(double height) {
+        this.height = height;
+        this.width = image.getWidth()/image.getHeight()*height;
+    }
+
 
     /**
      * renders the sprite with the current settings for its appearance and location
@@ -34,6 +54,6 @@ abstract class Sprite {
      * @param gc the GraphicsContext of the canvas to render the sprite to
      */
     public void render(GraphicsContext gc) {
-        gc.drawImage(image, position.getX(), position.getY(), size, size);
+        gc.drawImage(image, position.getX(), position.getY(), width, height);
     }
 }

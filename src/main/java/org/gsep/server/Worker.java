@@ -30,13 +30,12 @@ public class Worker implements Runnable {
                 String[] part = filename.split("-");
                 if(part[0].equals("Send")){
                     storeFile(part[1], dis);
-                }else{
+                }else if (part[0].equals("Get")){
+                   getFile(part[1],dis);
+                }
+                else{
                     System.out.println("WRONG BEGINNING! ");
                 }
-
-                dos.close();
-                dis.close();
-                soc.close();
 
             } catch (Exception e) {
                 System.out.println(e);
@@ -48,24 +47,28 @@ public class Worker implements Runnable {
 
     public void storeFile(String filename, DataInputStream dis) throws IOException {
 
-        synchronized (this) {
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("server" + filename));
-            Long fileSize = dis.readLong();
+            long fileSize = dis.readLong();
             System.out.println(fileSize);
             System.out.println("Sending File: " + filename);
             int n;
             byte[] buf = new byte[1024];
-            while ((n = dis.read(buf)) >0) {
+            while (fileSize > 0
+                    && (n = dis.read(buf, 0, (int) Math.min(buf.length, fileSize))) != -1) {
                 bos.write(buf, 0, n);
                 System.out.println(fileSize);
                 fileSize -= 1;
             }
-            bos.close();
-
 
             System.out.println("File has been created! \n Completed");
-        }
+
+
 
     }
+
+    public void getFile(String fileName, DataInputStream dis){
+
+    }
+
 
 }

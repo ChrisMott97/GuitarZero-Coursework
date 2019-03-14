@@ -19,55 +19,55 @@ import java.util.zip.ZipOutputStream;
  * @version 1.0
  *
  */
-public class Song{
+public class StoreManagerModel {
 
 	static ArrayList<File> filesSong = new ArrayList<File>();
-	static String name;
-	static Socket socket;
 
 	/**
 	 * Method that calls the methods readFile() and zipFile(). The purpose of run() is to invoke the client side methods all at once.
 	 * @throws Exception
 	 */
-	public void run() throws Exception {
-		synchronized (this) {
-			Socket soc = new Socket("192.168.56.1", 3332);
-			DataInputStream dis = new DataInputStream(soc.getInputStream());
-			String msg = dis.readUTF();
-			System.out.println(msg);
-			DataOutputStream dos = new DataOutputStream((soc.getOutputStream()));
-			String file = readFile(filesSong.get(0).toString(), StandardCharsets.UTF_8);
-			System.out.println(file);
-			zipFile(filesSong, name);
-			sendFile(name, soc);
-		}
+
+
+	StoreManagerModel(ArrayList<File> filesSong){
+		this.filesSong = filesSong;
 
 	}
+//	public void run() throws Exception {
+//
+//		Socket soc = new Socket("192.168.56.1", 3332);
+//		boolean valid = true;
+//		DataInputStream dis = new DataInputStream(soc.getInputStream());
+//		String msg = dis.readUTF();
+//		System.out.println(msg);
+//		String file = readFile(filesSong.get(0).toString(), StandardCharsets.UTF_8);
+//		System.out.println(file);
+//		zipFile(filesSong, name);
+//		sendFile(name, soc);
+//
+//	}
 
 	/**
 	 * Method that reads a file and returns its contents in a string.
-	 * @param path: Path of the file
-	 * @param encoding
 	 * @return
 	 * @throws IOException
 	 */
-	public static String readFile(String path, Charset encoding)
+	public static String readFile()
 			throws IOException
 	{
-
+		String path = filesSong.get(0).toString();
+		Charset encoding = StandardCharsets.UTF_8;
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		//hold contents of file in name
-		name= new String(encoded, encoding);
-		return name;
+		return new String(encoded, encoding);
 	}
 
 	/**
 	 * Method that zips an array of files, with the zip file assigned a given name.
-	 * @param files: List of files to zip
 	 * @param name: String to name the Zip file.
 	 * @throws IOException
 	 */
-	public static void zipFile(ArrayList<File> files, String name) throws IOException {
+	public static void zipFile(String name) throws IOException {
 
 		try {
 
@@ -75,14 +75,12 @@ public class Song{
 			ZipOutputStream zos = new ZipOutputStream(fos);
 			byte[] buffer = new byte[128];
 
-			for (int i = 0; i < files.size(); i++) {
-				File currentFile = files.get(i);
-
+			for (File currentFile : filesSong) {
 				if (!currentFile.isDirectory()) {
 					ZipEntry entry = new ZipEntry(currentFile.getName());
 					FileInputStream fis = new FileInputStream(currentFile);
 					zos.putNextEntry(entry);
-					int read = 0;
+					int read;
 					while ((read = fis.read(buffer)) != -1) {
 						zos.write(buffer, 0, read);
 					}
@@ -95,17 +93,22 @@ public class Song{
 		}
 	}
 
-	public static void sendFile(String file, Socket soc) throws IOException {
+	public static void sendFile(String file) throws IOException {
+		Socket soc = new Socket("192.168.56.1", 3332);
 		File f = new File(file+".zip");
 		DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
 		System.out.println("Receving file..");
-		DataInputStream dis = new DataInputStream(new FileInputStream(file+".zip"));
-		dos.writeUTF("Send-"+file+".zip");
+		DataInputStream dis = new DataInputStream(new FileInputStream(file + ".zip"));
+		dos.writeUTF("Send-" + file + ".zip");
 		dos.writeLong(f.length());
-		byte[] b = new byte[(int)f.length()];
-		dis.readFully(b,0,b.length);
-		dos.write(b,0,b.length);
+		byte[] b = new byte[(int) f.length()];
+		dis.readFully(b, 0, b.length);
+		dos.write(b, 0, b.length);
 		System.out.println("Comleted");
+
+		dis.close();
+		dos.close();
+
 
 	}
 

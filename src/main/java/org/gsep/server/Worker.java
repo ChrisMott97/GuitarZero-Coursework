@@ -11,96 +11,68 @@ import java.net.Socket;
 public class Worker implements Runnable {
     public static final int BUFFER_SIZE = 3000;
     private Socket soc;
+    private String name;
 
     Worker(Socket soc){
         this.soc = soc;
     }
 
     @Override
-    public void run() {
-        BufferedWriter writer;
-        BufferedReader reader;
-        ObjectInputStream ois;
-        
+    public void run() {    
+    		String extension = null;
+    		String request = null;
+
     		
         try {
+        	
+        		//Recieve file extension
+        		DataInputStream dis = new DataInputStream(soc.getInputStream());
+        		request = dis.readUTF();
         		
-        		//For reading inputs
-        		reader = new BufferedReader(new InputStreamReader(soc.getInputStream())); 
-
+        		if (request.contains("FileName")) {
+        	        String[] values = request.split(",");
+        			System.out.println("Recieved file name "+values[1]);
+        			name = values[1];
+        		}
+        		request = dis.readUTF();
+        		if (request.contains("fileSend")) {
+        			String[] values = request.split(",");
+        			System.out.println("Recieved extension "+values[1]);
+        			extension = values[1];
+        		}
+        		
+        		//CODE TO DOWNLOAD FILE
+        	
+        		//Initialise byte variables
+        		byte[] b = new byte[BUFFER_SIZE];
+            int len = 0;
+            int bytcount = 1024;
             
-            System.out.println("Connected!!");
-            DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
-            dos.writeUTF("Welcome to socket! ");
+            //Create file to be written to
+            FileOutputStream inFile = new FileOutputStream("file"+extension);
             
-	            //For creating a directory
-	            String command = reader.readLine();
-	            
-	            if(command.contains("mkdir"))
-	            {
-	                System.out.println("Creating a new directory");
-	                String toSplit = command;
-	                String[] values = toSplit.split(",");
-	                new File(values[1]).mkdirs();
-	            }
-	            
-	            if(command.contains("fileSend"))
-	            {
-	            		System.out.println("Recieved send request");
-	                    ois = new ObjectInputStream(soc.getInputStream());
-	                    System.out.println("ReachA");
-	                    FileOutputStream fos = null;
-	                    byte [] buffer = new byte[BUFFER_SIZE];
-	             
-	                    // 1. Read file name.
-	                    Object o = ois.readObject();
-	             
-	                    if (o instanceof String) {
-	                        fos = new FileOutputStream(o.toString());
-	                    } else {
-	                        throwException("Something is wrong");
-	                    }
-	             
-	                    // 2. Read file to the end.
-	                    Integer bytesRead = 0;
-	             
-	                    do {
-	                        o = ois.readObject();
-	             
-	                        if (!(o instanceof Integer)) {
-	                            throwException("Something is wrong");
-	                        }
-	             
-	                        bytesRead = (Integer)o;
-	             
-	                        o = ois.readObject();
-	             
-	                        if (!(o instanceof byte[])) {
-	                            throwException("Something is wrong");
-	                        }
-	             
-	                        buffer = (byte[])o;
-	             
-	                        // 3. Write data to output file.
-	                        fos.write(buffer, 0, bytesRead);
-	                       
-	                    } while (bytesRead == BUFFER_SIZE);
-	                     
-	                    System.out.println("File transfer success");
-	                     
-	                    fos.close();
-	                    ois.close();
-	            }	    
+            //Initialise input stream for file
+            InputStream is = soc.getInputStream();
+            BufferedInputStream in2 = new BufferedInputStream(is, 1024);
             
-        }catch (Exception e){
-            System.out.println(e);
-        }
+            //Read file and write to created file
+            while ((len = in2.read(b, 0, 1024)) != -1) {
+              bytcount = bytcount + 1024;
+              inFile.write(b, 0, len);
+            }
+            
+            System.out.println("Bytes Writen : " + bytcount);
+            
 
-
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        
     }
 
-    
-     public static void throwException(String message) throws Exception {
-        throw new Exception(message);
-    }
 }

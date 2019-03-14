@@ -96,7 +96,7 @@ public class Button implements Runnable {
         Controller[] ctrls = cenv.getControllers();                           /* Gets all controllers registered */
 
         for (Controller ctrl : ctrls) {
-            if (ctrl.getName().contains(GUITAR_HERO)) {                       /* Selects only relevant org.gsep.controller */
+            if (ctrl.getName() != null && ctrl.getName().contains(GUITAR_HERO)) {                       /* Selects only relevant org.gsep.controller */
 
                 Component[] cmps = ctrl.getComponents();                      /* Get all components of the org.gsep.controller */
 

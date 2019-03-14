@@ -4,8 +4,6 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import org.gsep.mediator.ModuleMediator;
 import org.gsep.mediator.SceneModule;
-import org.gsep.select.SelectModule;
-import org.gsep.slash.SlashModule;
 
 /*
  * Main.

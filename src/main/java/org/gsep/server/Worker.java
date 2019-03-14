@@ -2,6 +2,7 @@ package org.gsep.server;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * @author Niha Gummakonda
@@ -17,23 +18,28 @@ public class Worker implements Runnable {
 
     @Override
     public void run() {
+        synchronized (this) {
             try {
 
 
                 System.out.println("Connected!!");
-                DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
-                dos.writeUTF("Welcome to socket! ");
-
                 DataInputStream dis = new DataInputStream(soc.getInputStream());
-                String filename = dis.readUTF();
 
-                String[] part = filename.split("-");
-                if(part[0].equals("Send")){
-                    storeFile(part[1], dis);
-                }else if (part[0].equals("Get")){
-                   getFile(part[1],dis);
-                }
-                else{
+                String[] part = dis.readUTF().split("-");
+                int size = Integer.parseInt(part[1]);
+                if (part[0].equals("Send")) {
+                    System.out.println("2");
+                    while (size > 0) {
+                        System.out.println("3");
+                        String fileName = dis.readUTF();
+                        System.out.println(fileName);
+                        storeFile(fileName);
+                        System.out.println("4");
+                        size -= 1;
+                    }
+                } else if (part[0].equals("Get")) {
+                    getFile(part[1], dis);
+                } else {
                     System.out.println("WRONG BEGINNING! ");
                 }
 
@@ -42,26 +48,27 @@ public class Worker implements Runnable {
             }
 
 
-
+        }
     }
 
-    public void storeFile(String filename, DataInputStream dis) throws IOException {
+    public void storeFile(String fileName) throws IOException {
 
-            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("server" + filename));
-            long fileSize = dis.readLong();
-            System.out.println(fileSize);
-            System.out.println("Sending File: " + filename);
-            int n;
-            byte[] buf = new byte[1024];
-            while (fileSize > 0
-                    && (n = dis.read(buf, 0, (int) Math.min(buf.length, fileSize))) != -1) {
-                bos.write(buf, 0, n);
-                System.out.println(fileSize);
-                fileSize -= 1;
-            }
+        FileOutputStream inFile = new FileOutputStream(fileName);
 
+        byte[] b = new byte[3000];
+        int len = 0;
+        int bytcount = 1024;
+        //Initialise input stream for file
+        InputStream is = soc.getInputStream();
+        BufferedInputStream bis = new BufferedInputStream(is, 1024);
+
+        //Read file and write to created file
+        while ((len = bis.read(b, 0, 1024)) != -1) {
+            bytcount = bytcount + 1024;
+            inFile.write(b, 0, len);
+        }
+        System.out.println("File called " +fileName+" has been written" );
             System.out.println("File has been created! \n Completed");
-
 
 
     }

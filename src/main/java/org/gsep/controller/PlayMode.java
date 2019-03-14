@@ -1,3 +1,5 @@
+package org.gsep.controller;//package org.gsep.controller;
+
 /**
  * Place holder Play Mode to simulate real game action.
  *
@@ -5,7 +7,6 @@
  * @author  Humzah Malik
  * @version 2.0, March 2019.
  */
-package org.gsep.controller;
 public class PlayMode implements ButtonListener {
 
    static volatile Note[] currentPhysicalFretboard = {Note.OPEN, Note.OPEN, Note.OPEN};

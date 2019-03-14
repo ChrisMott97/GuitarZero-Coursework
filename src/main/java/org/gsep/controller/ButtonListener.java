@@ -1,10 +1,11 @@
+package org.gsep.controller;//package org.gsep.controller;
+
 /**
  * ButtonListener interface.
  *
  * @author  Abigail Lilley
  * @version 1.0, March 2019.
  */
-package org.gsep.controller;
 public interface ButtonListener
 {
     /**

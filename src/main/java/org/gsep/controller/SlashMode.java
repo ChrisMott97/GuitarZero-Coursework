@@ -1,10 +1,11 @@
+package org.gsep.controller;//package org.gsep.controller;
+
 /**
  * Place holder Slash Mode to simulate real game action.
  *
  * @author  Abigail Lilley
  * @version 1.0, March 2019.
  */
-package org.gsep.controller;
 public class SlashMode implements ButtonListener {
 
     /**

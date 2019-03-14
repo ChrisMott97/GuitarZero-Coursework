@@ -1,10 +1,10 @@
-package org.gsep.controller;
-import net.java.games.input.Component;
+package org.gsep.controller;//package org.gsep.controller;
+
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 
 /**
- * Connects to plastic guitar controller and links the listeners to useful input.
+ * Connects to plastic guitar org.gsep.controller and links the listeners to useful input.
  *
  *   $ CLASSPATH=jinput-2.0.9.jar:.
  *   $ export CLASSPATH

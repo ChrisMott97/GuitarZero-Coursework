@@ -1,4 +1,4 @@
-package org.gsep.controller;
+package org.gsep.controller;//package org.gsep.controller;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -6,9 +6,8 @@ import java.util.List;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
-
 /**
- * A Button object represents a button/component on the plastic guitar controller.
+ * A Button object represents a button/component on the plastic guitar org.gsep.controller.
  *
  * @author  Abigail Lilley
  * @version 1.0, March 2019.
@@ -24,7 +23,7 @@ public class Button implements Runnable {
 
     /**
      * Button Constructor.
-     * @param name      Human readable name of the button corresponding to the physical guitar controller
+     * @param name      Human readable name of the button corresponding to the physical guitar org.gsep.controller
      * @param num       Index of this button in the constant cmps[] array (components array)
      */
 	public Button( String name, int num ) {
@@ -97,9 +96,9 @@ public class Button implements Runnable {
         Controller[] ctrls = cenv.getControllers();                           /* Gets all controllers registered */
 
         for (Controller ctrl : ctrls) {
-            if (ctrl.getName().contains(GUITAR_HERO)) {                       /* Selects only relevant controller */
+            if (ctrl.getName().contains(GUITAR_HERO)) {                       /* Selects only relevant org.gsep.controller */
 
-                Component[] cmps = ctrl.getComponents();                      /* Get all components of the controller */
+                Component[] cmps = ctrl.getComponents();                      /* Get all components of the org.gsep.controller */
 
                 float originalVal = cmps[ _num ].getPollData();
 	            float oldVal = originalVal;                                   /* Set base value for button */
@@ -112,7 +111,7 @@ public class Button implements Runnable {
 
                             float newVal = cmps[ _num ].getPollData();
 
-                            if (oldVal != newVal) {                         /* State of physical controller changed */
+                            if (oldVal != newVal) {                         /* State of physical org.gsep.controller changed */
 
                                 if ( newVal == originalVal ) {
                                     buttonOff();
@@ -188,7 +187,7 @@ public class Button implements Runnable {
                 }
             }
         }
-        System.out.println(GUITAR_HERO + " controller not found");
+        System.out.println(GUITAR_HERO + " org.gsep.controller not found");
                 System.exit(1);
     }
 }

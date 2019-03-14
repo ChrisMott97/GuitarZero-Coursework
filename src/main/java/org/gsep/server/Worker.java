@@ -54,12 +54,24 @@ public class Worker implements Runnable {
 
     public void storeFile(String fileName, int fileLength) throws IOException {
 
-
+        String[] extension = fileName.split(".");
+        String folder = null;
         byte[] b = new byte[fileLength];
 
+        if(extension[1].equals(".png")||extension[1].equals(".jpg")) {
+            folder = "Images";
+        }
+
+        if(extension[1].equals(".mid")) {
+            folder = "Music";
+        }
+
+        if(extension[1].equals(".txt")) {
+            folder = "Notes";
+        }
         //Initialise input stream for file
         InputStream is = soc.getInputStream();
-        FileOutputStream fos = new FileOutputStream(fileName);
+        FileOutputStream fos = new FileOutputStream(folder+"/"+fileName);
         is.read(b,0,b.length);
         fos.write(b,0,b.length);
         System.out.println("File called " +fileName+" has been written" );

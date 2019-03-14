@@ -1,7 +1,9 @@
 package org.gsep.server;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * @author Niha Gummakonda
@@ -17,34 +19,70 @@ public class Worker implements Runnable {
 
     @Override
     public void run() {
-        try {
+        synchronized (this) {
+            try {
 
-            System.out.println("Connected!!");
-            DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
-            dos.writeUTF("Welcome to socket! ");
 
-            DataInputStream dis = new DataInputStream(soc.getInputStream());
-            String msg = dis.readUTF();
-            System.out.println(msg);
+                System.out.println("Connected!!");
+                DataInputStream dis = new DataInputStream(soc.getInputStream());
 
-            String filename = dis.readUTF();
-            System.out.println("Sending File: "+filename);
-            dos.writeUTF(filename);
-            FileOutputStream fin=new FileOutputStream("server" + filename);
-            byte b[]=new byte [1024];
-            dis.read(b,0,b.length);
-            fin.write(b,0,b.length);
-            System.out.println("File has been created! \n Completed");
+                String[] part = dis.readUTF().split("-");
+                int size = Integer.parseInt(part[1]);
+                if (part[0].equals("Send")) {
+                    System.out.println("2");
+                    while (size > 0) {
+                        System.out.println("3");
+                        String[] file = dis.readUTF().split("-");
+                        System.out.println(file[0]);
+                        storeFile(file[0], Integer.parseInt(file[1]));
+                        System.out.println("4");
+                        size -= 1;
+                    }
+                } else if (part[0].equals("Get")) {
+                    getFile(part[1], dis);
+                } else {
+                    System.out.println("WRONG BEGINNING! ");
+                }
 
-            fin.close();
-            dos.close();
-            dis.close();
-            soc.close();
-        }catch (Exception e){
-            System.out.println(e);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+
+
         }
+    }
+
+    public void storeFile(String fileName, int fileLength) throws IOException {
+
+        String[] extension = fileName.split(".");
+        String folder = null;
+        byte[] b = new byte[fileLength];
+
+        if(extension[1].equals(".png")||extension[1].equals(".jpg")) {
+            folder = "Images";
+        }
+
+        if(extension[1].equals(".mid")) {
+            folder = "Music";
+        }
+
+        if(extension[1].equals(".txt")) {
+            folder = "Notes";
+        }
+        //Initialise input stream for file
+        InputStream is = soc.getInputStream();
+        FileOutputStream fos = new FileOutputStream(folder+"/"+fileName);
+        is.read(b,0,b.length);
+        fos.write(b,0,b.length);
+        System.out.println("File called " +fileName+" has been written" );
+        System.out.println("File has been created! \n Completed");
 
 
     }
+
+    public void getFile(String fileName, DataInputStream dis){
+
+    }
+
 
 }

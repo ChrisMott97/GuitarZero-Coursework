@@ -37,6 +37,14 @@ public class guitarMIDI {
         }
     }
 
+    public static String noteName( int n ) {
+        final String[] NAMES =
+                { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+        final int octave = (n / 12) - 1;
+        final int note   = n % 12;
+        return NAMES[ note ] + octave;
+    }
+
     /**
      * Converts a given track of a MIDI file into an ArrayList containing the ticks and notes of
      * an instrument that contains strings
@@ -148,33 +156,41 @@ public class guitarMIDI {
     public static File addNotes(ArrayList arr){
         ArrayList<String> newArr = new ArrayList<>();
         Random rand = new Random();
-
         for(int i = 0; i < arr.size(); i++){
             int count=0;
             //Gets the ticks
             String[] iSplit = arr.get(i).toString().split("\\s+");
             int iTick = Integer.parseInt(iSplit[0]);
-
+            System.out.println(iSplit[1]);
+            int note = Integer.parseInt(iSplit[1]);
+            int min = 200, max = 0;
             for (Object anArr : arr) {
                 String[] jSplit = anArr.toString().split("\\s+");
                 int jTick = Integer.parseInt(jSplit[0]);
+                int jNote = Integer.parseInt(jSplit[1]);
                 //Compares the ticks with themselves
                 if (iTick == jTick) {
                     count = count + 1;
+                }
+
+                if (i == 0){
+                    if(max < jNote){
+                        max = jNote;
+                    }else if(min > jNote){
+                        min = jNote;
+                    }
                 }
             }
             //All randomly assigned
             //If only 1 note is played at that tick
             if(count == 1){
-                int row = rand.nextInt(3);
+                int row = rand.nextInt(3) ;
+                int colr = rand.nextInt(2) + 1;
                 if (row == 0){
-                    int colr = rand.nextInt(2) + 1;
                     newArr.add(iTick + "," + colr + ",0,0");
                 }else if (row == 1) {
-                    int colr = rand.nextInt(2) + 1;
                     newArr.add(iTick + ",0," + colr + ",0");
                 }else if(row == 2){
-                    int colr = rand.nextInt(2) + 1;
                     newArr.add(iTick + ",0,0," + colr);
                 }
                 //If 2 notes are played at that tick

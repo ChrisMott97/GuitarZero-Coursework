@@ -49,5 +49,35 @@ public class Client {
         System.out.println("Comleted");
 
     }
+    /**
+     //	 * Method that zips an array of files, with the zip file assigned a given name.
+     //	 * @param name: String to name the Zip file.
+     //	 * @throws IOException
+     //	 */
+//	public static void zipFile(String name) throws IOException {
+//
+//		try {
+//
+//			FileOutputStream   fos = new FileOutputStream(name+".zip");
+//			ZipOutputStream zos = new ZipOutputStream(fos);
+//			byte[] buffer = new byte[128];
+//
+//			for (File currentFile : filesSong) {
+//				if (!currentFile.isDirectory()) {
+//					ZipEntry entry = new ZipEntry(currentFile.getName());
+//					FileInputStream fis = new FileInputStream(currentFile);
+//					zos.putNextEntry(entry);
+//					int read;
+//					while ((read = fis.read(buffer)) != -1) {
+//						zos.write(buffer, 0, read);
+//					}
+//					zos.closeEntry();
+//
+//				}
+//			}
+//		} catch (FileNotFoundException e) {
+//			System.out.println("File not found : " + e);
+//		}
+//	}
 }
 

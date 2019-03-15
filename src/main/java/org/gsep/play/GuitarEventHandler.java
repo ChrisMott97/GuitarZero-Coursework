@@ -55,7 +55,8 @@ public class GuitarEventHandler implements EventHandler<KeyEvent>{
                     controller.setRightLaneStatus(setStatus, Note.WHITE);
                     break;
                 case SPACE:
-                    controller.strum();
+                    if (keyEvent.getEventType() == KeyEvent.KEY_PRESSED)
+                        controller.strum();
                     break;
             }
 

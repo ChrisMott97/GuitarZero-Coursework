@@ -12,7 +12,9 @@ abstract class Sprite {
     private double width;
     private double height;
     private Image image;
+    private double opacity = 1;
     private int layer = 0;
+    private Boolean active = true;
 
     public void setImage(String url){
         File file = new File(getClass().getResource(url).getFile());
@@ -50,7 +52,13 @@ abstract class Sprite {
         this.width = image.getWidth()/image.getHeight()*height;
     }
 
-    public abstract Boolean active();
+    public Boolean active(){
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 
     public void setLayer(int layer) {
         this.layer = (layer > 0 && layer <= Renderer.LAYERS) ? layer : 0;
@@ -68,6 +76,14 @@ abstract class Sprite {
         return visible;
     }
 
+    public double getOpacity() {
+        return opacity;
+    }
+
+    public void setOpacity(double opacity) {
+        this.opacity = opacity;
+    }
+
     public void updatePosition(double currentTimeMillis){}
 
     /**
@@ -77,6 +93,7 @@ abstract class Sprite {
      */
     public void render(GraphicsContext gc) {
         if (visible){
+            gc.setGlobalAlpha(opacity);
             gc.drawImage(image, position.getX(), position.getY(), width, height);
         }
     }

@@ -5,9 +5,14 @@ import java.util.*;
 public class NoteHighwayModel {
     public static final int countInBeats = 4;
     public static final int noteHighwayLength = 700;
-    private int beat = 0;
+    public static final int pointTickRange = 100;
+    public static final Note[] emptyTick = new Note[] {Note.OPEN, Note.OPEN, Note.OPEN};
+    private int tick = 0;
     private Map<Integer, Note[]> songSequence;
-    private final int pointTickRange = noteHighwayLength/10;
+    private Note[] bottom = emptyTick;
+    private Boolean scoreLock = false;
+    private Integer bottomTickPosition = null;
+    private int score = 0;
 
     /**
      * @author Örs Barkanyi
@@ -20,18 +25,33 @@ public class NoteHighwayModel {
     }
 
     public void advance(){
-        beat++;
+        tick++;
+
+        int bottomRangeMax = tick-noteHighwayLength+pointTickRange/2; //the current high end of the pointTickRange
+
+        if (songSequence.containsKey(bottomRangeMax)){
+            //found new set of notes that fall in range
+            bottom = songSequence.get(bottomRangeMax);
+            bottomTickPosition = bottomRangeMax;
+            scoreLock = false;
+        } else if (bottomTickPosition != null && bottomRangeMax-bottomTickPosition > pointTickRange){
+            //current notes in range
+            bottom = emptyTick;
+            bottomTickPosition = null;
+        }
+
+//        System.out.printf("%s  %s\n", bottomRangeMax, Arrays.toString(bottom));
     }
 
     /**
      * @author Örs Barkanyi
      * Returns the row of notes in the given tick at the top of the highway
      *
-     * @param tick the current tick number
+     *
      * @return list of notes in that tick or null
      */
     public Note[] top(){
-        return songSequence.get(beat);
+        return songSequence.get(tick);
     }
 
     /**
@@ -41,24 +61,24 @@ public class NoteHighwayModel {
      *
      * @return list of note types or null
      */
-//    public Boolean inBottomRange(Note[] notes){
-//        songSequence.va
-//    }
+    public Integer hit(Note[] strum){
+        Boolean scored = !scoreLock && bottomTickPosition != null && Arrays.equals(strum, bottom);
+//        System.out.printf("%s %s\n", Arrays.toString(strum), Arrays.toString(bottom));
+        if (scored){
+            scoreLock = true;
+            score += 1;
+            return bottomTickPosition;
+        } else {
+            return null;
+        }
 
-    public void strum(Note[] notes){
-//        if (inBottomRange(notes)){
-//            System.out.println("point");
-//        } else {
-//        }
-        System.out.println(Arrays.toString(notes));
-////            System.out.println(Arrays.toString(bottom()));
     }
 
-    public int getCountInBeats() {
-        return countInBeats;
+    public int getScore() {
+        return score;
     }
 
-    public long getNoteHighwayPeriod(long tickPeriod) {
-        return noteHighwayLength*tickPeriod;
+    public int getTickPosition(){
+        return tick;
     }
 }

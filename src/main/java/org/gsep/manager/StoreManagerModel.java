@@ -34,7 +34,7 @@ public class StoreManagerModel {
 
 		this.filesSong = filesSong;
 		try {
-			soc = new Socket("192.168.56.1", 3332);
+			soc = new Socket("localhost", 3332);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -74,16 +74,16 @@ public class StoreManagerModel {
 	public static void sendFile() throws IOException {
 
 		DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
-		dos.writeUTF("Send-" +filesSong.size());
+		dos.writeUTF("Send," +filesSong.size());
 		System.out.println("Receving file..");
 		for(int i =0; i <filesSong.size(); i++) {
 			FileInputStream fis = new FileInputStream(filesSong.get(i));
-			dos.writeUTF(filesSong.get(i).getName() + "-" + (int) filesSong.get(i).length());
+			dos.writeUTF(filesSong.get(i).getName() + "," + (int) filesSong.get(i).length());
 			byte[] b = new byte[(int) filesSong.get(i).length()];
 			fis.read(b, 0, b.length);
 			OutputStream os = soc.getOutputStream();
 			os.write(b,0,b.length);
-			System.out.println("Comleted" + filesSong.get(i).getName());
+			System.out.println("Comleted " + filesSong.get(i).getName());
 		}
 
 

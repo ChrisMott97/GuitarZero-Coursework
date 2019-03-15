@@ -1,7 +1,8 @@
 package org.gsep.play;
 
 import javafx.scene.Group;
-import javafx.scene.canvas.Canvas;
+
+import java.util.ArrayList;
 
 public class NoteHighwayView {
     public static double noteHighwayPeriod;
@@ -9,6 +10,8 @@ public class NoteHighwayView {
     private NoteShieldSprite leftNoteShieldSprite = new NoteShieldSprite(Lane.LEFT);
     private NoteShieldSprite middleNoteShieldSprite = new NoteShieldSprite(Lane.MIDDLE);
     private NoteShieldSprite rightNoteShieldSprite = new NoteShieldSprite(Lane.RIGHT);
+    private ArrayList<NoteSprite> noteSprites = new ArrayList<>();
+    private Integer score;
 
     /**
      * @author Örs Barkanyi
@@ -48,15 +51,27 @@ public class NoteHighwayView {
      *
      * @param notes the notes corresponding to each lane
      */
-    public void sendNotes(Note[] notes){
-        //initialise note sprites and queue them to render
+    public void sendNotes(Note[] notes, int tickPosition){
         Lane[] lanes = Lane.values();
         for (int i = 0; i < notes.length; i++){
             if (notes[i] != Note.OPEN){
-                NoteSprite noteSprite = new NoteSprite(notes[i], lanes[i]);
+                NoteSprite noteSprite = new NoteSprite(notes[i], lanes[i], tickPosition);
+                noteSprites.add(noteSprite);
                 renderer.add(noteSprite);
             }
         }
+    }
+
+    public void destroyNotes(int tick){
+        for (NoteSprite noteSprite : noteSprites){
+            if (noteSprite.getTickPosition() == tick) {
+                noteSprite.caught();
+            }
+        }
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public void leftLaneActive(Boolean status, Note note){

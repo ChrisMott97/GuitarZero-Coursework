@@ -41,15 +41,15 @@ public class NoteHighwayController {
         MidiPlayer midiPlayer = new MidiPlayer(midiFile);
 
         long tickPeriod = midiPlayer.getMicroSecsPerTick();
-        long countInPeriod = midiPlayer.getMicroSecsPerBeat(model.getCountInBeats());
-        long noteHighwayPeriod = model.getNoteHighwayPeriod(tickPeriod);
+        long countInPeriod = midiPlayer.getMicroSecsPerBeat(NoteHighwayModel.countInBeats);
+        long noteHighwayPeriod = NoteHighwayModel.noteHighwayLength*tickPeriod;
 
         view.setNoteHighwayPeriod(noteHighwayPeriod);
 
         //advances model to next beat and takes the top of the model and gives it to the view
         Runnable tick = () -> {
             if (model.top() != null) {
-                view.sendNotes(model.top());
+                view.sendNotes(model.top(), model.getTickPosition());
             }
             model.advance();
         };
@@ -78,6 +78,11 @@ public class NoteHighwayController {
 
     public void strum(){
         Note[] notes = new Note[] {leftLaneStatus.getNote(), middleLaneStatus.getNote(), rightLaneStatus.getNote()};
-        model.strum(notes);
+
+        Integer hitTick = model.hit(notes);
+        if (hitTick != null){
+            view.destroyNotes(hitTick);
+            view.setScore(model.getScore());
+        }
     }
 }

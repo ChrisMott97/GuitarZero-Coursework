@@ -16,6 +16,7 @@ public class MidiPlayer {
             this.sequence = MidiSystem.getSequence(file);
             this.sequencer = MidiSystem.getSequencer();
 
+            sequencer.setTempoInBPM(60);
             sequencer.open();
             sequencer.setSequence(sequence);
         } catch (Exception e){

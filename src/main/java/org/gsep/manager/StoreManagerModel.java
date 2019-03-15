@@ -40,27 +40,15 @@ public class StoreManagerModel {
 		}
 
 	}
-//	public void run() throws Exception {
-//
 
-//		boolean valid = true;
-//		DataInputStream dis = new DataInputStream(soc.getInputStream());
-//		String msg = dis.readUTF();
-//		System.out.println(msg);
-//		String file = readFile(filesSong.get(0).toString(), StandardCharsets.UTF_8);
-//		System.out.println(file);
-//		zipFile(filesSong, name);
-//		sendFile(name, soc);
-//
-//	}
 
 	/**
 	 * Method that reads a file and returns its contents in a string.
+	 * @author humzahmalik
 	 * @return
 	 * @throws IOException
 	 */
-	public static String readFile()
-			throws IOException
+	public static String readFile() throws IOException
 	{
 		String path = filesSong.get(0).toString();
 		Charset encoding = StandardCharsets.UTF_8;
@@ -69,25 +57,39 @@ public class StoreManagerModel {
 		return new String(encoded, encoding);
 	}
 
-
-
+	
+	/**
+	 * Method that sends array of files over socket to server
+	 * @author humzahmalik and niha
+	 * @throws IOException
+	 */
 	public static void sendFile() throws IOException {
 
 		DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
-		dos.writeUTF("Send," +filesSong.size());
+		
+		//Notify server that file is about to be sent
+		dos.writeUTF("Send," +filesSong.size()+ "," +readFile());
 		System.out.println("Receving file..");
-		for(int i =0; i <filesSong.size(); i++) {
+		
+		//Start i at 1 so title file not sent
+		for(int i =1; i <filesSong.size(); i++) {
 			FileInputStream fis = new FileInputStream(filesSong.get(i));
-			dos.writeUTF(filesSong.get(i).getName() + "," + (int) filesSong.get(i).length());
+			//Write file name along with its length
+			dos.writeUTF(filesSong.get(i).getName() + "," + (int) filesSong.get(i).length() );
+			//Create byte stream of correct length
 			byte[] b = new byte[(int) filesSong.get(i).length()];
+			//Read file into input stream
 			fis.read(b, 0, b.length);
 			OutputStream os = soc.getOutputStream();
+			//Write file over output stream
 			os.write(b,0,b.length);
+			
+			//Completion message
 			System.out.println("Comleted " + filesSong.get(i).getName());
 		}
 
-
 	}
+	
 
 
 }

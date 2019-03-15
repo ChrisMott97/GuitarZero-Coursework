@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class Worker implements Runnable {
 
     private Socket soc;
+    private String songName;
 
     Worker(Socket soc){
         this.soc = soc;
@@ -24,20 +25,34 @@ public class Worker implements Runnable {
 
 
                 System.out.println("Connected!!");
+                
+               
+                
                 DataInputStream dis = new DataInputStream(soc.getInputStream());
-
+                
+                //Read message sent from client
                 String[] part = dis.readUTF().split(",");
-                int size = Integer.parseInt(part[1]);
+                //Number of files to send over
+                int size = Integer.parseInt(part[1])-1;
+                
+                //If client is about to send files over
                 if (part[0].equals("Send")) {
-                    System.out.println("2");
+                		//Create directories if they dont exist
+                    createDir("Images");
+                    createDir("Music");
+                    createDir("Notes");
+                    
+                		//Retrieve name of file
+                		songName=part[2];
+                		
+                		//Send file to method that stores it
                     while (size > 0) {
-                        System.out.println("3");
                         String[] file = dis.readUTF().split(",");
-                        System.out.println(file[0]);
                         storeFile(file[0], Integer.parseInt(file[1]));
-                        System.out.println("4");
                         size -= 1;
                     }
+                    
+                //If the client is requesting to get the file
                 } else if (part[0].equals("Get")) {
                     getFile(part[1], dis);
                 } else {
@@ -54,21 +69,21 @@ public class Worker implements Runnable {
 
     public void storeFile(String fileName, int fileLength) throws IOException {
 
-        String[] extension = fileName.split(".");
-        System.out.println(extension.length);
+    		String extension = getFileExtension(new File(fileName));
+        System.out.println(extension);
         String folder = null;
         
-//        if (ext == ".txt") {
-//        		folder = "Notes";
-//        }
-//        
-//        if (ext == ".mid") {
-//    			folder = "Music";
-//        }
-//        
-//        if (ext == ".png"|| ext==".jpg") {
-//    			folder = "Images";
-//        }
+        if (extension.equals(".txt")) {
+        		folder = "Notes";
+        }
+        
+        if (extension.equals(".mid")) {
+    			folder = "Music";
+        }
+        
+        if (extension.equals(".png")|| extension.equals(".jpg")) {
+    			folder = "Images";
+        }
         
         
         byte[] b = new byte[fileLength];
@@ -76,18 +91,43 @@ public class Worker implements Runnable {
       
         //Initialise input stream for file
         InputStream is = soc.getInputStream();
-        FileOutputStream fos = new FileOutputStream(fileName);
+        FileOutputStream fos = new FileOutputStream(folder+"/"+songName+extension);
         is.read(b,0,b.length);
         fos.write(b,0,b.length);
-        System.out.println("File called " +fileName+" has been written" + folder);
-        System.out.println("File has been created! \n Completed");
-
-
+        System.out.println("File called " +songName+" has been written to " + folder);
     }
 
     public void getFile(String fileName, DataInputStream dis){
 
     }
 
-
+    /**
+     * @author humzahmalik
+     * @param file
+     * @return
+     */
+    private String getFileExtension(File file) {
+        String name = file.getName();
+        int lastIndexOf = name.lastIndexOf(".");
+        if (lastIndexOf == -1) {
+            return ""; // empty extension
+        }
+        return name.substring(lastIndexOf);
+    }
+    
+    /**
+     * @author humzahmalik
+     */
+    private static void createDir(String dirName) {
+    		File directory = new File(dirName);
+    		//If directory doesn't exist, create it
+    		if (! directory.exists()){
+    	        directory.mkdir();
+    	    }
+    		
+    }
+    
+    
+    
+    
 }

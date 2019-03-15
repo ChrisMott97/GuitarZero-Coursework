@@ -49,7 +49,13 @@ public class NoteShieldSprite extends Sprite{
     }
 
     @Override
+    public Boolean active() {
+        return true;
+    }
+
+    @Override
     public void render(GraphicsContext gc) {
+        //TODO could be achieved with progress instead
         if (visible){
             super.render(gc);
         }

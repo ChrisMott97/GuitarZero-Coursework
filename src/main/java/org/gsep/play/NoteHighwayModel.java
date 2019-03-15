@@ -3,9 +3,9 @@ package org.gsep.play;
 import java.util.*;
 
 public class NoteHighwayModel {
+    public static final int countInBeats = 4;
+    public static final int noteHighwayLength = 700;
     private int beat = 0;
-    private final int countInBeats = 4;
-    private final int noteHighwayLength = 700;
     private Map<Integer, Note[]> songSequence;
     private final int pointTickRange = noteHighwayLength/10;
 

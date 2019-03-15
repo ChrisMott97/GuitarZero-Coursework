@@ -1,13 +1,10 @@
 package org.gsep.play;
 
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,8 +14,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Play {
-    private final int CANVASWIDTH = 950;
-    private final int CANVASHEIGHT = 700;
+    public static final int CANVASWIDTH = 950;
+    public static final int CANVASHEIGHT = 700;
     private Scene scene;
     private NoteHighwayModel model;
     private NoteHighwayView view;
@@ -35,8 +32,6 @@ public class Play {
      * @param midiFilePath the path to the selected midi file
      */
     public Play(String noteFilePath, String midiFilePath){
-        Canvas canvas = new Canvas(CANVASWIDTH, CANVASHEIGHT);
-
         //initialise scene
         Group root = new Group();
         this.scene = new Scene(root);
@@ -50,11 +45,10 @@ public class Play {
 //        });
 
         root.getChildren().add(createBackground());
-        root.getChildren().add(canvas);
 
         //set up mvc
         this.model = new NoteHighwayModel();
-        this.view = new NoteHighwayView(canvas);
+        this.view = new NoteHighwayView(root);
         this.controller = new NoteHighwayController(model, view);
 
         GuitarEventHandler guitarEventHandler = new GuitarEventHandler(controller);

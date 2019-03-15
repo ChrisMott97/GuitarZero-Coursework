@@ -8,6 +8,7 @@ public class NoteSprite extends Sprite{
     private double spawnTime;
     private double initialSize = 45;
     private double finalSize = 109;
+    private double progress = 0;
     //TODO Shadows
 
     public NoteSprite(Note noteType, Lane laneType){
@@ -21,7 +22,19 @@ public class NoteSprite extends Sprite{
         this.spawnTime = System.currentTimeMillis();
     }
 
-    public void updateProgress(double progress) {
+    public Boolean active(){
+        if (progress <= 1){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public void updatePosition(double currentTimeMillis) {
+//        double currentTimeMillis = (double)(currentNanoTime/(float)(10^3));
+        progress = (currentTimeMillis-spawnTime)/NoteHighwayView.noteHighwayPeriod;
+
         Point2D vector = destination.subtract(source);
         Point2D newpos = source.add(vector.multiply(progress));
         setPosition(newpos);
@@ -29,7 +42,4 @@ public class NoteSprite extends Sprite{
         setWidthPreserveRatio(initialSize + (finalSize-initialSize)*progress);
     }
 
-    public double getSpawnTime(){
-        return spawnTime;
-    }
 }

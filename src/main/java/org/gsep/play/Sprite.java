@@ -11,6 +11,7 @@ abstract class Sprite {
     private double width;
     private double height;
     private Image image;
+    private int layer = 0;
 
     public void setImage(String url){
         File file = new File(getClass().getResource(url).getFile());
@@ -48,6 +49,13 @@ abstract class Sprite {
         this.width = image.getWidth()/image.getHeight()*height;
     }
 
+    public abstract Boolean active();
+
+    public int getLayer() {
+        return layer;
+    }
+
+    public void updatePosition(double currentTimeMillis){}
 
     /**
      * renders the sprite with the current settings for its appearance and location

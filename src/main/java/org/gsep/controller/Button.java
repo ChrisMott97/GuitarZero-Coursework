@@ -13,8 +13,8 @@ import net.java.games.input.ControllerEnvironment;
  * @version 1.0, March 2019.
  */
 public class Button implements Runnable {
-    final static String GUITAR_HERO = "Guitar Hero"; /* Identifier  */
-    final static int DELAY = 50;
+    private final static String GUITAR_HERO = "Guitar Hero"; /* Identifier  */
+    private final static int DELAY = 50;
 
     private ButtonState _state = ButtonState.OFF;
     private List _listeners = new ArrayList();

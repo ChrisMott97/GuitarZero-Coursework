@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import org.gsep.controller.ButtonEvent;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -58,7 +59,7 @@ public class Play {
         this.controller = new NoteHighwayController(model, view);
 
         GuitarEventHandler guitarEventHandler = new GuitarEventHandler(controller);
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, guitarEventHandler);
+        scene.addEventHandler(ButtonEvent.ON, guitarEventHandler);
         scene.addEventHandler(KeyEvent.KEY_RELEASED, guitarEventHandler);
 
         //find files

@@ -56,7 +56,7 @@ public class Worker implements Runnable {
                 } else if (part[0].equals("Get")) {
                     getFile(part[1], dis);
                 } else {
-                    System.out.println("WRONG BEGINNING! ");
+                    System.out.println("This is not a valid input");
                 }
 
             } catch (Exception e) {
@@ -66,6 +66,14 @@ public class Worker implements Runnable {
 
         }
     }
+    
+    /**
+     * This method stores the file in the correct directory
+     * @author humzahmalik and Niha
+     * @param fileName
+     * @param fileLength
+     * @throws IOException
+     */
 
     public void storeFile(String fileName, int fileLength) throws IOException {
 
@@ -102,6 +110,7 @@ public class Worker implements Runnable {
     }
 
     /**
+     * This method returns the extension of a file
      * @author humzahmalik
      * @param file
      * @return
@@ -116,6 +125,8 @@ public class Worker implements Runnable {
     }
     
     /**
+     * This method creates a directory if it doesn't already exist
+     * @param dirName
      * @author humzahmalik
      */
     private static void createDir(String dirName) {

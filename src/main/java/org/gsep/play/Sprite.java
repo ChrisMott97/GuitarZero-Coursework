@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import java.io.File;
 
 abstract class Sprite {
+    private Boolean visible = true;
     private Point2D position;
     private double width;
     private double height;
@@ -51,8 +52,20 @@ abstract class Sprite {
 
     public abstract Boolean active();
 
+    public void setLayer(int layer) {
+        this.layer = (layer > 0 && layer <= Renderer.LAYERS) ? layer : 0;
+    }
+
     public int getLayer() {
         return layer;
+    }
+
+    public void setVisible(Boolean visible){
+        this.visible = visible;
+    }
+
+    public Boolean getVisible() {
+        return visible;
     }
 
     public void updatePosition(double currentTimeMillis){}
@@ -63,6 +76,8 @@ abstract class Sprite {
      * @param gc the GraphicsContext of the canvas to render the sprite to
      */
     public void render(GraphicsContext gc) {
-        gc.drawImage(image, position.getX(), position.getY(), width, height);
+        if (visible){
+            gc.drawImage(image, position.getX(), position.getY(), width, height);
+        }
     }
 }

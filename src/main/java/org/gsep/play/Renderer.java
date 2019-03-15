@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Renderer extends AnimationTimer{
-    public static int LAYERS = 1;
+    public static int LAYERS = 2;
     private List<Sprite> sprites = new CopyOnWriteArrayList<>();
     private final List<Canvas> layers = new ArrayList<>();
 
@@ -30,7 +30,7 @@ public class Renderer extends AnimationTimer{
                     sprite.updatePosition(System.currentTimeMillis());
 
                     if (sprite.active() && sprite.getLayer() == layers.indexOf(layer)) {
-                            sprite.render(layer.getGraphicsContext2D());
+                        sprite.render(layer.getGraphicsContext2D());
                     } else if (!sprite.active()){
                         sprites.remove(sprite);
                     }

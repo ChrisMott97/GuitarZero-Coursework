@@ -3,8 +3,7 @@ package org.gsep.play;
 import javafx.geometry.Point2D;
 
 public class NoteSprite extends Sprite{
-    private Point2D source;
-    private Point2D destination;
+    private Lane laneType;
     private double spawnTime;
     private double initialSize = 45;
     private double finalSize = 109;
@@ -14,8 +13,7 @@ public class NoteSprite extends Sprite{
     public NoteSprite(Note noteType, Lane laneType){
         setImage(noteType.getImageSource());
 
-        source = laneType.getStartPoint();
-        destination = laneType.getShieldPoint();
+        this.laneType = laneType;
 
         setWidthPreserveRatio(initialSize);
 
@@ -23,7 +21,7 @@ public class NoteSprite extends Sprite{
     }
 
     public Boolean active(){
-        if (progress <= 1){
+        if (progress <= 2){
             return true;
         } else {
             return false;
@@ -35,11 +33,17 @@ public class NoteSprite extends Sprite{
 //        double currentTimeMillis = (double)(currentNanoTime/(float)(10^3));
         progress = (currentTimeMillis-spawnTime)/NoteHighwayView.noteHighwayPeriod;
 
+        Point2D source = laneType.getStartPoint();
+        Point2D destination = laneType.getShieldPoint();
+
+        if (progress > 1){
+            setLayer(1);
+        }
+
         Point2D vector = destination.subtract(source);
         Point2D newpos = source.add(vector.multiply(progress));
         setPosition(newpos);
 
         setWidthPreserveRatio(initialSize + (finalSize-initialSize)*progress);
     }
-
 }

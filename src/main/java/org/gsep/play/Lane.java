@@ -37,4 +37,8 @@ public enum Lane {
     public Point2D getShieldPoint() {
         return shieldPoint;
     }
+
+    public Point2D getEndPoint() {
+        return endPoint;
+    }
 }

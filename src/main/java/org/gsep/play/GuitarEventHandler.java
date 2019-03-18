@@ -1,18 +1,23 @@
 package org.gsep.play;
 
-//import javafx.event.EventHandler;
-//import javafx.scene.input.KeyCode;
-//import javafx.scene.input.KeyEvent;
 import org.gsep.controller.ButtonEvent;
 import org.gsep.controller.ButtonListener;
 import org.gsep.controller.ButtonState;
 
 import java.util.ArrayList;
 
-//public class GuitarEventHandler implements EventHandler<KeyEvent>{
+
+/**
+ * @author Örs Barkanyi
+ * @author Abigail Lilley
+ * @version 2.0, March 18th 2019
+ * Constructor for Play Mode
+ *
+ * Original keyboard implementation by Örs
+ * Conversion to plastic guitar input by Abigail
+ */
 public class GuitarEventHandler implements ButtonListener {
     private NoteHighwayController controller;
-    //private ArrayList<KeyCode> pressedKeys = new ArrayList<>();
     private ArrayList<String> pressedButtons = new ArrayList<>();
 
     GuitarEventHandler(NoteHighwayController controller) {
@@ -22,7 +27,6 @@ public class GuitarEventHandler implements ButtonListener {
 
     public void stateReceived(String buttonName, ButtonEvent event) {
 
-        //String keycode = keyEvent.getCode();
         Boolean setStatus = false;
         boolean firstCall = false;
 
@@ -40,7 +44,6 @@ public class GuitarEventHandler implements ButtonListener {
         }
 
         if (firstCall){
-//            System.out.println(keycode);
             switch (buttonName){
                 case "fret1_black":
                     controller.setLeftLaneStatus(setStatus, Note.BLACK);

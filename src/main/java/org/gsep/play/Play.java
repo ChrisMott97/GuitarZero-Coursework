@@ -2,7 +2,6 @@ package org.gsep.play;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -18,8 +17,8 @@ import net.java.games.input.ControllerEnvironment;
 import org.gsep.controller.*;
 
 public class Play {
-    private final int CANVASWIDTH = 950;
-    private final int CANVASHEIGHT = 700;
+    public static final int CANVASWIDTH = 950;
+    public static final int CANVASHEIGHT = 700;
     private Scene scene;
     private NoteHighwayModel model;
     private NoteHighwayView view;
@@ -52,8 +51,6 @@ public class Play {
      * @param midiFilePath the path to the selected midi file
      */
     public Play(String noteFilePath, String midiFilePath){
-        Canvas canvas = new Canvas(CANVASWIDTH, CANVASHEIGHT);
-
         //initialise scene
         Group root = new Group();
         this.scene = new Scene(root);
@@ -67,11 +64,10 @@ public class Play {
 //        });
 
         root.getChildren().add(createBackground());
-        root.getChildren().add(canvas);
 
         //set up mvc
         this.model = new NoteHighwayModel();
-        this.view = new NoteHighwayView(canvas);
+        this.view = new NoteHighwayView(root);
         this.controller = new NoteHighwayController(model, view);
 
         ControllerEnvironment cenv = ControllerEnvironment.getDefaultEnvironment();
@@ -90,7 +86,7 @@ public class Play {
         try{
             this.songSequence = readFile(getClass().getResource(noteFilePath).getFile());
         } catch (Exception e) {
-            System.out.println("Note file not found");
+            System.out.println("Note file not found or invalid");
             e.printStackTrace();
             System.exit(1);
         }
@@ -115,7 +111,13 @@ public class Play {
      */
     public void play(){
         view.startRender();
-        controller.play(songSequence,midiFile);
+        try{
+            controller.play(songSequence,midiFile);
+        } catch (Exception e){
+            System.out.println("Couldn't play MIDI file");
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
     /**

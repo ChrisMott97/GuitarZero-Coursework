@@ -67,7 +67,6 @@ public class GuitarEventHandler implements ButtonListener {
                     controller.strum();
                     break;
             }
-
         }
     }
 }

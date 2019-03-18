@@ -55,13 +55,13 @@ public class Play {
         Group root = new Group();
         this.scene = new Scene(root);
 
-//        scene.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent mouseEvent) {
-//                System.out.println(mouseEvent.getSceneY());
-//                System.out.println(mouseEvent.getSceneX());
-//            }
-//        });
+        scene.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                System.out.println(mouseEvent.getSceneY());
+                System.out.println(mouseEvent.getSceneX());
+            }
+        });
 
         root.getChildren().add(createBackground());
 

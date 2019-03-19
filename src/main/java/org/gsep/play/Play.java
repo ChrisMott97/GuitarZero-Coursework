@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import net.java.games.input.Controller;
@@ -17,8 +18,8 @@ import net.java.games.input.ControllerEnvironment;
 import org.gsep.controller.*;
 
 public class Play {
-    public static final int CANVASWIDTH = 950;
-    public static final int CANVASHEIGHT = 700;
+    static final int CANVASWIDTH = 950;
+    static final int CANVASHEIGHT = 700;
     private Scene scene;
     private NoteHighwayModel model;
     private NoteHighwayView view;
@@ -27,19 +28,21 @@ public class Play {
     private Map<Integer, Note[]> songSequence;
 
     private final static String[] BUTTONNAMES = { 	"fret1_white",
-            "fret1_black",
-            "fret2_white",
-            "fret2_black",
-            "fret3_white",
-            "fret3_black",
-            "zeroPower",
-            "strumBar",
-            "escape",
-            "power",
-            "bender",
-            "whammy"	    	};
+                                                    "fret1_black",
+                                                    "fret2_white",
+                                                    "fret2_black",
+                                                    "fret3_white",
+                                                    "fret3_black",
+                                                    "zeroPower",
+                                                    "strumBar",
+                                                    "escape",
+                                                    "power",
+                                                    "bender",
+                                                    "whammy"	    	};
+    //int[] buttonNums = { 0, 1, 4, 2, 5, 3, 8, 15, 10, 12, 13, 17};
 
-    private final static int[] BUTTONNUMS = { 0, 1, 4, 2, 5, 3, 8, 15, 10, 12, 13, 17};
+
+    //private final static int[] BUTTONNUMS = { 0, 1, 4, 2, 5, 3, 8, 15, 10, 12, 13, 17};
     /* Index of the component in the component array. Order corresponds to the names in BUTTONNAMES */
 
     /**
@@ -70,17 +73,7 @@ public class Play {
         this.view = new NoteHighwayView(root);
         this.controller = new NoteHighwayController(model, view);
 
-        ControllerEnvironment cenv = ControllerEnvironment.getDefaultEnvironment();
-        Controller[] ctrls = cenv.getControllers();
-        GuitarEventHandler guitarEventHandler = new GuitarEventHandler(controller);
-
-        Button[] 	 buttons = new Button[ BUTTONNAMES.length ];
-        for ( int i = 0; i < buttons.length; i = i + 1 ) {
-            buttons[ i ] = new Button( BUTTONNAMES[i], BUTTONNUMS[i]);
-            buttons[ i ].addButtonListener( guitarEventHandler );			/* Adding listeners to Buttons depending on the mode */
-            Thread buttonThread = new Thread(buttons[ i ]);
-            buttonThread.start();								/* Starting a thread for each Button */
-        }
+        linkGuitar();
 
         //find files
         try{
@@ -139,7 +132,7 @@ public class Play {
     /**
      * @author humzahmalik
      * Method that reads notes file into an array
-     * @return
+     *
      * @throws IOException
      *
      */
@@ -193,6 +186,56 @@ public class Play {
         }
 
         return type;
+
+    }
+
+    private void linkGuitar() {
+        ControllerEnvironment cenv = ControllerEnvironment.getDefaultEnvironment();
+        Controller[] ctrls = cenv.getControllers();
+        GuitarEventHandler guitarEventHandler = new GuitarEventHandler(controller);
+        int[] buttonNums;
+        final int[] windowsButtonNums = { 0, 1, 4, 2, 5, 3, 8, 15, 10, 12, 13, 17};
+        final int[] unixButtonNums    = { 0, 1, 4, 2, 5, 3, 8, 15, 10, 12, 13, 17};
+        final int[] macButtonNums     = { 0, 1, 4, 2, 5, 3, 8, 15, 10, 12, 13, 17};
+
+
+        try {
+            String osName = System.getProperty("os.name");
+            if (osName == null) {
+                throw new IOException("os.name not found");
+            }
+            osName = osName.toLowerCase(Locale.ENGLISH);
+            if (osName.contains("windows")) {
+                buttonNums = windowsButtonNums;
+            } else if (osName.contains("linux")
+                    || osName.contains("mpe/ix")
+                    || osName.contains("freebsd")
+                    || osName.contains("irix")
+                    || osName.contains("digital unix")
+                    || osName.contains("unix")) {
+                buttonNums = unixButtonNums;
+            } else if (osName.contains("mac os")) {
+                buttonNums = macButtonNums;
+                System.out.println("THIS IS A MAC");
+            } else {
+                throw new IOException("os.name not supported");
+            }
+
+            Button[] buttons = new Button[ BUTTONNAMES.length ];
+            for ( int i = 0; i < buttons.length; i = i + 1 ) {
+                buttons[ i ] = new Button( BUTTONNAMES[i], buttonNums[i]);
+                buttons[ i ].addButtonListener( guitarEventHandler );			/* Adding listeners to Buttons depending on the mode */
+                Thread buttonThread = new Thread(buttons[ i ]);
+                buttonThread.start();								/* Starting a thread for each Button */
+            }
+
+        } catch (IOException ex) {
+            System.out.println("OS not identified, can't run game");
+            ex.getMessage();
+            ex.printStackTrace();
+            //TODO terminate game
+        }
+
 
     }
 }

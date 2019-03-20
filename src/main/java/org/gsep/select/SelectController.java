@@ -2,6 +2,7 @@ package org.gsep.select;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -11,19 +12,23 @@ import org.gsep.carousel.Carousel;
 import org.gsep.carousel.Item;
 import org.gsep.carousel.ItemContainerModel;
 import org.gsep.carousel.ItemModel;
+import org.gsep.controller.ButtonEvent;
+import org.gsep.controller.ButtonListener;
+import org.gsep.controller.ButtonState;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
+/**
  * SelectController.
  *
  * @author  Chris Mott.
+ * @author  Abigail Lilley
  * @version 2.00, March 2019.
  */
-public class SelectController extends SceneController {
+public class SelectController extends SceneController implements ButtonListener {
 
     @FXML
     private Carousel carousel;
@@ -71,19 +76,19 @@ public class SelectController extends SceneController {
     public Scene load() throws Exception{
         Scene scene = super.load(this.fxmlLoader, this.carousel);
 
-        scene.setOnKeyPressed(keyEvent -> {
-            switch(keyEvent.getCode()){
-                case RIGHT:
-                    carousel.next();
-                    break;
-                case LEFT:
-                    carousel.previous();
-                    break;
-                case ESCAPE:
-                    module.swapTo(Modules.SLASH);
-                    break;
-            }
-        });
+//        scene.setOnKeyPressed(keyEvent -> {
+//            switch(keyEvent.getCode()){
+//                case RIGHT:
+//                    carousel.next();
+//                    break;
+//                case LEFT:
+//                    carousel.previous();
+//                    break;
+//                case ESCAPE:
+//                    module.swapTo(Modules.SLASH);
+//                    break;
+//            }
+//        });
         return scene;
     }
 
@@ -107,5 +112,32 @@ public class SelectController extends SceneController {
         }
 
         this.carousel.ingest(items);
+    }
+
+
+    @Override
+    public void stateReceived(String buttonName, ButtonEvent event) {
+        System.out.println("State received :   "+event.state());
+        //TODO implement for select mode
+        if (module instanceof SelectModule) {
+            if (event.state() == ButtonState.ON) {
+                switch (buttonName) {
+                    case "zeroPower":
+                        //TODO: Logic to select intended song bundle
+                        break;
+                    case "escape":
+                        Platform.runLater((Runnable) () -> {
+                            module.swapTo(Modules.SLASH);
+                        });
+                        break;
+
+
+                }
+            } else if (event.state() == ButtonState.FORWARD) {
+                carousel.next();
+            } else if (event.state() == ButtonState.BACKWARD) {
+                carousel.previous();
+            }
+        }
     }
 }

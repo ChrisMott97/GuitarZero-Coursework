@@ -2,6 +2,7 @@ package org.gsep.slash;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -9,19 +10,23 @@ import javafx.scene.control.Button;
 import org.gsep.Modules;
 import org.gsep.SceneController;
 import org.gsep.carousel.*;
+import org.gsep.controller.ButtonEvent;
+import org.gsep.controller.ButtonListener;
+import org.gsep.controller.ButtonState;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
+/**
  * SlashController.
  *
  * @author  Chris Mott.
+ * @author  Abigail Lilley
  * @version 2.00, March 2019.
  */
-public class SlashController extends SceneController {
+public class SlashController extends SceneController implements ButtonListener {
 
     @FXML
     protected Carousel carousel;
@@ -69,28 +74,29 @@ public class SlashController extends SceneController {
      * @throws Exception
      */
     public Scene load() throws Exception{
+        System.out.println("load() running");
         Scene scene = super.load(this.fxmlLoader, this.carousel);
-        scene.setOnKeyPressed(keyEvent -> {
-            switch(keyEvent.getCode()){
-                case RIGHT:
-                    carousel.next();
-                    break;
-                case LEFT:
-                    carousel.previous();
-                    break;
-                case SPACE:
-                    //TODO: Make itemModel store enum reference so switch not necessary!
-                    switch(itemModel.getIntended().getName()){
-                        case "Select":
-                            module.swapTo(Modules.SELECT);
-                            break;
-                        case "Store":
-                            module.swapTo(Modules.STORE);
-                            break;
-                    }
-                    break;
-            }
-        });
+//        scene.setOnKeyPressed(keyEvent -> {
+//            switch(keyEvent.getCode()){
+//                case RIGHT:
+//                    carousel.next();
+//                    break;
+//                case LEFT:
+//                    carousel.previous();
+//                    break;
+//                case SPACE:
+//                    //TODO: Make itemModel store enum reference so switch not necessary!
+//                    switch(itemModel.getIntended().getName()){
+//                        case "Select":
+//                            module.swapTo(Modules.SELECT);
+//                            break;
+//                        case "Store":
+//                            module.swapTo(Modules.STORE);
+//                            break;
+//                    }
+//                    break;
+//            }
+//        });
         return scene;
     }
 
@@ -118,4 +124,35 @@ public class SlashController extends SceneController {
         this.carousel.ingest(items);
     }
 
+    @Override
+    public void stateReceived(String buttonName, ButtonEvent event) {
+        System.out.println("State recieved :   "+event.state());
+        //TODO implement for slash mode
+        if (module instanceof SlashModule) {
+            if (event.state() == ButtonState.ON) {
+                switch (buttonName) {
+                    case "zeroPower":
+                        //TODO: Make itemModel store enum reference so switch not necessary!
+                        Platform.runLater((Runnable) () -> {
+                            // Update UI here.
+                            switch (itemModel.getIntended().getName()) {
+                                case "Select":
+                                    module.swapTo(Modules.SELECT);
+                                    break;
+                                case "Store":
+                                    module.swapTo(Modules.STORE);
+                                    break;
+                            }
+                        });
+                        break;
+                }
+            } else if (event.state() == ButtonState.FORWARD) {
+                carousel.next();
+            } else if (event.state() == ButtonState.BACKWARD) {
+                carousel.previous();
+            }
+        }
+
+
+    }
 }

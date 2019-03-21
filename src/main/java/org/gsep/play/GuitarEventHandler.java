@@ -20,13 +20,12 @@ public class GuitarEventHandler implements ButtonListener {
     private NoteHighwayController controller;
     private ArrayList<String> pressedButtons = new ArrayList<>();
 
-    public GuitarEventHandler(NoteHighwayController controller) {
+    GuitarEventHandler(NoteHighwayController controller) {
         this.controller = controller;
     }
 
 
     public void stateReceived(String buttonName, ButtonEvent event) {
-        System.out.println("Play Mode: state received");
 
         Boolean setStatus = false;
         boolean firstCall = false;
@@ -46,22 +45,22 @@ public class GuitarEventHandler implements ButtonListener {
 
         if (firstCall){
             switch (buttonName){
-                case "fret1Black":
+                case "fret1_black":
                     controller.setLeftLaneStatus(setStatus, Note.BLACK);
                     break;
-                case "fret2Black":
+                case "fret2_black":
                     controller.setMiddleLaneStatus(setStatus, Note.BLACK);
                     break;
-                case "fret3Black":
+                case "fret3_black":
                     controller.setRightLaneStatus(setStatus, Note.BLACK);
                     break;
-                case "fret1White":
+                case "fret1_white":
                     controller.setLeftLaneStatus(setStatus, Note.WHITE);
                     break;
-                case "fret2White":
+                case "fret2_white":
                     controller.setMiddleLaneStatus(setStatus, Note.WHITE);
                     break;
-                case "fret3White":
+                case "fret3_white":
                     controller.setRightLaneStatus(setStatus, Note.WHITE);
                     break;
                 case "bender":

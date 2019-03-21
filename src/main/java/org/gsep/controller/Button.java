@@ -80,8 +80,9 @@ public class Button implements Runnable {
     private synchronized void _fireMoodEvent() {
 
         ButtonEvent state = new ButtonEvent( this, _state );
-        for (Object listener : _listeners) {
-            ((ButtonListener) listener).stateReceived(this.getName(), state);
+        Iterator listeners = _listeners.iterator();
+        while( listeners.hasNext() ) {
+            ( (ButtonListener) listeners.next() ).stateReceived( this.getName(), state );
         }
     }
 

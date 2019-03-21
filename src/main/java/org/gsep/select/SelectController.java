@@ -95,13 +95,13 @@ public class SelectController extends SceneController implements ButtonListener 
                 case LEFT:
                     carousel.previous();
                     break;
-                case ESCAPE:
-                    module.swapTo(SlashModule.getInstance());
-                    break;
                 case SPACE:
                     if(itemModel.getIntended().getClass() == MusicItem.class){
                         module.setIntendedItem((MusicItem)itemModel.getIntended());
                     }
+                case ESCAPE:
+                    module.swapTo(SlashModule.getInstance());
+                    break;
             }
         });
         return scene;
@@ -158,8 +158,9 @@ public class SelectController extends SceneController implements ButtonListener 
             if (event.state() == ButtonState.ON) {
                 switch (buttonName) {
                     case "zeroPower":
-                        //TODO: Logic to select intended song bundle
-                        break;
+                        if(itemModel.getIntended().getClass() == MusicItem.class){
+                            module.setIntendedItem((MusicItem)itemModel.getIntended());
+                        }
                     case "escape":
                         Platform.runLater( () -> {
                             module.swapTo(SlashModule.getInstance());
@@ -169,10 +170,8 @@ public class SelectController extends SceneController implements ButtonListener 
 
                 }
             } else if (event.state() == ButtonState.FORWARD) {
-                System.out.println("Current module is..."+module.getMediator().getCurrentModule());
                 carousel.next();
             } else if (event.state() == ButtonState.BACKWARD) {
-                System.out.println("Current module is..."+module.getMediator().getCurrentModule());
                 carousel.previous();
             }
         }

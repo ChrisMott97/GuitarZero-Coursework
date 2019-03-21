@@ -20,6 +20,11 @@ public class MusicItem extends Item {
         super();
     }
 
+    @Override
+    public String toString() {
+        return this.getName()+"\n"+"  "+this.getNoteFile()+"\n"+"  "+this.getMidiFile();
+    }
+
     public File getNoteFile() {
         return noteFile;
     }

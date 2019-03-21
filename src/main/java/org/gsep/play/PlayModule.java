@@ -5,6 +5,7 @@ import org.gsep.carousel.ItemContainerModel;
 import org.gsep.carousel.ItemModel;
 import org.gsep.mediator.Mediator;
 import org.gsep.mediator.SceneModule;
+import org.gsep.select.MusicItem;
 
 /*
  * PlayModule.
@@ -40,7 +41,10 @@ public class PlayModule extends SceneModule {
     }
 
     public void init(){
-        Play play = new Play("/untitled2.txt", "/untitled2.mid");
+        MusicItem item = getMediator().getIntendedItem();
+        System.out.println(item);
+//        Play play = new Play("/untitled2.txt", "/untitled2.mid");
+        Play play = new Play(item.getNoteFile(), item.getMidiFile());
         setScene(play.getScene());
         setTitle("Play Mode");
         play.play();

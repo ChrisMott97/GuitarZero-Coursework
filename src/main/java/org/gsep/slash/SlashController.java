@@ -101,6 +101,9 @@ public class SlashController extends SceneController implements ButtonListener {
                         case "Store":
                             module.swapTo(StoreModule.getInstance());
                             break;
+                        case "Play":
+                            module.swapTo(PlayModule.getInstance());
+                            break;
                     }
                     break;
             }
@@ -154,6 +157,9 @@ public class SlashController extends SceneController implements ButtonListener {
                                     break;
                                 case "Store":
                                     module.swapTo(StoreModule.getInstance());
+                                    break;
+                                case "Play":
+                                    module.swapTo(PlayModule.getInstance());
                                     break;
                             }
                         });

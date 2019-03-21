@@ -50,7 +50,7 @@ public class Play {
      * @param noteFilePath the path to the selected note file
      * @param midiFilePath the path to the selected midi file
      */
-    public Play(String noteFilePath, String midiFilePath){
+    public Play(File noteFile, File midiFile){
         //initialise scene
         Group root = new Group();
         this.scene = new Scene(root);
@@ -84,7 +84,7 @@ public class Play {
 
         //find files
         try{
-            this.songSequence = readFile(getClass().getResource(noteFilePath).getFile());
+            this.songSequence = readFile(noteFile);
         } catch (Exception e) {
             System.out.println("Note file not found or invalid");
             e.printStackTrace();
@@ -92,7 +92,7 @@ public class Play {
         }
 
         try{
-            this.midiFile = new File(getClass().getResource(midiFilePath).getFile());
+            this.midiFile = midiFile;
         } catch (Exception e){
             System.out.println("MIDI file Not found");
             e.printStackTrace();
@@ -143,7 +143,7 @@ public class Play {
      * @throws IOException
      *
      */
-    public LinkedHashMap readFile(String f) throws IOException {
+    public LinkedHashMap readFile(File f) throws IOException {
 
         BufferedReader in = new BufferedReader(new FileReader(f));
         String str;

@@ -37,8 +37,9 @@ public class Worker implements Runnable {
     private Socket soc;
     private String songName;
     private int songIndex;
-    private static String jsonPath = "./src/main/resources/songs/index.json";
-    private static String midiPath = "./src/main/resources/songs/midi";
+    private final static String JSONPATH = "./src/main/resources/songs/ServerContents/index.json";
+    private final static String MIDIPATH = "./src/main/resources/songs/ServerContents/midi";
+    private final static String SERVERPATH = "./src/main/resources/songs/ServerContents/";
     private static int numSongs;
 
     Worker(Socket soc){
@@ -104,29 +105,30 @@ public class Worker implements Runnable {
     
     
     /**
+     * Sets number of songs currently on server, to a field n. This is used when indexing new songs.
      * @author humzahmalik
-     *  This method gets the number of songs seeing how many songs exist currently.
      */
     private void getNumSongs() {
-		int n = new File(midiPath).list().length;
+		int n = new File(MIDIPATH).list().length;
 		this.numSongs=n;
 		
     }
     
     
     /**
-     * This method stores the file in the correct directory
+     * Stores the file in the correct directory, with correct extension and name.
      * @author humzahmalik and Niha
-     * @param fileName
-     * @param fileLength
+     * @param fileName 
+     * @param fileLength Length of file, used in buffered reader.
      * @throws IOException
      */
 
     public void storeFile(String fileName, int fileLength) throws IOException {
-
+    		//Get extension of file transfered
     		String extension = getFileExtension(new File(fileName));
         String folder = null;
         
+        //Specify the folder for the file to go into, regarding its extension
         if (extension.equals(".txt")) {
         		folder = "notes";
         }
@@ -141,22 +143,20 @@ public class Worker implements Runnable {
         
         
         byte[] b = new byte[fileLength];
-        
       
         //Initialise input stream for file
         InputStream is = soc.getInputStream();
-        System.out.println(folder);
-        FileOutputStream fos = new FileOutputStream("./src/main/resources/songs/"+folder+"/"+numSongs+extension);
+        
+        FileOutputStream fos = new FileOutputStream(SERVERPATH+folder+"/"+numSongs+extension);
         is.read(b,0,b.length);
         fos.write(b,0,b.length);
-        System.out.println("File called " +songName+" has been written to " + "./src/main/resources/songs/"+folder+"/"+songName+extension);
     }
 
 
     /**
      * This method returns the extension of a file
      * @author humzahmalik
-     * @param file
+     * @param file The file to check for its extension
      * @return
      */
     private String getFileExtension(File file) {
@@ -169,13 +169,13 @@ public class Worker implements Runnable {
     }
     
     /**
-     * This method creates a directory if it doesn't already exist
-     * @param dirName
+     * Creates a directory if it doesn't already exist
+     * @param dirName The name of the directory to create
      * @author humzahmalik
      */
     private static void createDir(String dirName) {
     
-    		File directory = new File("./src/main/resources/songs/"+dirName);
+    		File directory = new File(SERVERPATH+dirName);
     		//If directory doesn't exist, create it
     		if (!directory.exists()){
     	        directory.mkdir();
@@ -189,10 +189,9 @@ public class Worker implements Runnable {
      * @author humzahmalik
      */
     private static void createJSON() {
-    		File file = new File(jsonPath);
+    		File file = new File(JSONPATH);
     		
-    		//If file doesn't exist, create it
-
+    		//If JSON file doesn't exist, create it
     		try {
 				if (file.createNewFile())
 				{
@@ -207,39 +206,45 @@ public class Worker implements Runnable {
     }
     
     /**
-     * @author Chris Mott and Humzah Malik
-     * @return
+     * Reads JSON index file and stores contents in a list of Song objects, which it returns.
+     * @author Chris Mott 
+     * @return List of Song objects
      */
     public List<Song> getSongs(){
+    		//Create a list of song type to hold the song JSON objects
         List<Song> songs = new ArrayList<Song>();
-
+        
         ObjectMapper objectMapper = new ObjectMapper();
 
-        File file = new File(jsonPath);
+        //Create file object of index.JSON path
+        File file = new File(JSONPATH);
         try{
+        		//Read all song objects into a list
             songs = objectMapper.readValue(file, new TypeReference<List<Song>>(){});
         }catch(Exception e){
-            e.printStackTrace();
+            System.out.println("Your song list is currently empty");
         }
         return songs;
     }
 
     /**
-     * @author Chris Mot humzahmalik
-     * Method that adds a song to the current array of song objects, updating the midi file
-     * @param id
-     * @param name
+     * @author Chris Mot 
+     * Adds a Song object to the current array of Song objects, updating the midi file
+     * @param id The index of the song
+     * @param name The name of the song
      */
     public void addSong(int id, String name){
+    		//Get list of current songs
         List<Song> songs = getSongs();
+        //Create a new song object of correct id and name
         Song song = new Song(id, name);
 
         songs.add(song);
         ObjectMapper objectMapper = new ObjectMapper();
 
         try{
-            objectMapper.writeValue(
-                new FileOutputStream(jsonPath), songs);
+        		//Write updated list to index file
+            objectMapper.writeValue(new FileOutputStream(JSONPATH), songs);
         }catch(Exception e){
             e.printStackTrace();
         }

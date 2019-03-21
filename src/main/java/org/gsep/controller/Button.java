@@ -40,22 +40,22 @@ public class Button implements Runnable {
 	}
 
 
-    private synchronized void buttonOn() {
+    public synchronized void buttonOn() {
             _state = ButtonState.ON;
             _fireMoodEvent();
     }
 	
-    private synchronized void buttonOff() {
+    public synchronized void buttonOff() {
             _state = ButtonState.OFF;
             _fireMoodEvent();
     }
 	
-    private synchronized void scrollForward() {
+    public synchronized void scrollForward() {
             _state = ButtonState.FORWARD;
             _fireMoodEvent();
     }
 	
-    private synchronized void scrollBackward() {
+    public synchronized void scrollBackward() {
             _state = ButtonState.BACKWARD;
             _fireMoodEvent();
     }
@@ -186,7 +186,7 @@ public class Button implements Runnable {
                 }
             }
         }
-        System.out.println(GUITAR_HERO + " controller not found");
-                System.exit(1);
+        System.out.println(GUITAR_HERO + " org.gsep.controller not found");
+                //System.exit(1);
     }
 }

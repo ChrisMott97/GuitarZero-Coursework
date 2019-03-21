@@ -31,7 +31,7 @@ public class SlashModule extends SceneModule {
                                                 "strumBar",
                                                 "escape"    };
     private SlashModule(){
-        linkGuitar();
+
     }
 
     public static SlashModule getInstance(){
@@ -57,6 +57,7 @@ public class SlashModule extends SceneModule {
             System.out.println("Slash controller could not load.");
         }
         setTitle("Slash Mode");
+        linkGuitar();
     }
 
     private void linkGuitar() {

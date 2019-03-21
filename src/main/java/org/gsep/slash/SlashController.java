@@ -140,7 +140,7 @@ public class SlashController extends SceneController implements ButtonListener {
     public void stateReceived(String buttonName, ButtonEvent event) {
         System.out.println("State recieved :   "+event.state());
         //TODO implement for slash mode
-        if (module instanceof SlashModule) {
+        if (this.module == module.getMediator().getCurrentModule()) {
             if (event.state() == ButtonState.ON) {
                 switch (buttonName) {
                     case "zeroPower":
@@ -159,8 +159,10 @@ public class SlashController extends SceneController implements ButtonListener {
                         break;
                 }
             } else if (event.state() == ButtonState.FORWARD) {
+                System.out.println("Current module is..."+module.getMediator().getCurrentModule());
                 carousel.next();
             } else if (event.state() == ButtonState.BACKWARD) {
+                System.out.println("Current module is..."+module.getMediator().getCurrentModule());
                 carousel.previous();
             }
         }

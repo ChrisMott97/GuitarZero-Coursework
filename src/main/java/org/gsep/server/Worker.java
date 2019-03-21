@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.gsep.manager.Song;
-import org.json.*;
-import org.json.simple.parser.JSONParser;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -247,7 +245,7 @@ public class Worker implements Runnable {
             fis.read(b, 0, b.length);
             OutputStream os = soc.getOutputStream();
             os.write(b, 0, b.length);
-            deleteFile(file);
+//            deleteFile(file);
         }
     }
     
@@ -277,16 +275,16 @@ public class Worker implements Runnable {
         }
     }
 
-    public void deleteFile(File file) {
-        if (file.delete()) {
-            System.out.println("File added to Game Contents");
-        } else {
-            System.out.println("Error: couldn't delete file");
-        }
-        songs.add(song);
-        ObjectMapper objectMapper = new ObjectMapper();
-       
-    }
+//    public void deleteFile(File file) {
+//        if (file.delete()) {
+//            System.out.println("File added to Game Contents");
+//        } else {
+//            System.out.println("Error: couldn't delete file");
+//        }
+//        songs.add(song);
+//        ObjectMapper objectMapper = new ObjectMapper();
+//
+//    }
     
     
 	

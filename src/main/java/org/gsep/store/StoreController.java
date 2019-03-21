@@ -7,7 +7,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import org.gsep.Modules;
 import org.gsep.SceneController;
 import org.gsep.carousel.Carousel;
 import org.gsep.carousel.Item;
@@ -38,6 +37,13 @@ public class StoreController extends SceneController {
     private ItemModel itemModel;
     private ItemContainerModel itemContainerModel;
     private StoreModule module;
+
+    private static final String defaultName = "default";
+    private static final String baseDir = "/cache/";
+    private static final String indexFile = baseDir +"index.json";
+    private static final String imgDir = baseDir +"img/";
+    private static final String imgExt = ".jpg";
+
     int currency;
 
     /**
@@ -114,19 +120,23 @@ public class StoreController extends SceneController {
         ObjectMapper objectMapper = new ObjectMapper();
         List<StoreItem> items;
 
-        File file = new File(getClass().getResource("/songs/index.json").getFile());
+        File file = new File(getClass().getResource("/cache/index.json").getFile());
         try{
             items = objectMapper.readValue(file, new TypeReference<List<StoreItem>>(){});
         }catch(IOException e){
             items = new ArrayList<>();
         }
 
-        for (Item item :
-                items) {
-            item.setPrefix("songs");
+        int itemId;
+        for (StoreItem item : items) {
+            itemId = item.getId();
+            try{
+                item.setImageFile(new File(getClass().getResource(imgDir+itemId+imgExt).getFile()));
+            }catch (NullPointerException e){
+                System.out.println("Setting default image file");
+                item.setImageFile(new File(getClass().getResource(imgDir+defaultName+imgExt).getFile()));
+            }
         }
-
-        //TODO: Read files from network.
 
         this.carousel.ingest(items);
     }

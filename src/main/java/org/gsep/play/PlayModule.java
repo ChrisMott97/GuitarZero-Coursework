@@ -47,6 +47,8 @@ public class PlayModule extends SceneModule {
         Play play = new Play(item.getNoteFile(), item.getMidiFile());
         setScene(play.getScene());
         setTitle("Play Mode");
+
+        //TODO call linkGuitar in here, need to pass notehighwaycontroller instance
         play.play();
     }
 

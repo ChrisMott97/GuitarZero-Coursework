@@ -1,17 +1,10 @@
 package org.gsep.slash;
 
-import javafx.scene.Scene;
-import net.java.games.input.Controller;
-import net.java.games.input.ControllerEnvironment;
+
 import org.gsep.carousel.ItemContainerModel;
 import org.gsep.carousel.ItemModel;
-import org.gsep.controller.Button;
-import org.gsep.mediator.Mediator;
 import org.gsep.mediator.SceneModule;
-import org.gsep.play.GuitarEventHandler;
 
-import java.io.IOException;
-import java.util.Locale;
 
 /**
  * SlashModule.

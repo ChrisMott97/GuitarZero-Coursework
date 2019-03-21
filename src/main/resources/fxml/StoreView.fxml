@@ -19,9 +19,11 @@
 <!--<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"-->
 <!--minWidth="-Infinity" prefHeight="400.0" prefWidth="610.0"-->
 <!--xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">-->
+<?import javafx.scene.image.ImageView?>
 <fx:root type="javafx.scene.layout.StackPane" prefHeight="700.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
 
     <children>
+        <ImageView fx:id="imageView" fitHeight="20" fitWidth="20" />
         <Carousel fx:id="carousel" styleClass="carousel" >
             <StackPane.margin>
                 <Insets>

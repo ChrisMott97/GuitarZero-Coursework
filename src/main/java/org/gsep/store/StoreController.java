@@ -136,8 +136,7 @@ public class StoreController extends SceneController {
             Store store = new Store(id);
             store.getFile();
             System.out.println(fileName + " has been successfully bought.");
-            ObjectMapper objectMapper = new ObjectMapper();
-            List<StoreItem> items;
+            store.updateJSON(fileName);
 
            
         } catch (IOException e) {

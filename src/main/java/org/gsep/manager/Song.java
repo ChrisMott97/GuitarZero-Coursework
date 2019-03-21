@@ -5,7 +5,7 @@ public class Song {
     private int id;
     private String name;
 
-    Song(String name, int id){
+    public Song(String name, int id){
         this.name = name;
         this.id = id;
     }

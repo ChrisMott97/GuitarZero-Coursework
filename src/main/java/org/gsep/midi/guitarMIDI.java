@@ -161,6 +161,7 @@ public class guitarMIDI {
             //Gets the ticks
             String[] iSplit = arr.get(i).toString().split("\\s+");
             int iTick = Integer.parseInt(iSplit[0]);
+            System.out.println(iSplit[1]);
             int note = Integer.parseInt(iSplit[1]);
             int min = 200, max = 0;
             for (Object anArr : arr) {
@@ -301,9 +302,11 @@ public class guitarMIDI {
             BufferedReader br = new BufferedReader(fr);
             String line;
             while ((line = br.readLine()) != null) {
+                //process the line
+                System.out.println(line);
             }
         } catch (FileNotFoundException i ) {
-            System.out.println("File not found");
+            System.out.println("File not found lol");
         } catch (IOException e) {
             System.out.println("IO Error");
         }

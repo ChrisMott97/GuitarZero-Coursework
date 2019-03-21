@@ -63,7 +63,7 @@ public class StoreController extends SceneController {
     public void initialize(){
         System.out.println("Store mode initializing...");
         carousel.linkModels(itemModel,itemContainerModel);
-        File file = new File("src/queen.jpg");
+        File file = new File("src/main/resources/Store/currency.jpg");
         Image image = new Image(file.toURI().toString());
         imageView.setImage(image);
         loadData();

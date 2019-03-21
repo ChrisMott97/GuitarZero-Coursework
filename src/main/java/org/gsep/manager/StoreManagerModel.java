@@ -36,7 +36,9 @@ public class StoreManagerModel {
 		try {
 			soc = new Socket("localhost", 3332);
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("The Guitar Zero Lite server is down. Please try again later.");
+			//Close the application
+	        System.exit(0);
 		}
 
 	}

@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.gsep.manager.MapperClass;
 import org.gsep.manager.Song;
 import org.json.*;
 import org.json.simple.parser.JSONParser;
@@ -52,7 +51,7 @@ public class Worker implements Runnable {
             try {
 
 
-                System.out.println("Connected!!");
+                System.out.println("You are connected to the Guitar Zero Liter server");
                 
                 DataInputStream dis = new DataInputStream(soc.getInputStream());
                 
@@ -246,7 +245,7 @@ public class Worker implements Runnable {
         		//Write updated list to index file
             objectMapper.writeValue(new FileOutputStream(JSONPATH), songs);
         }catch(Exception e){
-            e.printStackTrace();
+            System.out.println("There has been an error updating the store. ");
         }
     }
     

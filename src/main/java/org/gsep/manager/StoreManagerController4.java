@@ -4,7 +4,10 @@ import org.gsep.midi.guitarMIDI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -16,6 +19,7 @@ public class StoreManagerController4 implements ActionListener {
     //Declare booleans used to validate file entry
     private static boolean empty;
     private static boolean invalid;
+
 
     //Initialise ArrayList to hold files and Array to hold file paths
     private ArrayList<File> files = new ArrayList<>();
@@ -55,6 +59,7 @@ public class StoreManagerController4 implements ActionListener {
         if (invalid) {
             System.out.println("This application has closed. Please next time ensure all fields submit a VALID file.");
             view.frame.dispose();
+            System.exit(0);
             return;
         }
 
@@ -62,22 +67,29 @@ public class StoreManagerController4 implements ActionListener {
         for(int i=0; i< 3; i++){
             files.add(new File(filePaths[i]));
         }
-
         //Create proprietry file from midi file and add that to list of files
         File noteFile = gM.convertMIDI(files.get(2).getAbsolutePath());
+
+        //Check file if there is a playable file, if not quit application
+        if (checkNotes(noteFile)==true) {
+        		System.out.println("No notes could be created from this file. Please upload a file with a more prominant guitar track");
+        		System.exit(0);
+        		return;
+        }
+        //Add file to list of files to send
         files.add(noteFile);
 
         //Run method within Client
         try {
             StoreManagerModel storeManagerModel = new StoreManagerModel(files);
-
+            System.out.println("BEFORE");
             storeManagerModel.sendFile();
 
         } catch (IOException e1) {
-            e1.printStackTrace();
+            System.out.println("There is an error with the uploaded files. Please try again and reupload them.");
         }
 
-        //How to close the application
+        //Close the application
         System.exit(0);
         view.frame.dispose();
     }
@@ -111,6 +123,7 @@ public class StoreManagerController4 implements ActionListener {
                     return;
                 }
                 break;
+                
             case 2:
                 //Check file exists and is not a directory
                 if(f.exists() && !f.isDirectory()) {
@@ -147,5 +160,31 @@ public class StoreManagerController4 implements ActionListener {
                 }
                 break;
         }
+    }
+
+    /**
+     * Checks first line of file for error message
+     * @param file
+     * @return 
+     */
+    private static boolean checkNotes(File file) {
+    	 	boolean noNotes = false;
+	    	BufferedReader br;
+			try {
+				br = new BufferedReader(new FileReader(file));
+			 	String text = br.readLine();
+			 	
+			 	
+			 	if (text.equals("No guitar instrument available")) {
+			 		noNotes = true;
+			 	}
+			} catch (FileNotFoundException e) {
+				System.out.println("Your notes file does not exist");
+			} catch (IOException e) {
+				System.out.println("Your file contains invalid content");
+			}
+	   
+			return noNotes;
+    		
     }
 }

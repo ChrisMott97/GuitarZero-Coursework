@@ -30,19 +30,8 @@ public class SlashModule extends SceneModule {
     private final static String[] BUTTONNAMES = {   "zeroPower",
                                                 "strumBar",
                                                 "escape"    };
-
     private SlashModule(){
-        itemModel = new ItemModel();
-        itemContainerModel = new ItemContainerModel();
-        controller = new SlashController(itemModel, itemContainerModel, this);
         linkGuitar();
-
-        try{
-            setScene(controller.load());
-        }catch(Exception e){
-            System.out.println("Slash controller could not load.");
-        }
-        setTitle("Slash Mode");
     }
 
     public static SlashModule getInstance(){
@@ -54,6 +43,20 @@ public class SlashModule extends SceneModule {
             }
         }
         return instance;
+    }
+
+    @Override
+    public void init(){
+        itemModel = new ItemModel();
+        itemContainerModel = new ItemContainerModel();
+        controller = new SlashController(itemModel, itemContainerModel, this);
+        try{
+            setScene(controller.load());
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println("Slash controller could not load.");
+        }
+        setTitle("Slash Mode");
     }
 
     private void linkGuitar() {

@@ -6,10 +6,11 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import org.gsep.Modules;
 import org.gsep.SceneController;
 import org.gsep.carousel.*;
+import org.gsep.play.PlayModule;
+import org.gsep.select.SelectModule;
+import org.gsep.store.StoreModule;
 import org.gsep.controller.ButtonEvent;
 import org.gsep.controller.ButtonListener;
 import org.gsep.controller.ButtonState;
@@ -38,6 +39,12 @@ public class SlashController extends SceneController implements ButtonListener {
     private ItemModel itemModel;
     private ItemContainerModel itemContainerModel;
     private SlashModule module;
+
+    private static final String baseDir = "/menu/";
+    private static final String indexFile = baseDir +"index.json";
+    private static final String imgDir = baseDir +"img/";
+    private static final String imgExt = ".png";
+    private static final String defaultName = "default";
 
     /**
      * Constructor.
@@ -108,17 +115,22 @@ public class SlashController extends SceneController implements ButtonListener {
         ObjectMapper objectMapper = new ObjectMapper();
         List<MenuItem> items;
 
-        File file = new File(getClass().getResource("/menu/index.json").getFile());
+        File file = new File(getClass().getResource(indexFile).getFile());
         try{
             items = objectMapper.readValue(file, new TypeReference<List<MenuItem>>(){});
         }catch(IOException e){
             items = new ArrayList<>();
         }
 
-        for (Item item :
-                items) {
-            item.setPrefix("menu");
-            //TODO: Refactor into something nicer
+        int itemId;
+        for (Item item : items) {
+            itemId = item.getId();
+            try{
+                item.setImageFile(new File(getClass().getResource(imgDir+itemId+imgExt).getFile()));
+            }catch (NullPointerException e){
+                System.out.println("Setting default image file");
+                item.setImageFile(new File(getClass().getResource(imgDir+defaultName+imgExt).getFile()));
+            }
         }
         
         this.carousel.ingest(items);

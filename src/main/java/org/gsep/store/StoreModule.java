@@ -18,6 +18,23 @@ public class StoreModule extends SceneModule {
     private static StoreModule instance;
 
     private StoreModule(){
+
+    }
+
+    public static StoreModule getInstance(){
+        if(instance == null){
+            synchronized (StoreModule.class){
+                if(instance == null){
+                    System.out.println("Store Module instanced!");
+                    instance = new StoreModule();
+                }
+            }
+        }
+        return instance;
+    }
+
+    @Override
+    public void init() {
         itemModel = new ItemModel();
         itemContainerModel = new ItemContainerModel();
         controller = new StoreController(itemModel, itemContainerModel, this);
@@ -29,16 +46,4 @@ public class StoreModule extends SceneModule {
         }
         setTitle("Store Mode");
     }
-
-    public static StoreModule getInstance(){
-        if(instance == null){
-            synchronized (StoreModule.class){
-                if(instance == null){
-                    instance = new StoreModule();
-                }
-            }
-        }
-        return instance;
-    }
-
 }

@@ -9,6 +9,10 @@ import org.gsep.controller.ButtonEvent;
 import org.gsep.controller.ButtonListener;
 import org.gsep.mediator.ModuleMediator;
 import org.gsep.mediator.SceneModule;
+import org.gsep.play.PlayModule;
+import org.gsep.select.SelectModule;
+import org.gsep.slash.SlashModule;
+import org.gsep.store.StoreModule;
 import org.gsep.play.GuitarEventHandler;
 
 import java.io.IOException;
@@ -25,13 +29,15 @@ public class Client extends Application {
     public void start (Stage view) throws Exception{
         ModuleMediator mediator = new ModuleMediator(view);
 
-        SceneModule slashModule = Modules.SLASH.getModule();
-        SceneModule selectModule = Modules.SELECT.getModule();
-        SceneModule storeModule = Modules.STORE.getModule();
+        SceneModule slashModule = SlashModule.getInstance();
+        SceneModule selectModule = SelectModule.getInstance();
+        SceneModule storeModule = StoreModule.getInstance();
+        SceneModule playModule = PlayModule.getInstance();
 
         slashModule.setMediator(mediator);
         selectModule.setMediator(mediator);
         storeModule.setMediator(mediator);
+        playModule.setMediator(mediator);
 
         mediator.setCurrentModule(slashModule);
 

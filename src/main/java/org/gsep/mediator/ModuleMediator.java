@@ -1,6 +1,7 @@
 package org.gsep.mediator;
 
 import javafx.stage.Stage;
+import org.gsep.play.PlayModule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,11 @@ public class ModuleMediator implements Mediator{
      */
     public void setCurrentModule(SceneModule currentModule) {
         //TODO: Fade out scene, change, then fade in new to prevent stutter
+        if(currentModule.getClass() == PlayModule.class){
+            System.out.println("Changing to play module!");
+        }
+
+        currentModule.init();
         view.setScene(currentModule.getScene());
         view.setTitle(currentModule.getTitle());
         this.currentModule = currentModule;

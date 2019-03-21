@@ -20,7 +20,7 @@ public class GuitarEventHandler implements ButtonListener {
     private NoteHighwayController controller;
     private ArrayList<String> pressedButtons = new ArrayList<>();
 
-    GuitarEventHandler(NoteHighwayController controller) {
+    public GuitarEventHandler(NoteHighwayController controller) {
         this.controller = controller;
     }
 

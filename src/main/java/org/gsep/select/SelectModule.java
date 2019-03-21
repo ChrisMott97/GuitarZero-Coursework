@@ -20,15 +20,7 @@ public class SelectModule extends SceneModule {
     private static SelectModule instance;
 
     private SelectModule(){
-        itemModel = new ItemModel();
-        itemContainerModel = new ItemContainerModel();
-        controller = new SelectController(itemModel, itemContainerModel, this);
-        try{
-            setScene(controller.load());
-        }catch(Exception e){
-            System.out.println("Select controller could not load.");
-        }
-        setTitle("Select Mode");
+
     }
 
     public static SelectModule getInstance(){
@@ -40,6 +32,20 @@ public class SelectModule extends SceneModule {
             }
         }
         return instance;
+    }
+
+    @Override
+    public void init(){
+        itemModel = new ItemModel();
+        itemContainerModel = new ItemContainerModel();
+        controller = new SelectController(itemModel, itemContainerModel, this);
+        try{
+            setScene(controller.load());
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println("Select controller could not load.");
+        }
+        setTitle("Select Mode");
     }
 
 }

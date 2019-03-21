@@ -1,9 +1,10 @@
 package org.gsep.slash;
 
-import javafx.scene.Scene;
+import net.java.games.input.Controller;
+import net.java.games.input.ControllerEnvironment;
 import org.gsep.carousel.ItemContainerModel;
 import org.gsep.carousel.ItemModel;
-import org.gsep.mediator.Mediator;
+import org.gsep.controller.Button;
 import org.gsep.mediator.SceneModule;
 
 /*
@@ -19,17 +20,7 @@ public class SlashModule extends SceneModule {
 
     private static SlashModule instance;
 
-    private SlashModule(){
-        itemModel = new ItemModel();
-        itemContainerModel = new ItemContainerModel();
-        controller = new SlashController(itemModel, itemContainerModel, this);
-        try{
-            setScene(controller.load());
-        }catch(Exception e){
-            System.out.println("Slash controller could not load.");
-        }
-        setTitle("Slash Mode");
-    }
+    private SlashModule(){ }
 
     public static SlashModule getInstance(){
         if(instance == null){
@@ -40,5 +31,19 @@ public class SlashModule extends SceneModule {
             }
         }
         return instance;
+    }
+
+    @Override
+    public void init(){
+        itemModel = new ItemModel();
+        itemContainerModel = new ItemContainerModel();
+        controller = new SlashController(itemModel, itemContainerModel, this);
+        try{
+            setScene(controller.load());
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println("Slash controller could not load.");
+        }
+        setTitle("Slash Mode");
     }
 }

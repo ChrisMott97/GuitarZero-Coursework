@@ -226,7 +226,11 @@ public class Worker implements Runnable {
         }
         return songs;
     }
-
+    /**
+     * @author niha 
+     * @param fileName
+     * @throws IOException
+     */
     public void getFile(String fileName) throws IOException {
         ArrayList<String> folders = new ArrayList<>();
         folders.add("img");
@@ -246,8 +250,9 @@ public class Worker implements Runnable {
             deleteFile(file);
         }
     }
+    
     /**
-     * @author Chris Mot 
+     * @author Chris Mot & Humzah Malik
      * Adds a Song object to the current array of Song objects, updating the midi file
      * @param id The index of the song
      * @param name The name of the song
@@ -258,14 +263,6 @@ public class Worker implements Runnable {
         //Create a new song object of correct id and name
         Song song = new Song(id, name);
 
-
-    public void deleteFile(File file) {
-        if (file.delete()) {
-            System.out.println("File added to Game Contents");
-        } else {
-            System.out.println("Error: couldn't delete file");
-        }
-    }
         songs.add(song);
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -278,6 +275,17 @@ public class Worker implements Runnable {
             System.out.println("There's been an error updating the store. Please try again later.");
 
         }
+    }
+
+    public void deleteFile(File file) {
+        if (file.delete()) {
+            System.out.println("File added to Game Contents");
+        } else {
+            System.out.println("Error: couldn't delete file");
+        }
+        songs.add(song);
+        ObjectMapper objectMapper = new ObjectMapper();
+       
     }
     
     

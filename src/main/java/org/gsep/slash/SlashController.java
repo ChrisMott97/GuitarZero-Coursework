@@ -176,7 +176,5 @@ public class SlashController extends SceneController implements ButtonListener {
                 carousel.previous();
             }
         }
-
-
     }
 }

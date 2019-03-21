@@ -57,6 +57,7 @@ public class SelectModule extends SceneModule {
             System.out.println("Select controller could not load.");
         }
         setTitle("Select Mode");
+        linkGuitar();
     }
 
     private void linkGuitar() {

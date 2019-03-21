@@ -25,7 +25,6 @@ public class SelectModule extends SceneModule {
     private ItemContainerModel itemContainerModel;
 
     private static SelectModule instance;
-    private boolean guitarLinked = false;
 
     private SelectModule(){
 
@@ -54,10 +53,6 @@ public class SelectModule extends SceneModule {
             System.out.println("Select controller could not load.");
         }
         setTitle("Select Mode");
-        System.out.println("Select mode linking guitar");
-        if (!guitarLinked) {
-            linkGuitar(controller);
-            guitarLinked = true;
-        }
+        linkGuitar(controller);
     }
 }

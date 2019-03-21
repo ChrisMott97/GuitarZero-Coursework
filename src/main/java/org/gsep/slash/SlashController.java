@@ -84,30 +84,30 @@ public class SlashController extends SceneController implements ButtonListener {
         System.out.println("load() running");
         Scene scene = super.load(this.fxmlLoader, this.carousel);
         //Fallback to keyboard input
-//        scene.setOnKeyPressed(keyEvent -> {
-//            switch(keyEvent.getCode()){
-//                case RIGHT:
-//                    carousel.next();
-//                    break;
-//                case LEFT:
-//                    carousel.previous();
-//                    break;
-//                case SPACE:
-//                    //TODO: Make itemModel store enum reference so switch not necessary!
-//                    switch(itemModel.getIntended().getName()){
-//                        case "Select":
-//                            module.swapTo(SelectModule.getInstance());
-//                            break;
-//                        case "Store":
-//                            module.swapTo(StoreModule.getInstance());
-//                            break;
-//                        case "Play":
-//                            module.swapTo(PlayModule.getInstance());
-//                            break;
-//                    }
-//                    break;
-//            }
-//        });
+        scene.setOnKeyPressed(keyEvent -> {
+            switch(keyEvent.getCode()){
+                case RIGHT:
+                    carousel.next();
+                    break;
+                case LEFT:
+                    carousel.previous();
+                    break;
+                case SPACE:
+                    //TODO: Make itemModel store enum reference so switch not necessary!
+                    switch(itemModel.getIntended().getName()){
+                        case "Select":
+                            module.swapTo(SelectModule.getInstance());
+                            break;
+                        case "Store":
+                            module.swapTo(StoreModule.getInstance());
+                            break;
+                        case "Play":
+                            module.swapTo(PlayModule.getInstance());
+                            break;
+                    }
+                    break;
+            }
+        });
         return scene;
     }
 
@@ -142,13 +142,10 @@ public class SlashController extends SceneController implements ButtonListener {
 
     @Override
     public void stateReceived(String buttonName, ButtonEvent event) {
-        System.out.println("Slash State recieved :   "+event.state());
+        System.out.println("State recieved :   "+event.state());
         //TODO implement for slash mode
         if (this.module == module.getMediator().getCurrentModule()) {
-            System.out.println(" SLASH MODULE REACTING");
-
             if (event.state() == ButtonState.ON) {
-                System.out.println("WHY");
                 switch (buttonName) {
                     case "zeroPower":
                         //TODO: Make itemModel store enum reference so switch not necessary!
@@ -169,7 +166,6 @@ public class SlashController extends SceneController implements ButtonListener {
                         break;
                 }
             } else if (event.state() == ButtonState.FORWARD) {
-                System.out.println("in forward");
                 carousel.next();
             } else if (event.state() == ButtonState.BACKWARD) {
                 carousel.previous();
@@ -178,6 +174,4 @@ public class SlashController extends SceneController implements ButtonListener {
 
 
     }
-
-
 }

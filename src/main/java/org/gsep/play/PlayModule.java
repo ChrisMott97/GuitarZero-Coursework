@@ -43,6 +43,7 @@ public class PlayModule extends SceneModule {
     public void init(){
         MusicItem item = getMediator().getIntendedItem();
         System.out.println(item);
+//        Play play = new Play("/untitled2.txt", "/untitled2.mid");
         Play play = new Play(item.getNoteFile(), item.getMidiFile());
         setScene(play.getScene());
         setTitle("Play Mode");

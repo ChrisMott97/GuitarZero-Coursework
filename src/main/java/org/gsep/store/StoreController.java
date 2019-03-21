@@ -82,6 +82,12 @@ public class StoreController extends SceneController {
                 case ESCAPE:
                     module.swapTo(Modules.SLASH);
                     break;
+                case SPACE:
+                    int id = itemModel.getIntended().getId();
+                    String name = itemModel.getIntended().getName();
+                    downloadData(id,name);
+                    break;
+
             }
         });
         return scene;
@@ -105,9 +111,27 @@ public class StoreController extends SceneController {
                 items) {
             item.setPrefix("songs");
         }
-        
+       
         //TODO: Read files from network.
 
         this.carousel.ingest(items);
+    }
+
+    private void downloadData(int id, String fileName){
+
+        try {
+            Store store = new Store(id);
+            store.getFile();
+            System.out.println(fileName + " has been successfully bought.");
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<StoreItem> items;
+
+//            File file = new File(getClass().getResource("/songs/GameContents/index.json").getFile());
+//            items = objectMapper.readValue(file, new TypeReference<List<StoreItem>>(){});
+//            items.add(new StoreItem(fileName,"/songs/GameContents/img/"+id+".jpg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

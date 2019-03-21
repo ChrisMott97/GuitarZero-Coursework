@@ -223,7 +223,13 @@ public class guitarMIDI {
             i = i + count - 1;
         }
 
-        return writeToFile(newArr);
+        if(!newArr.isEmpty()) {
+            return writeToFile(newArr);
+        }else{
+            ArrayList<String> error = new ArrayList<>();
+            error.add("No guitar instrument available");
+            return(writeToFile(error));
+        }
 
     }
 
@@ -268,6 +274,7 @@ public class guitarMIDI {
             Sequence seq = MidiSystem.getSequence(new File (MIDIFileName));
             Sequencer seqr = MidiSystem.getSequencer();
             seqr.setSequence(seq);
+            System.out.println(seqr.getTempoFactor());
             Track[] trks = seq.getTracks();
             int longestLen = 0;
             ArrayList <String> trackArray = new ArrayList<>();
@@ -292,23 +299,23 @@ public class guitarMIDI {
         return null;
     }
 
-    public static void main (String[] args) {                       //To test file is written and passed back correctly
-        //In real implementation, convertMIDI will be
-        guitarMIDI gm = new guitarMIDI();
-
-        File noteFile = gm.convertMIDI("/queen.mid");      //called from externally
-        try {
-            FileReader fr = new FileReader(noteFile);
-            BufferedReader br = new BufferedReader(fr);
-            String line;
-            while ((line = br.readLine()) != null) {
-                //process the line
-                System.out.println(line);
-            }
-        } catch (FileNotFoundException i ) {
-            System.out.println("File not found lol");
-        } catch (IOException e) {
-            System.out.println("IO Error");
-        }
-    }
+//    public static void main (String[] args) {                       //To test file is written and passed back correctly
+//        //In real implementation, convertMIDI will be
+//        guitarMIDI gm = new guitarMIDI();
+//
+//        File noteFile = gm.convertMIDI("/ComeOnEileen.mid");      //called from externally
+//        try {
+//            FileReader fr = new FileReader(noteFile);
+//            BufferedReader br = new BufferedReader(fr);
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                //process the line
+//                System.out.println(line);
+//            }
+//        } catch (FileNotFoundException i ) {
+//            System.out.println("File not found lol");
+//        } catch (IOException e) {
+//            System.out.println("IO Error");
+//        }
+//    }
 }

@@ -101,6 +101,7 @@ public class Button implements Runnable {
                 Component[] cmps = ctrl.getComponents();                      /* Get all components of the org.gsep.controller */
 
                 float originalVal = cmps[ _num ].getPollData();
+                if (originalVal == 1) originalVal =0;
 	            float oldVal = originalVal;                                   /* Set base value for button */
 
                 if ( _name.equals("strumBar" )) {

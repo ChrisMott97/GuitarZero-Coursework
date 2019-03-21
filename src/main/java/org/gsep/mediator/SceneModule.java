@@ -5,6 +5,7 @@ import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 import org.gsep.SceneController;
 import org.gsep.controller.Button;
+import org.gsep.select.MusicItem;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -52,6 +53,10 @@ public abstract class SceneModule {
      */
     public void swapTo(SceneModule module){
         mediator.setCurrentModule(module);
+    }
+
+    public void setIntendedItem(MusicItem musicItem){
+        mediator.setIntendedItem(musicItem);
     }
 
     public String getTitle() {

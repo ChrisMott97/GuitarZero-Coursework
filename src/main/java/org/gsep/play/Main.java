@@ -15,14 +15,14 @@ public class Main extends Application{
     }
 
     public void start(Stage stage){
-        stage.setTitle("Play Mode Demo");
-
-        Play play = new Play("/queen.txt", "/queen.mid");
-
-        stage.setScene(play.getScene());
-        stage.setResizable(false);
-
-        stage.show();
-        play.play();
+//        stage.setTitle("Play Mode Demo");
+//
+//        Play play = new Play("/0.txt", "/0.mid");
+//
+//        stage.setScene(play.getScene());
+//        stage.setResizable(false);
+//
+//        stage.show();
+//        play.play();
     }
 }

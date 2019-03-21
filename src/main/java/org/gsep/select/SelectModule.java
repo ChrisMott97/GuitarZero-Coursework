@@ -26,10 +26,6 @@ public class SelectModule extends SceneModule {
 
     private static SelectModule instance;
 
-    private final static String[] BUTTONNAMES = {   "zeroPower",
-            "strumBar",
-            "escape"    };
-
     private SelectModule(){
 
     }

@@ -70,13 +70,11 @@ public class ItemContainerModel {
             return;
         if(items.size() >= 5){
             for (int i = 0; i < 5; i++) {
-                System.out.println(items.get(i));
                 if(containers.get(i).getItem() != items.get(i))
                     containers.get(i).setItem(items.get(i));
             }
         }else{
             for (int i = 0; i < items.size(); i++) {
-                System.out.println(items.get(i));
                 containers.get(i).setItem(items.get(i));
             }
         }

@@ -9,6 +9,7 @@ import javafx.scene.layout.TilePane;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /*
@@ -83,6 +84,7 @@ public class Carousel extends TilePane{
      */
     public void ingest(List<? extends Item> items){
         //TODO: Handle no songs found
+        Collections.sort(items); //Sort alphabetically
         iModel.loadData(items);
         icModel.loadData(containers);
         icModel.map(items);

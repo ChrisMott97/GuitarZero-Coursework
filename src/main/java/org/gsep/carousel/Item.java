@@ -12,7 +12,7 @@ import java.io.File;
  * @author  Chris Mott.
  * @version 2.00, March 2019.
  */
-public abstract class Item {
+public abstract class Item implements Comparable<Item>{
 
     private int id;
 
@@ -92,5 +92,10 @@ public abstract class Item {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public int compareTo(Item o) {
+        return this.getName().compareTo(o.getName());
     }
 }

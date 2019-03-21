@@ -72,7 +72,8 @@ public class SelectController extends SceneController implements ButtonListener 
      */
     public void initialize(){
         System.out.println("Select mode initializing...");
-        carousel.linkModels(itemModel,itemContainerModel);
+        carousel.linkModels(itemModel, itemContainerModel);
+
         loadData();
 
     }
@@ -85,20 +86,24 @@ public class SelectController extends SceneController implements ButtonListener 
      */
     public Scene load() throws Exception{
         Scene scene = super.load(this.fxmlLoader, this.carousel);
-
-//        scene.setOnKeyPressed(keyEvent -> {
-//            switch(keyEvent.getCode()){
-//                case RIGHT:
-//                    carousel.next();
-//                    break;
-//                case LEFT:
-//                    carousel.previous();
-//                    break;
-//                case ESCAPE:
-//                    module.swapTo(Modules.SLASH);
-//                    break;
-//            }
-//        });
+        //Backup keyboard input
+        scene.setOnKeyPressed(keyEvent -> {
+            switch(keyEvent.getCode()){
+                case RIGHT:
+                    carousel.next();
+                    break;
+                case LEFT:
+                    carousel.previous();
+                    break;
+                case SPACE:
+                    if(itemModel.getIntended().getClass() == MusicItem.class){
+                        module.setIntendedItem((MusicItem)itemModel.getIntended());
+                    }
+                case ESCAPE:
+                    module.swapTo(SlashModule.getInstance());
+                    break;
+            }
+        });
         return scene;
     }
 
@@ -153,10 +158,11 @@ public class SelectController extends SceneController implements ButtonListener 
             if (event.state() == ButtonState.ON) {
                 switch (buttonName) {
                     case "zeroPower":
-                        //TODO: Logic to select intended song bundle
-                        break;
+                        if(itemModel.getIntended().getClass() == MusicItem.class){
+                            module.setIntendedItem((MusicItem)itemModel.getIntended());
+                        }
                     case "escape":
-                        Platform.runLater((Runnable) () -> {
+                        Platform.runLater( () -> {
                             module.swapTo(SlashModule.getInstance());
                         });
                         break;
@@ -164,10 +170,8 @@ public class SelectController extends SceneController implements ButtonListener 
 
                 }
             } else if (event.state() == ButtonState.FORWARD) {
-                System.out.println("Current module is..."+module.getMediator().getCurrentModule());
                 carousel.next();
             } else if (event.state() == ButtonState.BACKWARD) {
-                System.out.println("Current module is..."+module.getMediator().getCurrentModule());
                 carousel.previous();
             }
         }

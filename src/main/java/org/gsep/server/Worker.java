@@ -283,7 +283,7 @@ public class Worker implements Runnable {
         } else {
             System.out.println("Error: couldn't delete file");
         }
-        songs.add(song);
+        //songs.add(song);
         ObjectMapper objectMapper = new ObjectMapper();
        
     }

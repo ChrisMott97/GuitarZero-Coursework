@@ -34,7 +34,7 @@ public class StoreManagerModel {
 
 		this.filesSong = filesSong;
 		try {
-			soc = new Socket("localhost", 3332);
+			soc = new Socket("localhost", 3335);
 		} catch (IOException e) {
 			System.out.println("Guitar Zero Lite server is down. Please try again later");
 			//Close application

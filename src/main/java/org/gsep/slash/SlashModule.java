@@ -31,6 +31,7 @@ public class SlashModule extends SceneModule {
                                                 "strumBar",
                                                 "escape"    };
     private SlashModule(){
+        linkGuitar();
     }
 
     public static SlashModule getInstance(){

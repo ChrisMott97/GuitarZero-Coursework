@@ -1,6 +1,7 @@
 package org.gsep.mediator;
 
 import javafx.scene.Scene;
+import org.gsep.SceneController;
 
 /*
  * SceneModule.
@@ -10,7 +11,7 @@ import javafx.scene.Scene;
  */
 public abstract class SceneModule {
     private String title;
-    private Mediator mediator;
+    private ModuleMediator mediator;
     private Scene scene;
 
     /**
@@ -20,7 +21,7 @@ public abstract class SceneModule {
      */
     public SceneModule(){ }
 
-    public void setMediator(Mediator mediator) {
+    public void setMediator(ModuleMediator mediator) {
         this.mediator = mediator;
         //TODO: Check is already exists in the module
         mediator.addModule(this);
@@ -31,7 +32,7 @@ public abstract class SceneModule {
      *
      * @return the parent mediator.
      */
-    public Mediator getMediator() {
+    public ModuleMediator getMediator() {
         return mediator;
     }
 

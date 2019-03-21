@@ -149,7 +149,7 @@ public class SelectController extends SceneController implements ButtonListener 
     public void stateReceived(String buttonName, ButtonEvent event) {
         System.out.println("State received :   "+event.state());
         //TODO implement for select mode
-        if (module instanceof SelectModule) {
+        if (this.module == module.getMediator().getCurrentModule()) {
             if (event.state() == ButtonState.ON) {
                 switch (buttonName) {
                     case "zeroPower":
@@ -164,8 +164,10 @@ public class SelectController extends SceneController implements ButtonListener 
 
                 }
             } else if (event.state() == ButtonState.FORWARD) {
+                System.out.println("Current module is..."+module.getMediator().getCurrentModule());
                 carousel.next();
             } else if (event.state() == ButtonState.BACKWARD) {
+                System.out.println("Current module is..."+module.getMediator().getCurrentModule());
                 carousel.previous();
             }
         }

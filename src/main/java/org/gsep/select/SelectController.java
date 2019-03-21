@@ -157,7 +157,7 @@ public class SelectController extends SceneController implements ButtonListener 
                         break;
                     case "escape":
                         Platform.runLater((Runnable) () -> {
-                            module.swapTo(Modules.SLASH);
+                            module.swapTo(SlashModule.getInstance());
                         });
                         break;
 

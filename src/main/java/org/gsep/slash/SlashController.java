@@ -149,10 +149,10 @@ public class SlashController extends SceneController implements ButtonListener {
                             // Update UI here.
                             switch (itemModel.getIntended().getName()) {
                                 case "Select":
-                                    module.swapTo(Modules.SELECT);
+                                    module.swapTo(SelectModule.getInstance());
                                     break;
                                 case "Store":
-                                    module.swapTo(Modules.STORE);
+                                    module.swapTo(StoreModule.getInstance());
                                     break;
                             }
                         });

@@ -87,7 +87,7 @@ public class StoreManagerModel {
 			os.write(b,0,b.length);
 			
 			//Completion message
-			System.out.println("Comleted sending over" + filesSong.get(i).getName() + " to the Guitar Zero Lite server!");
+			System.out.println("Comleted sending over " + filesSong.get(i).getName() + " to the Guitar Zero Lite server!");
 		}
 
 	}

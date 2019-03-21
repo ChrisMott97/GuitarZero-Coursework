@@ -15,6 +15,7 @@ import java.util.Map;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 import org.gsep.controller.*;
+import org.gsep.select.MusicItem;
 
 public class Play {
     public static final int CANVASWIDTH = 950;
@@ -50,7 +51,7 @@ public class Play {
      * @param noteFilePath the path to the selected note file
      * @param midiFilePath the path to the selected midi file
      */
-    public Play(File noteFile, File midiFile){
+    public Play(MusicItem item){
         //initialise scene
         Group root = new Group();
         this.scene = new Scene(root);
@@ -84,7 +85,7 @@ public class Play {
 
         //find files
         try{
-            this.songSequence = readFile(noteFile);
+            this.songSequence = readFile(item.getNoteFile());
         } catch (Exception e) {
             System.out.println("Note file not found or invalid");
             e.printStackTrace();
@@ -92,7 +93,7 @@ public class Play {
         }
 
         try{
-            this.midiFile = midiFile;
+            this.midiFile = item.getMidiFile();
         } catch (Exception e){
             System.out.println("MIDI file Not found");
             e.printStackTrace();

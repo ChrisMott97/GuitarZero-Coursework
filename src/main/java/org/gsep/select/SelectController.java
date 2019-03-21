@@ -38,15 +38,15 @@ public class SelectController extends SceneController implements ButtonListener 
     private ItemContainerModel itemContainerModel;
     private SelectModule module;
 
+    private static final String defaultName = "default";
     private static final String baseDir = "/songs/";
     private static final String indexFile = baseDir +"index.json";
     private static final String imgDir = baseDir +"img/";
-    private static final String imgExt = ".png";
+    private static final String imgExt = ".jpg";
     private static final String midiDir = baseDir +"midi/";
     private static final String midiExt = ".mid";
     private static final String notesDir = baseDir +"notes/";
     private static final String notesExt = ".txt";
-    private static final String defaultName = "default";
 
 
     /**

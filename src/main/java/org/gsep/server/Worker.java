@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.gsep.manager.MapperClass;
 import org.gsep.manager.Song;
 import org.json.*;
 import org.json.simple.parser.JSONParser;
@@ -37,8 +36,8 @@ public class Worker implements Runnable {
     private Socket soc;
     private String songName;
     private int songIndex;
-    private static String jsonPath = "./src/main/resources/songs/index.json";
-    private static String midiPath = "./src/main/resources/songs/midi";
+    private static String jsonPath = "./src/main/resources/songs/ServerContents/index.json";
+    private static String midiPath = "./src/main/resources/songs/ServerContents/midi";
     private static int numSongs;
 
     Worker(Socket soc){

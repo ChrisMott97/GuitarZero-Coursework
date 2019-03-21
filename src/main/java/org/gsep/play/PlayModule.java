@@ -43,6 +43,8 @@ public class PlayModule extends SceneModule {
         Play play = new Play("/untitled2.txt", "/untitled2.mid");
         setScene(play.getScene());
         setTitle("Play Mode");
+
+        //TODO call linkGuitar in here, need to pass notehighwaycontroller instance
         play.play();
     }
 

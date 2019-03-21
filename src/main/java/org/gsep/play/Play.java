@@ -39,7 +39,7 @@ public class Play {
                                                     "power",
                                                     "bender",
                                                     "whammy"	    	};
-    //int[] buttonNums = { 0, 1, 4, 2, 5, 3, 8, 15, 10, 12, 13, 17};
+    //int[] buttonNums = { 0, 1, 4, 2, 5, 3, 8, 16, 10, 12, 13, 14};
 
 
     //private final static int[] BUTTONNUMS = { 0, 1, 4, 2, 5, 3, 8, 15, 10, 12, 13, 17};
@@ -195,7 +195,7 @@ public class Play {
         GuitarEventHandler guitarEventHandler = new GuitarEventHandler(controller);
         int[] buttonNums;
         final int[] windowsButtonNums = { 0, 1, 4, 2, 5, 3, 8, 15, 10, 12, 13, 17};
-        final int[] unixButtonNums    = { 0, 1, 4, 2, 5, 3, 8, 15, 10, 12, 13, 17};
+        final int[] unixButtonNums    = { 0, 1, 4, 2, 5, 3, 8, 16, 10, 12, 13, 14};;
         final int[] macButtonNums     = { 0, 1, 4, 2, 5, 3, 8, 15, 10, 12, 13, 17};
 
 

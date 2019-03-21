@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import org.gsep.Modules;
 import org.gsep.SceneController;
 import org.gsep.carousel.Carousel;
 import org.gsep.carousel.Item;
@@ -27,12 +30,15 @@ public class StoreController extends SceneController {
 
     @FXML
     private Carousel carousel;
+    @FXML
+    private ImageView imageView;
 
     private FXMLLoader fxmlLoader;
 
     private ItemModel itemModel;
     private ItemContainerModel itemContainerModel;
     private StoreModule module;
+    int currency;
 
     /**
      * Constructor.
@@ -58,6 +64,9 @@ public class StoreController extends SceneController {
     public void initialize(){
         System.out.println("Store mode initializing...");
         carousel.linkModels(itemModel,itemContainerModel);
+        File file = new File("src/main/resources/Store/currency.jpg");
+        Image image = new Image(file.toURI().toString());
+        imageView.setImage(image);
         loadData();
 
     }
@@ -83,9 +92,14 @@ public class StoreController extends SceneController {
                     module.swapTo(SlashModule.getInstance());
                     break;
                 case SPACE:
-                    int id = itemModel.getIntended().getId();
-                    String name = itemModel.getIntended().getName();
-                    downloadData(id,name);
+                    if(currency > 1) {
+                        int id = itemModel.getIntended().getId();
+                        String name = itemModel.getIntended().getName();
+                        downloadData(id, name);
+                        currency = currency - 1;
+                    }else{
+                        System.out.println("Don't have enough currency to purchase song");
+                    }
                     break;
 
             }
@@ -111,7 +125,7 @@ public class StoreController extends SceneController {
                 items) {
             item.setPrefix("songs");
         }
-       
+
         //TODO: Read files from network.
 
         this.carousel.ingest(items);
@@ -123,12 +137,9 @@ public class StoreController extends SceneController {
             Store store = new Store(id);
             store.getFile();
             System.out.println(fileName + " has been successfully bought.");
-            ObjectMapper objectMapper = new ObjectMapper();
-            List<StoreItem> items;
+            store.updateJSON(fileName);
 
-//            File file = new File(getClass().getResource("/songs/GameContents/index.json").getFile());
-//            items = objectMapper.readValue(file, new TypeReference<List<StoreItem>>(){});
-//            items.add(new StoreItem(fileName,"/songs/GameContents/img/"+id+".jpg"));
+
         } catch (IOException e) {
             e.printStackTrace();
         }

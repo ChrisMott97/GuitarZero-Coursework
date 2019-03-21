@@ -3,6 +3,8 @@ package org.gsep.mediator;
 import javafx.scene.Scene;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
+import org.gsep.ButtonNames;
+import org.gsep.ButtonNumbers;
 import org.gsep.SceneController;
 import org.gsep.controller.Button;
 import org.gsep.select.MusicItem;
@@ -82,12 +84,10 @@ public abstract class SceneModule {
         ControllerEnvironment cenv = ControllerEnvironment.getDefaultEnvironment();
         Controller[] ctrls = cenv.getControllers();
         int[] buttonNums;
-        final int[] windowsButtonNums = {8, 15, 10};
-        final int[] unixButtonNums    = { 0, 1, 4};
-        final int[] macButtonNums = { 8, 15, 10 };
-        //TODO get values for different OS
-
-
+//        final int[] windowsButtonNums = {8, 15, 10};
+//        final int[] unixButtonNums    = { 0, 1, 4};
+//        final int[] macButtonNums = { 8, 15, 10 };
+//        //TODO get values for different OS
 
         try {
             String osName = System.getProperty("os.name");
@@ -96,24 +96,24 @@ public abstract class SceneModule {
             }
             osName = osName.toLowerCase(Locale.ENGLISH);
             if (osName.contains("windows")) {
-                buttonNums = windowsButtonNums;
+                buttonNums = ButtonNumbers.WINDOWSNUMBERS.getNumbers();
             } else if (osName.contains("linux")
                     || osName.contains("mpe/ix")
                     || osName.contains("freebsd")
                     || osName.contains("irix")
                     || osName.contains("digital unix")
                     || osName.contains("unix")) {
-                buttonNums = unixButtonNums;
+                buttonNums = ButtonNumbers.UNIXNUMBERS.getNumbers();
             } else if (osName.contains("mac os")) {
-                buttonNums = macButtonNums;
+                buttonNums = ButtonNumbers.MACNUMBERS.getNumbers();
                 System.out.println("THIS IS A MAC");
             } else {
                 throw new IOException("os.name not supported");
             }
 
-            Button[] buttons = new Button[ BUTTONNAMES.length ];
+            Button[] 	 buttons = new Button[ ButtonNames.BUTTONNAMES.getNames().length ];
             for ( int i = 0; i < buttons.length; i = i + 1 ) {
-                buttons[ i ] = new Button( BUTTONNAMES[i], buttonNums[i]);
+                buttons[ i ] = new Button( ButtonNames.BUTTONNAMES.getNames()[i], buttonNums[i]);
                 buttons[ i ].addButtonListener( controller );			/* Adding listeners to Buttons depending on the mode */
                 Thread buttonThread = new Thread(buttons[ i ]);
                 buttonThread.start();								/* Starting a thread for each Button */

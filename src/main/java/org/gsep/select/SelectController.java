@@ -72,7 +72,8 @@ public class SelectController extends SceneController implements ButtonListener 
      */
     public void initialize(){
         System.out.println("Select mode initializing...");
-        carousel.linkModels(itemModel,itemContainerModel);
+        carousel.linkModels(itemModel, itemContainerModel);
+
         loadData();
 
     }
@@ -85,20 +86,24 @@ public class SelectController extends SceneController implements ButtonListener 
      */
     public Scene load() throws Exception{
         Scene scene = super.load(this.fxmlLoader, this.carousel);
-
-//        scene.setOnKeyPressed(keyEvent -> {
-//            switch(keyEvent.getCode()){
-//                case RIGHT:
-//                    carousel.next();
-//                    break;
-//                case LEFT:
-//                    carousel.previous();
-//                    break;
-//                case ESCAPE:
-//                    module.swapTo(Modules.SLASH);
-//                    break;
-//            }
-//        });
+        //Backup keyboard input
+        scene.setOnKeyPressed(keyEvent -> {
+            switch(keyEvent.getCode()){
+                case RIGHT:
+                    carousel.next();
+                    break;
+                case LEFT:
+                    carousel.previous();
+                    break;
+                case ESCAPE:
+                    module.swapTo(SlashModule.getInstance());
+                    break;
+                case SPACE:
+                    if(itemModel.getIntended().getClass() == MusicItem.class){
+                        module.setIntendedItem((MusicItem)itemModel.getIntended());
+                    }
+            }
+        });
         return scene;
     }
 
@@ -156,7 +161,7 @@ public class SelectController extends SceneController implements ButtonListener 
                         //TODO: Logic to select intended song bundle
                         break;
                     case "escape":
-                        Platform.runLater((Runnable) () -> {
+                        Platform.runLater( () -> {
                             module.swapTo(SlashModule.getInstance());
                         });
                         break;

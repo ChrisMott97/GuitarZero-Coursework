@@ -62,7 +62,6 @@ public class guitarMIDI {
         for ( int i = 0; i < track.size(); i = i +1 ) {
             MidiEvent midiEvent = track.get( i );
             MidiMessage midiMessage = midiEvent.getMessage();
-
             if ( midiMessage instanceof ShortMessage ) {
                 final long tick = midiEvent.getTick();
                 final ShortMessage smsg = (ShortMessage) midiMessage;
@@ -240,17 +239,25 @@ public class guitarMIDI {
      * @return calls the addNotes function with the concatenated array
      */
     public static File concatArr(ArrayList arr){
+
         for (int i =0; i <arr.size(); i++){
             //Checks current tick with next tick
-            if (i < arr.size() - 1) {
+            if (i < (arr.size() - 1)) {
                 String[] iSplit = arr.get(i).toString().split("\\s+");
                 String[] nextSplit = arr.get(i + 1).toString().split("\\s+");
+
                 int iTick = Integer.parseInt(iSplit[0]);
+
                 int nextTick = Integer.parseInt(nextSplit[0]);
+
                 if (nextTick < iTick + 100 && nextTick != iTick) {
                     //Removes it if the ticks are too close
                     arr.remove(i + 1);
-                    i = i - 2;
+                    if(i == 0){
+                        i = i - 1;
+                    }else {
+                        i = i - 2;
+                    }
                 }
             }
         }
@@ -270,26 +277,24 @@ public class guitarMIDI {
         //TODO make sure it handles when a) file not found b) input file in not a MIDI file
         try {
 
-            Sequence seq = MidiSystem.getSequence(new File (MIDIFileName));
+            Sequence seq = MidiSystem.getSequence(new File(MIDIFileName));
             Sequencer seqr = MidiSystem.getSequencer();
             seqr.setSequence(seq);
-            System.out.println(seqr.getTempoFactor());
             Track[] trks = seq.getTracks();
             int longestLen = 0;
             ArrayList <String> trackArray = new ArrayList<>();
-//            double perTick = 60000/(seqr.getTempoInBPM()*seq.getResolution());
-//            double bperms = seqr.getTempoInBPM()*1/60000;
-//            double tickperbeat = 1/(bperms*perTick);
+
             for (Track trk : trks) {
 
                 ArrayList<String> currentTrack = getTrackNotes(trk);
                 int trackSize = currentTrack.size();
-
                 if (trackSize > longestLen) {
                     longestLen = trackSize;
                     trackArray = currentTrack;
                 }
             }
+
+
             return concatArr(trackArray);
 
         } catch ( Exception exn ) {
@@ -297,24 +302,23 @@ public class guitarMIDI {
         }
         return null;
     }
-
-    public static void main (String[] args) {                       //To test file is written and passed back correctly
-        //In real implementation, convertMIDI will be
-        guitarMIDI gm = new guitarMIDI();
-
-        File noteFile = gm.convertMIDI("/queen.mid");      //called from externally
-        try {
-            FileReader fr = new FileReader(noteFile);
-            BufferedReader br = new BufferedReader(fr);
-            String line;
-            while ((line = br.readLine()) != null) {
-                //process the line
-                System.out.println(line);
-            }
-        } catch (FileNotFoundException i ) {
-            System.out.println("File not found");
-        } catch (IOException e) {
-            System.out.println("IO Error");
-        }
-    }
+//
+//    public static void main (String[] args) {                       //To test file is written and passed back correctly
+//        //In real implementation, convertMIDI will be
+//        guitarMIDI gm = new guitarMIDI();
+//        File noteFile = gm.convertMIDI("/songs/GameContents/midi/2.mid");
+//        try {
+//            FileReader fr = new FileReader(noteFile);
+//            BufferedReader br = new BufferedReader(fr);
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                //process the line
+//                System.out.println(line);
+//            }
+//        } catch (FileNotFoundException i ) {
+//            System.out.println("File not found lol");
+//        } catch (IOException e) {
+//            System.out.println("IO Error");
+//        }
+//    }
 }

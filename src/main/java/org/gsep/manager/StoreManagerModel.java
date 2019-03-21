@@ -36,7 +36,9 @@ public class StoreManagerModel {
 		try {
 			soc = new Socket("localhost", 3332);
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Guitar Zero Lite server is down. Please try again later");
+			//Close application
+			System.exit(0);
 		}
 
 	}
@@ -85,7 +87,7 @@ public class StoreManagerModel {
 			os.write(b,0,b.length);
 			
 			//Completion message
-			System.out.println("Comleted " + filesSong.get(i).getName());
+			System.out.println("Comleted sending over" + filesSong.get(i).getName() + " to the Guitar Zero Lite server!");
 		}
 
 	}

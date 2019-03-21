@@ -36,7 +36,7 @@ public class StoreManagerFrame {
 				StoreManagerFrame window = new StoreManagerFrame();
 				window.frame.setVisible(true);
 			} catch (Exception e) {
-				e.printStackTrace();
+				System.out.println("Error in starting the application. Please try again.");
 			}
 		});
 	}

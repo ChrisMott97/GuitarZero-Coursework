@@ -10,8 +10,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import org.gsep.manager.MapperClass;
 import org.gsep.manager.Song;
 import org.json.*;
 import org.json.simple.parser.JSONParser;
@@ -52,7 +50,7 @@ public class Worker implements Runnable {
             try {
 
 
-                System.out.println("Connected!!");
+                System.out.println("You are connected to the Guitar Zero Lite server!");
                 
                 DataInputStream dis = new DataInputStream(soc.getInputStream());
                 
@@ -77,10 +75,8 @@ public class Worker implements Runnable {
                 		String songName = part[2].trim();
 
                 		//CHRIS STUFF      		
-
             	        addSong(numSongs, songName);
 
-                		
                 		//Send file to method that stores it
                     while (size > 0) {
                         String[] file = dis.readUTF().split(",");
@@ -96,7 +92,7 @@ public class Worker implements Runnable {
                 }
 
             } catch (Exception e) {
-                System.out.println(e);
+                System.out.println("There's been an error in adding the files. Please try again.");
             }
 
 
@@ -179,7 +175,6 @@ public class Worker implements Runnable {
     		//If directory doesn't exist, create it
     		if (!directory.exists()){
     	        directory.mkdir();
-    	        System.out.println("Created");
     	    }
     		
     }
@@ -195,12 +190,12 @@ public class Worker implements Runnable {
     		try {
 				if (file.createNewFile())
 				{
-				    System.out.println("Json file is created!");
 				} else {
-				    System.out.println("File already exists.");
+				    return;
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.out.println("There has been an issue accessing the store file system. Please try again");
+
 			}
     		
     }
@@ -222,7 +217,7 @@ public class Worker implements Runnable {
         		//Read all song objects into a list
             songs = objectMapper.readValue(file, new TypeReference<List<Song>>(){});
         }catch(Exception e){
-            System.out.println("Your song list is currently empty");
+            System.out.println("You have added your first song to your library. Congratulations!");
         }
         return songs;
     }
@@ -245,8 +240,11 @@ public class Worker implements Runnable {
         try{
         		//Write updated list to index file
             objectMapper.writeValue(new FileOutputStream(JSONPATH), songs);
+            System.out.println("You have just added game number " + (id+1) + " to your server, congratulations!");
+            
         }catch(Exception e){
-            e.printStackTrace();
+            System.out.println("There's been an error updating the store. Please try again later.");
+
         }
     }
     

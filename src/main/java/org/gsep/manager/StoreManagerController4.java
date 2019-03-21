@@ -4,7 +4,10 @@ import org.gsep.midi.guitarMIDI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -74,7 +77,8 @@ public class StoreManagerController4 implements ActionListener {
             storeManagerModel.sendFile();
 
         } catch (IOException e1) {
-            e1.printStackTrace();
+            System.out.println("There is an error with the uploaded files. Please try again and reupload them.");
+
         }
 
         //How to close the application
@@ -147,5 +151,31 @@ public class StoreManagerController4 implements ActionListener {
                 }
                 break;
         }
+    }
+
+    /**
+     * Checks first line of file for error message
+     * @param file
+     * @return 
+     */
+    private static boolean checkNotes(File file) {
+    	 	boolean noNotes = false;
+	    	BufferedReader br;
+			try {
+				br = new BufferedReader(new FileReader(file));
+			 	String text = br.readLine();
+			 	
+			 	
+			 	if (text.equals("No guitar instrument available")) {
+			 		noNotes = true;
+			 	}
+			} catch (FileNotFoundException e) {
+				System.out.println("Your notes file does not exist");
+			} catch (IOException e) {
+				System.out.println("Your file contains invalid content");
+			}
+	   
+			return noNotes;
+    		
     }
 }

@@ -21,8 +21,6 @@ public class Main {
 		StoreManagerFrame smf = new StoreManagerFrame();
 		smf.create();
 		
-		
-		
 			      
 	  }
 }

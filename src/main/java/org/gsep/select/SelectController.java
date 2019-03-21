@@ -87,23 +87,23 @@ public class SelectController extends SceneController implements ButtonListener 
     public Scene load() throws Exception{
         Scene scene = super.load(this.fxmlLoader, this.carousel);
         //Backup keyboard input
-        scene.setOnKeyPressed(keyEvent -> {
-            switch(keyEvent.getCode()){
-                case RIGHT:
-                    carousel.next();
-                    break;
-                case LEFT:
-                    carousel.previous();
-                    break;
-                case SPACE:
-                    if(itemModel.getIntended().getClass() == MusicItem.class){
-                        module.setIntendedItem((MusicItem)itemModel.getIntended());
-                    }
-                case ESCAPE:
-                    module.swapTo(SlashModule.getInstance());
-                    break;
-            }
-        });
+//        scene.setOnKeyPressed(keyEvent -> {
+//            switch(keyEvent.getCode()){
+//                case RIGHT:
+//                    carousel.next();
+//                    break;
+//                case LEFT:
+//                    carousel.previous();
+//                    break;
+//                case SPACE:
+//                    if(itemModel.getIntended().getClass() == MusicItem.class){
+//                        module.setIntendedItem((MusicItem)itemModel.getIntended());
+//                    }
+//                case ESCAPE:
+//                    module.swapTo(SlashModule.getInstance());
+//                    break;
+//            }
+//        });
         return scene;
     }
 
@@ -149,12 +149,12 @@ public class SelectController extends SceneController implements ButtonListener 
         this.carousel.ingest(items);
     }
 
-
     @Override
     public void stateReceived(String buttonName, ButtonEvent event) {
-        System.out.println("State received :   "+event.state());
+        System.out.println("Select State received :   "+event.state() + "On thread: "+ Thread.currentThread() );
         //TODO implement for select mode
         if (this.module == module.getMediator().getCurrentModule()) {
+            System.out.println(" SELECT MODULE REACTING");
             if (event.state() == ButtonState.ON) {
                 switch (buttonName) {
                     case "zeroPower":

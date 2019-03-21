@@ -19,6 +19,7 @@ public class SlashModule extends SceneModule {
     private ItemContainerModel itemContainerModel;
 
     private static SlashModule instance;
+    private boolean guitarLinked = false;
 
     private SlashModule(){
     }
@@ -46,6 +47,11 @@ public class SlashModule extends SceneModule {
             System.out.println("Slash controller could not load.");
         }
         setTitle("Slash Mode");
-        linkGuitar(controller);
+        System.out.println("Slash mode linking guitar");
+
+        if (!guitarLinked) {
+            linkGuitar(controller);
+            guitarLinked = true;
+        }
     }
 }

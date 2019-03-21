@@ -11,7 +11,7 @@ import java.util.EventObject;
 public class ButtonEvent extends EventObject {
     private ButtonState _state;
     
-    public ButtonEvent( Object source, ButtonState state ) {
+    ButtonEvent(Object source, ButtonState state) {
         super( source );                                           //Source identifies the button triggering the event
         _state = state;
     }

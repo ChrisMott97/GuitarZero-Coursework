@@ -222,7 +222,13 @@ public class guitarMIDI {
             i = i + count - 1;
         }
 
-        return writeToFile(newArr);
+        if(!newArr.isEmpty()) {
+            return writeToFile(newArr);
+        }else{
+            ArrayList<String> error = new ArrayList<>();
+            error.add("No guitar instrument available");
+            return(writeToFile(error));
+        }
 
     }
 
@@ -267,6 +273,7 @@ public class guitarMIDI {
             Sequence seq = MidiSystem.getSequence(new File (MIDIFileName));
             Sequencer seqr = MidiSystem.getSequencer();
             seqr.setSequence(seq);
+            System.out.println(seqr.getTempoFactor());
             Track[] trks = seq.getTracks();
             int longestLen = 0;
             ArrayList <String> trackArray = new ArrayList<>();

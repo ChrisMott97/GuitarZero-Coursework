@@ -1,6 +1,9 @@
 package org.gsep.mediator;
 
 import javafx.stage.Stage;
+import org.gsep.carousel.Item;
+import org.gsep.play.PlayModule;
+import org.gsep.select.MusicItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +17,7 @@ import java.util.List;
 public class ModuleMediator implements Mediator{
     private List<SceneModule> modules;
     private SceneModule currentModule;
+    private MusicItem intendedItem;
     private Stage view;
 
     /**
@@ -53,6 +57,11 @@ public class ModuleMediator implements Mediator{
      */
     public void setCurrentModule(SceneModule currentModule) {
         //TODO: Fade out scene, change, then fade in new to prevent stutter
+        if(currentModule.getClass() == PlayModule.class){
+            System.out.println("Changing to play module!");
+        }
+
+        currentModule.init();
         view.setScene(currentModule.getScene());
         view.setTitle(currentModule.getTitle());
         this.currentModule = currentModule;
@@ -66,4 +75,7 @@ public class ModuleMediator implements Mediator{
     public SceneModule getCurrentModule() {
         return currentModule;
     }
+
+    public MusicItem getIntendedItem() { return intendedItem; }
+    public void setIntendedItem(MusicItem intendedItem) { this.intendedItem = intendedItem; }
 }

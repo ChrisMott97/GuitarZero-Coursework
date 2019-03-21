@@ -9,16 +9,7 @@ import org.gsep.carousel.Item;
  * @version 1.00, January 2019.
  */
 public class MenuItem extends Item {
-    MenuItem(){
+    public MenuItem() {
         super();
-    }
-    /**
-     * Constructor for the Menu Item that passes the arguments to the parent Item.
-     *
-     * @param text the name of the item.
-     * @param url the url to the image of the item.
-     */
-    MenuItem(String text, String url){
-        super(text, url);
     }
 }

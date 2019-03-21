@@ -1,12 +1,10 @@
 package org.gsep.play;
 
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 import java.io.File;
 
 public class NoteShieldSprite extends Sprite{
-    private Boolean visible = false;
     private Image whiteImage;
     private Image blackImage;
     
@@ -20,6 +18,7 @@ public class NoteShieldSprite extends Sprite{
         setImage(whiteImage);
         setWidthPreserveRatio(109);
         setPosition(laneType.getShieldPoint());
+        setVisible(false);
     }
 
     private void setBlackImage(String url){
@@ -41,17 +40,11 @@ public class NoteShieldSprite extends Sprite{
                 setImage(blackImage);
                 break;
         }
-        this.visible = visible;
-    }
-
-    public Boolean getVisible() {
-        return visible;
+        super.setVisible(visible);
     }
 
     @Override
-    public void render(GraphicsContext gc) {
-        if (visible){
-            super.render(gc);
-        }
+    public Boolean active() {
+        return true;
     }
 }

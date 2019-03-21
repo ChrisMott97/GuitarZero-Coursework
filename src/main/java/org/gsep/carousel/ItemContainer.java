@@ -182,14 +182,8 @@ public class ItemContainer extends Pane {
      */
     public void setItem(Item item){
         //TODO: Move to ItemContainerModel?
-        File file;
-        Image image;
-        try{
-            file = new File(getClass().getResource("/"+item.getPrefix()+"/img/"+item.getId()+".png").getFile());
-        }catch(Exception e){
-            file = new File(getClass().getResource("/"+item.getPrefix()+"/img/error.png").getFile());
-        }
-        image = new Image(file.toURI().toString(), 65, 65, true, true, true);
+
+        Image image = new Image(item.getImageFile().toURI().toString(), 65, 65, true, true, true);
 
         this.item = item;
         this.label.setText(item.getName());

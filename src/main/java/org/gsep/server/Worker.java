@@ -1,5 +1,8 @@
 package org.gsep.server;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import javafx.scene.chart.PieChart;
+
 import java.io.*;
 import java.lang.reflect.Field;
 import java.net.Socket;
@@ -40,7 +43,7 @@ public class Worker implements Runnable {
     private final static String SERVERPATH = "./src/main/resources/songs/ServerContents/";
     private static int numSongs;
 
-    Worker(Socket soc){
+    Worker(Socket soc) {
         this.soc = soc;
     }
 
@@ -87,6 +90,8 @@ public class Worker implements Runnable {
                 //If the client is requesting to get the file
                 } else if (part[0].equals("Get")) {
                     
+                    System.out.println("1");
+                    getFile(part[1]);
                 } else {
                     System.out.println("This is not a valid input");
                 }
@@ -222,6 +227,25 @@ public class Worker implements Runnable {
         return songs;
     }
 
+    public void getFile(String fileName) throws IOException {
+        ArrayList<String> folders = new ArrayList<>();
+        folders.add("img");
+        folders.add("notes");
+        folders.add("midi");
+        String[] extension = {".jpg", ".txt", ".mid"};
+        for (int i = 0; i < folders.size(); i++) {
+            DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
+            File file = new File("src/main/resources/songs/ServerContents/" + folders.get(i) + "/" + fileName + extension[i]);
+            FileInputStream fis = new FileInputStream(file);
+            dos.writeInt((int) file.length());
+            System.out.println((int) file.length());
+            byte[] b = new byte[(int) file.length()];
+            fis.read(b, 0, b.length);
+            OutputStream os = soc.getOutputStream();
+            os.write(b, 0, b.length);
+            deleteFile(file);
+        }
+    }
     /**
      * @author Chris Mot 
      * Adds a Song object to the current array of Song objects, updating the midi file
@@ -234,6 +258,14 @@ public class Worker implements Runnable {
         //Create a new song object of correct id and name
         Song song = new Song(id, name);
 
+
+    public void deleteFile(File file) {
+        if (file.delete()) {
+            System.out.println("File added to Game Contents");
+        } else {
+            System.out.println("Error: couldn't delete file");
+        }
+    }
         songs.add(song);
         ObjectMapper objectMapper = new ObjectMapper();
 

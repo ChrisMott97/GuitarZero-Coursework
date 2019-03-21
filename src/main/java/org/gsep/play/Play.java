@@ -1,13 +1,9 @@
 package org.gsep.play;
 
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,9 +12,13 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import net.java.games.input.Controller;
+import net.java.games.input.ControllerEnvironment;
+import org.gsep.controller.*;
+
 public class Play {
-    private final int CANVASWIDTH = 950;
-    private final int CANVASHEIGHT = 700;
+    public static final int CANVASWIDTH = 950;
+    public static final int CANVASHEIGHT = 700;
     private Scene scene;
     private NoteHighwayModel model;
     private NoteHighwayView view;
@@ -26,17 +26,31 @@ public class Play {
     private File midiFile;
     private Map<Integer, Note[]> songSequence;
 
+    private final static String[] BUTTONNAMES = { 	"fret1_white",
+            "fret1_black",
+            "fret2_white",
+            "fret2_black",
+            "fret3_white",
+            "fret3_black",
+            "zeroPower",
+            "strumBar",
+            "escape",
+            "power",
+            "bender",
+            "whammy"	    	};
+
+    private final static int[] BUTTONNUMS = { 0, 1, 4, 2, 5, 3, 8, 15, 10, 12, 13, 17};
+    /* Index of the component in the component array. Order corresponds to the names in BUTTONNAMES */
+
     /**
      * @author Örs Barkanyi
+     * @author Abigail Lilley
      * Constructor for Play Mode
      *
-     * @param root the root object in the play mode scene
      * @param noteFilePath the path to the selected note file
      * @param midiFilePath the path to the selected midi file
      */
-    public Play(String noteFilePath, String midiFilePath){
-        Canvas canvas = new Canvas(CANVASWIDTH, CANVASHEIGHT);
-
+    public Play(File noteFile, File midiFile){
         //initialise scene
         Group root = new Group();
         this.scene = new Scene(root);
@@ -50,28 +64,35 @@ public class Play {
 //        });
 
         root.getChildren().add(createBackground());
-        root.getChildren().add(canvas);
 
         //set up mvc
         this.model = new NoteHighwayModel();
-        this.view = new NoteHighwayView(canvas);
+        this.view = new NoteHighwayView(root);
         this.controller = new NoteHighwayController(model, view);
 
+        ControllerEnvironment cenv = ControllerEnvironment.getDefaultEnvironment();
+        Controller[] ctrls = cenv.getControllers();
         GuitarEventHandler guitarEventHandler = new GuitarEventHandler(controller);
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, guitarEventHandler);
-        scene.addEventHandler(KeyEvent.KEY_RELEASED, guitarEventHandler);
+
+        Button[] 	 buttons = new Button[ BUTTONNAMES.length ];
+        for ( int i = 0; i < buttons.length; i = i + 1 ) {
+            buttons[ i ] = new Button( BUTTONNAMES[i], BUTTONNUMS[i]);
+            buttons[ i ].addButtonListener( guitarEventHandler );			/* Adding listeners to Buttons depending on the mode */
+            Thread buttonThread = new Thread(buttons[ i ]);
+            buttonThread.start();								/* Starting a thread for each Button */
+        }
 
         //find files
         try{
-            this.songSequence = readFile(getClass().getResource(noteFilePath).getFile());
+            this.songSequence = readFile(noteFile);
         } catch (Exception e) {
-            System.out.println("Note file not found");
+            System.out.println("Note file not found or invalid");
             e.printStackTrace();
             System.exit(1);
         }
 
         try{
-            this.midiFile = new File(getClass().getResource(midiFilePath).getFile());
+            this.midiFile = midiFile;
         } catch (Exception e){
             System.out.println("MIDI file Not found");
             e.printStackTrace();
@@ -90,7 +111,13 @@ public class Play {
      */
     public void play(){
         view.startRender();
-        controller.play(songSequence,midiFile);
+        try{
+            controller.play(songSequence,midiFile);
+        } catch (Exception e){
+            System.out.println("Couldn't play MIDI file");
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
     /**
@@ -116,7 +143,7 @@ public class Play {
      * @throws IOException
      *
      */
-    public LinkedHashMap readFile(String f) throws IOException {
+    public LinkedHashMap readFile(File f) throws IOException {
 
         BufferedReader in = new BufferedReader(new FileReader(f));
         String str;

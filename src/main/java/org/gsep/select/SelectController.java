@@ -5,12 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import org.gsep.Modules;
 import org.gsep.SceneController;
 import org.gsep.carousel.Carousel;
-import org.gsep.carousel.Item;
 import org.gsep.carousel.ItemContainerModel;
 import org.gsep.carousel.ItemModel;
+import org.gsep.slash.SlashModule;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +32,17 @@ public class SelectController extends SceneController {
     private ItemModel itemModel;
     private ItemContainerModel itemContainerModel;
     private SelectModule module;
+
+    private static final String baseDir = "/songs/";
+    private static final String indexFile = baseDir +"index.json";
+    private static final String imgDir = baseDir +"img/";
+    private static final String imgExt = ".png";
+    private static final String midiDir = baseDir +"midi/";
+    private static final String midiExt = ".mid";
+    private static final String notesDir = baseDir +"notes/";
+    private static final String notesExt = ".txt";
+    private static final String defaultName = "default";
+
 
     /**
      * Constructor.
@@ -80,7 +90,7 @@ public class SelectController extends SceneController {
                     carousel.previous();
                     break;
                 case ESCAPE:
-                    module.swapTo(Modules.SLASH);
+                    module.swapTo(SlashModule.getInstance());
                     break;
             }
         });
@@ -93,17 +103,37 @@ public class SelectController extends SceneController {
     private void loadData() {
         ObjectMapper objectMapper = new ObjectMapper();
         List<MusicItem> items;
+        String dir;
 
-        File file = new File(getClass().getResource("/songs/index.json").getFile());
+        File file = new File(getClass().getResource(indexFile).getFile());
         try{
             items = objectMapper.readValue(file, new TypeReference<List<MusicItem>>(){});
         }catch(IOException e){
             items = new ArrayList<>();
         }
 
-        for (Item item :
-                items) {
-            item.setPrefix("songs");
+        int itemId;
+        for (MusicItem item : items) {
+            itemId = item.getId();
+            try{
+                item.setMidiFile(new File(getClass().getResource(midiDir+itemId+midiExt).getFile()));
+            }catch(NullPointerException e){
+                System.out.println("Setting default midi file");
+                item.setMidiFile(new File(getClass().getResource(midiDir+defaultName+midiExt).getFile()));
+            }
+            try{
+                item.setNoteFile(new File(getClass().getResource(notesDir+itemId+notesExt).getFile()));
+            }catch(NullPointerException e){
+                System.out.println("Setting default notes file");
+                item.setNoteFile(new File(getClass().getResource(notesDir+defaultName+notesExt).getFile()));
+            }
+            try{
+                item.setImageFile(new File(getClass().getResource(imgDir+itemId+imgExt).getFile()));
+            }catch (NullPointerException e){
+                System.out.println("Setting default image file");
+                item.setImageFile(new File(getClass().getResource(imgDir+defaultName+imgExt).getFile()));
+            }
+
         }
 
         this.carousel.ingest(items);

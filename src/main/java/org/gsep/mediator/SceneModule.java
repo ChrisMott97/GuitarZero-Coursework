@@ -1,7 +1,6 @@
 package org.gsep.mediator;
 
 import javafx.scene.Scene;
-import org.gsep.Modules;
 
 /*
  * SceneModule.
@@ -39,10 +38,10 @@ public abstract class SceneModule {
     /**
      * Swaps the stage scene and current module to a given module and it's scene.
      *
-     * @param sceneModule the new module to swap to.
+     * @param module the new module to swap to.
      */
-    public void swapTo(Modules module){
-        getMediator().setCurrentModule(module.getModule());
+    public void swapTo(SceneModule module){
+        mediator.setCurrentModule(module);
     }
 
     public String getTitle() {
@@ -60,4 +59,6 @@ public abstract class SceneModule {
     public Scene getScene() {
         return scene;
     }
+
+    public void init(){}
 }

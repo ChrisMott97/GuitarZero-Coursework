@@ -1,5 +1,11 @@
 package org.gsep.carousel;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import javafx.scene.image.Image;
+
+import java.io.File;
+
 /*
  * Item.
  *
@@ -12,27 +18,14 @@ public abstract class Item {
 
     private String name;
 
-    private String imageURL;
+    @JsonIgnore
+    private File imageFile;
 
+    @JsonIgnore
     private String prefix;
 
-    /**
-     * Constructor for an Item with no image.
-     */
-    public Item(){
-
+    public Item() {
     }
-
-    /**
-     * Constructor for an Item with a title and image.
-     *
-     * @param name name of the item.
-     * @param imageURL the relative path to the item image.
-     */
-    public Item(String name, String imageURL){
-        this.name = name;
-        this.imageURL = imageURL;
-    }//TODO: Change to new item based on ID
 
     /**
      * Getter for name.
@@ -71,24 +64,6 @@ public abstract class Item {
     }
 
     /**
-     * Setter for Image Url if not initially set.
-     *
-     * @param imageURL relative path to image.
-     */
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
-    }
-
-    /**
-     * Getter for Image Url.
-     *
-     * @return relative path to image.
-     */
-    public String getImageURL() {
-        return imageURL;
-    }
-
-    /**
      * Gets the correct file prefix for finding images.
      *
      * @return the string prefix.
@@ -104,6 +79,14 @@ public abstract class Item {
      */
     public void setPrefix(String prefix) {
         this.prefix = prefix;
+    }
+
+    public File getImageFile() {
+        return imageFile;
+    }
+
+    public void setImageFile(File imageFile) {
+        this.imageFile = imageFile;
     }
 
     @Override

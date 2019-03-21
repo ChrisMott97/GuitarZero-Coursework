@@ -9,14 +9,18 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
-import org.gsep.manager.JsonSong;
 import org.gsep.manager.MapperClass;
+import org.gsep.manager.Song;
 import org.json.*;
 import org.json.simple.parser.JSONParser;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,16 +53,13 @@ public class Worker implements Runnable {
 
                 System.out.println("Connected!!");
                 
-                
                 DataInputStream dis = new DataInputStream(soc.getInputStream());
-                System.out.println("1");
                 
                 //Read message sent from client
                 String[] part = dis.readUTF().split(",");
-                System.out.println("2");
+
                 //Number of files to send over
                 int size = Integer.parseInt(part[1])-1;
-                System.out.println("3");
                 
                 //If client is about to send files over
                 if (part[0].equals("Send")) {
@@ -68,21 +69,15 @@ public class Worker implements Runnable {
                     createDir("notes");
                     createJSON();
                     
-                    //Check how many songs exist atm
+                    //Check how many songs exist
                     getNumSongs();
-                    System.out.println("4");
-                   
-                    //Read JSON
-                    //readJSON();
                     
                 		//Retrieve name of file
                 		String songName = part[2].trim();
-                		System.out.println(songName);
 
-                		
-                		//Write to JSON file                		
-                     writeJSON(songName);
-                		
+                		//CHRIS STUFF      		
+
+            	        addSong(numSongs, songName);
 
                 		
                 		//Send file to method that stores it
@@ -212,55 +207,45 @@ public class Worker implements Runnable {
     }
     
     /**
-     * This method write and object to JSON file.
-     * @author humzahmalik
-     * @throws IOException 
-     * @throws JSONException 
-     * @throws org.json.simple.parser.ParseException 
+     * @author Chris Mott and Humzah Malik
+     * @return
      */
-    private static void writeJSON(String dirName){
+    public List<Song> getSongs(){
+        List<Song> songs = new ArrayList<Song>();
 
-            
-    	try {
-    		
-    			
+        ObjectMapper objectMapper = new ObjectMapper();
 
-		    File file = new File(jsonPath);
-		    FileWriter fileWriter = new FileWriter(file, true);
+        File file = new File(jsonPath);
+        try{
+            songs = objectMapper.readValue(file, new TypeReference<List<Song>>(){});
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return songs;
+    }
 
-		    ObjectMapper mapper = new ObjectMapper();
+    /**
+     * @author Chris Mot humzahmalik
+     * Method that adds a song to the current array of song objects, updating the midi file
+     * @param id
+     * @param name
+     */
+    public void addSong(int id, String name){
+        List<Song> songs = getSongs();
+        Song song = new Song(id, name);
 
-		    SequenceWriter seqWriter = mapper.writer().writeValuesAsArray(fileWriter);
-		    //seqWriter.write(new JsonSong(index, dirName));
-		    seqWriter.write(new JsonSong(numSongs, dirName));
-		    seqWriter.close();
-		    
-		    
-		} catch (IOException e) {
-		    e.printStackTrace();
-		}
+        songs.add(song);
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try{
+            objectMapper.writeValue(
+                new FileOutputStream(jsonPath), songs);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
     
+    
 	
-		/**
-		 * @author humzahmalik
-		 * Method that reads JSON file and prints most recent object. 
-		 * @return 
-		 * @throws org.json.simple.parser.ParseException 
-		 * @throws IOException 
-		 * @throws FileNotFoundException 
-		 * @throws JSONException 
-		 */
-    private static String readJSON() throws IOException  {
-
-    		byte[] encoded = Files.readAllBytes(Paths.get(jsonPath));
-    	  String s= new String(encoded, StandardCharsets.UTF_8);
-    	  String strNew = s.replace("[", "");
-    	  String strNew2 = strNew.replace("]", "");// strNew is 'bcdDCBA123'
-
-    	  return strNew2;
-	    	
-
-    }
     
 }

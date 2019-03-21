@@ -188,6 +188,6 @@ public class Button implements Runnable {
             }
         }
         System.out.println(GUITAR_HERO + " org.gsep.controller not found");
-                System.exit(1);
+                //System.exit(1);
     }
 }

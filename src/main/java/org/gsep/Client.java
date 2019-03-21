@@ -2,12 +2,21 @@ package org.gsep;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import net.java.games.input.Controller;
+import net.java.games.input.ControllerEnvironment;
+import org.gsep.controller.Button;
+import org.gsep.controller.ButtonEvent;
+import org.gsep.controller.ButtonListener;
 import org.gsep.mediator.ModuleMediator;
 import org.gsep.mediator.SceneModule;
 import org.gsep.play.PlayModule;
 import org.gsep.select.SelectModule;
 import org.gsep.slash.SlashModule;
 import org.gsep.store.StoreModule;
+import org.gsep.play.GuitarEventHandler;
+
+import java.io.IOException;
+import java.util.Locale;
 
 /*
  * Main.
@@ -25,7 +34,6 @@ public class Client extends Application {
         SceneModule storeModule = StoreModule.getInstance();
         SceneModule playModule = PlayModule.getInstance();
 
-
         slashModule.setMediator(mediator);
         selectModule.setMediator(mediator);
         storeModule.setMediator(mediator);
@@ -39,9 +47,5 @@ public class Client extends Application {
         view.setResizable(false);
         view.show();
         //950x700
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

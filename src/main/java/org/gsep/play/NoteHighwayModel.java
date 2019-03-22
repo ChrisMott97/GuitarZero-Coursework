@@ -10,6 +10,7 @@ public class NoteHighwayModel {
 
     public static final int scoreMultiplierInterval = 10;
     public static final int scoreMultiplierFactor = 2;
+    public static final int currencyInterval = 5;
 
     private int tick = 0;
     private Map<Integer, Note[]> songSequence;
@@ -36,7 +37,6 @@ public class NoteHighwayModel {
         tick++;
 
         int bottomRangeMax = tick-noteHighwayLength+pointTickRange/2; //the current leading end of the pointTickRange
-        int bottomRangeMin = tick-noteHighwayLength-pointTickRange/2; //the current trailing end of the pointTickRange
 
         if (songSequence.containsKey(bottomRangeMax)){
             //found new set of notes that fall in range
@@ -51,8 +51,6 @@ public class NoteHighwayModel {
                 resetStreak();
             }
         }
-
-//        System.out.printf("%s  %s\n", bottomRangeMax, Arrays.toString(bottom));
     }
 
     /**
@@ -90,6 +88,7 @@ public class NoteHighwayModel {
         noteStreak += 1;
         scoreMultiplier = noteStreak%scoreMultiplierInterval == 0 ? scoreMultiplier*scoreMultiplierFactor : scoreMultiplier;
         score = score + scoreMultiplier;
+        currency = score%currencyInterval == 0 && currency < 5 ? currency+1 : currency;
     }
 
     private void resetStreak(){
@@ -107,6 +106,7 @@ public class NoteHighwayModel {
         return score;
     }
 
+    public int getCurrency(){return currency;}
     public int getTickPosition(){
         return tick;
     }

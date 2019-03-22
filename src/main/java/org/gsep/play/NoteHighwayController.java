@@ -53,6 +53,7 @@ public class NoteHighwayController {
                 view.setNoteStreak(model.getNoteStreak());
                 view.setMultiplier(model.getMultiplier());
                 view.setScore(model.getScore());
+                view.setCurrency(model.getCurrency());
             }
             model.advance();
         };

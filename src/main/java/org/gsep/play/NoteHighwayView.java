@@ -96,6 +96,8 @@ public class NoteHighwayView {
         this.scoreCounter.setScore(score);
     }
 
+    public void setCurrency(int currency){this.currencyCounter.setCurrency(currency);}
+
     public void leftLaneActive(Boolean status, Note note){
         this.leftNoteShieldSprite.setVisible(status, note);
     }

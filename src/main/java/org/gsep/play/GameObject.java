@@ -108,6 +108,10 @@ abstract class GameObject {
 
     public void updatePosition(double currentTimeMillis){}
 
+    public Image getImage() {
+        return image;
+    }
+
     /**
      * renders the sprite with the current settings for its appearance and location
      *

@@ -2,7 +2,7 @@ package org.gsep.play;
 
 import javafx.geometry.Point2D;
 
-public class NoteSprite extends Sprite{
+public class NoteIcon extends GameObject {
     private Lane laneType;
     private final int tickPosition;
     private double spawnTime;
@@ -12,11 +12,12 @@ public class NoteSprite extends Sprite{
     private boolean caught = false;
     //TODO Shadows
 
-    public NoteSprite(Note noteType, Lane laneType, int tickPosition){
+    public NoteIcon(Note noteType, Lane laneType, int tickPosition){
         setImage(noteType.getImageSource());
         this.laneType = laneType;
         this.tickPosition = tickPosition;
         setWidthPreserveRatio(initialSize);
+        setPositionOffset(new Point2D(0.5, 0.95));
 
         this.spawnTime = System.currentTimeMillis();
     }

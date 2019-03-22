@@ -6,12 +6,17 @@ import java.util.ArrayList;
 
 public class NoteHighwayView {
     public static double noteHighwayPeriod;
+
     private Renderer renderer;
-    private NoteShieldSprite leftNoteShieldSprite = new NoteShieldSprite(Lane.LEFT);
-    private NoteShieldSprite middleNoteShieldSprite = new NoteShieldSprite(Lane.MIDDLE);
-    private NoteShieldSprite rightNoteShieldSprite = new NoteShieldSprite(Lane.RIGHT);
-    private ArrayList<NoteSprite> noteSprites = new ArrayList<>();
-    private Integer score;
+
+    private NoteShieldIcon leftNoteShieldSprite = new NoteShieldIcon(Lane.LEFT);
+    private NoteShieldIcon middleNoteShieldSprite = new NoteShieldIcon(Lane.MIDDLE);
+    private NoteShieldIcon rightNoteShieldSprite = new NoteShieldIcon(Lane.RIGHT);
+    private ArrayList<NoteIcon> noteIcons = new ArrayList<>();
+
+    private StreakCounter noteStreakCounter = new StreakCounter();
+    private ScoreCounter scoreCounter = new ScoreCounter();
+    private MultiplierRoundel multiplierRoundel = new MultiplierRoundel();
 
     /**
      * @author Örs Barkanyi
@@ -24,6 +29,10 @@ public class NoteHighwayView {
         renderer.add(leftNoteShieldSprite);
         renderer.add(middleNoteShieldSprite);
         renderer.add(rightNoteShieldSprite);
+
+        renderer.add(noteStreakCounter);
+        renderer.add(multiplierRoundel);
+        renderer.add(scoreCounter);
     }
 
     /**
@@ -53,25 +62,36 @@ public class NoteHighwayView {
      */
     public void sendNotes(Note[] notes, int tickPosition){
         Lane[] lanes = Lane.values();
+
         for (int i = 0; i < notes.length; i++){
             if (notes[i] != Note.OPEN){
-                NoteSprite noteSprite = new NoteSprite(notes[i], lanes[i], tickPosition);
-                noteSprites.add(noteSprite);
-                renderer.add(noteSprite);
+                //assign lane based on position in given notes array
+                NoteIcon noteIcon = new NoteIcon(notes[i], lanes[i], tickPosition);
+
+                noteIcons.add(noteIcon);
+                renderer.add(noteIcon);
             }
         }
     }
 
     public void destroyNotes(int tick){
-        for (NoteSprite noteSprite : noteSprites){
-            if (noteSprite.getTickPosition() == tick) {
-                noteSprite.caught();
+        for (NoteIcon noteIcon : noteIcons){
+            if (noteIcon.getTickPosition() == tick) {
+                noteIcon.caught();
             }
         }
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void setNoteStreak(int noteStreak) {
+        this.noteStreakCounter.setNoteStreak(noteStreak);
+    }
+
+    public void setMultiplier(int multiplier){
+        this.multiplierRoundel.setMultiplier(multiplier);
+    }
+
+    public void setScore(int score){
+        this.scoreCounter.setScore(score);
     }
 
     public void leftLaneActive(Boolean status, Note note){

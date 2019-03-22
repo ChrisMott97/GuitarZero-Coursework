@@ -1,14 +1,15 @@
 package org.gsep.play;
 
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 
 import java.io.File;
 
-public class NoteShieldSprite extends Sprite{
+public class NoteShieldIcon extends GameObject {
     private Image whiteImage;
     private Image blackImage;
     
-    public NoteShieldSprite(Lane laneType) {
+    public NoteShieldIcon(Lane laneType) {
         NoteShield noteShieldType = NoteShield.valueOf(laneType.name());
 
         setBlackImage(noteShieldType.getBlackImageSource());
@@ -18,6 +19,7 @@ public class NoteShieldSprite extends Sprite{
         setImage(whiteImage);
         setWidthPreserveRatio(109);
         setPosition(laneType.getShieldPoint());
+        setPositionOffset(new Point2D(0.5, 0.95));
         setVisible(false);
     }
 

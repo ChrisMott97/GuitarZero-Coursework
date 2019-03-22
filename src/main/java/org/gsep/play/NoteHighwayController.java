@@ -50,6 +50,9 @@ public class NoteHighwayController {
         Runnable tick = () -> {
             if (model.top() != null) {
                 view.sendNotes(model.top(), model.getTickPosition());
+                view.setNoteStreak(model.getNoteStreak());
+                view.setMultiplier(model.getMultiplier());
+                view.setScore(model.getScore());
             }
             model.advance();
         };
@@ -82,7 +85,6 @@ public class NoteHighwayController {
         Integer hitTick = model.hit(notes);
         if (hitTick != null){
             view.destroyNotes(hitTick);
-            view.setScore(model.getScore());
         }
     }
 }

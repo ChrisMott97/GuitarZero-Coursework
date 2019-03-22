@@ -10,9 +10,11 @@ import net.java.games.input.ControllerEnvironment;
  * A Button object represents a button/component on the plastic guitar org.gsep.controller.
  *
  * @author  Abigail Lilley
- * @version 1.0, March 2019.
+ * @version 2.0, March 2019.
  */
 public class Button implements Runnable {
+    private volatile boolean running = true;
+
     private final static String GUITAR_HERO = "Guitar Hero"; /* Identifier  */
     private final static int DELAY = 50;
 
@@ -87,6 +89,13 @@ public class Button implements Runnable {
     }
 
     /**
+     * Stop thread attached to Button
+     */
+    public void terminate() {
+        running = false;
+    }
+
+    /**
      * Each Button polled forever on it's own thread to ensure a change of state is detected ASAP.
      * Buttons are handled according to the type of data they provide and what will be most useful for the listeners.
      */
@@ -107,7 +116,7 @@ public class Button implements Runnable {
                 if ( _name.equals("strumBar" )) {
                                                                              /* Strum Bar only used for carousels, so
                                                                               has specialised forward/backward states */
-                    while (true) {
+                    while (running) {
                         if (ctrl.poll()) {
 
                             float newVal = cmps[ _num ].getPollData();
@@ -135,7 +144,7 @@ public class Button implements Runnable {
                     }
                 } else if ( _name.equals( "whammy" ) || _name.equals("bender")) {
                             /* Whammy and bender have variable values when 'ON', this method treats them as 'ON'/'OFF'*/
-                    while (true) {
+                    while (running) {
                         if (ctrl.poll()) {
 
                             float newVal = cmps[ _num ].getPollData();
@@ -161,7 +170,7 @@ public class Button implements Runnable {
                     }
                 } else {                                                         /*All other button are simple ON/OFF*/
 
-                    while (true) {
+                    while (running) {
                         if (ctrl.poll()) {
 
                             float newVal = cmps[ _num ].getPollData();

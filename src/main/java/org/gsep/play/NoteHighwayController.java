@@ -15,6 +15,9 @@ import java.util.concurrent.TimeUnit;
  * @author orsbarkanyi
  */
 public class NoteHighwayController {
+    private Runnable midiPlay;
+    private MidiPlayer midiPlayer;
+    private boolean isRunning = false;
     private NoteHighwayModel model;
     private NoteHighwayView view;
     private LaneStatus leftLaneStatus = new LaneStatus();
@@ -35,10 +38,12 @@ public class NoteHighwayController {
     }
 
     /**
+     * @author Örs Barkanyi
+     * @author Abigail Lilley
+     *
      * Plays a midi file and advances the model and updates the view using a separate thread that polls the current
      * position of the sequencer
      *
-     * @author Örs Barkanyi
      *
      * @param songSequence the notes to play along the note highway
      * @param midiFile the midi file to play with {@link MidiPlayer}
@@ -46,7 +51,7 @@ public class NoteHighwayController {
     public void play(Map<Integer, Note[]> songSequence, File midiFile) throws MidiPlayerException {
         model.setSongSequence(songSequence);
 
-        MidiPlayer midiPlayer = new MidiPlayer(midiFile);
+        midiPlayer = new MidiPlayer(midiFile);
 
         long tickPeriod = midiPlayer.getMicroSecsPerTick();
         long countInPeriod = midiPlayer.getMicroSecsPerBeat(NoteHighwayModel.countInBeats);
@@ -67,10 +72,18 @@ public class NoteHighwayController {
         };
 
         //starts playing the midi file
-        Runnable midiPlay = () -> midiPlayer.start();
+        midiPlay = () -> midiPlayer.start();
+        isRunning = true;
 
         executor.scheduleAtFixedRate(tick, countInPeriod, tickPeriod, TimeUnit.MICROSECONDS);
         executor.schedule(midiPlay, countInPeriod+noteHighwayPeriod, TimeUnit.MICROSECONDS);
+    }
+
+    public void stop() {
+        if (isRunning && midiPlayer != null) {
+            midiPlayer.stop();
+            isRunning = false;
+        }
     }
 
     public void setLeftLaneStatus(Boolean status, Note note){

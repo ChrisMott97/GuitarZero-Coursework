@@ -117,6 +117,7 @@ public class StoreController extends SceneController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         ObjectMapper objectMapper = new ObjectMapper();
         List<StoreItem> items;
 
@@ -131,7 +132,6 @@ public class StoreController extends SceneController {
                 items) {
             item.setPrefix("songs");
         }
-        //TODO: Read files from network.
         this.carousel.ingest(items);
     }
 

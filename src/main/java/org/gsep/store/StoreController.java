@@ -124,6 +124,7 @@ public class StoreController extends SceneController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         ObjectMapper objectMapper = new ObjectMapper();
         List<StoreItem> items;
 
@@ -144,7 +145,6 @@ public class StoreController extends SceneController {
                 item.setImageFile(new File(getClass().getResource(imgDir+defaultName+imgExt).getFile()));
             }
         }
-
         this.carousel.ingest(items);
     }
 

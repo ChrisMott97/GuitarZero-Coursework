@@ -1,32 +1,17 @@
 package org.gsep.server;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import javafx.scene.chart.PieChart;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
-import java.lang.reflect.Field;
+
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.text.ParseException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import org.gsep.manager.Song;
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SequenceWriter;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 /*
  * Worker class
  * 
@@ -38,12 +23,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class Worker implements Runnable {
 
     private Socket soc;
+    private String[] extension = {".jpg", ".txt", ".mid"};
+    private ArrayList<String> folders = new ArrayList<>();
     private String songName;
     private int songIndex;
     private final static String JSONPATH = "./src/main/resources/ServerContents/index.json";
     private final static String MIDIPATH = "./src/main/resources/ServerContents/midi";
     private final static String SERVERPATH = "./src/main/resources/ServerContents/";
     private static int numSongs;
+
 
     Worker(Socket soc) {
         this.soc = soc;
@@ -93,9 +81,13 @@ public class Worker implements Runnable {
                 } else if (part[0].equals("Get")) {
                     
                     System.out.println("1");
-                    getFile(part[1]);
-                } else {
-                    System.out.println("This is not a valid input");
+                    sendFile(part[1]);
+                } else if(part[0].equals("Images")) {
+                    sendImages();
+                }else if(part[0].equals("JSON")){
+                    sendJSON();
+                }else{
+                    System.out.println("WRONG BEGINNING! ");
                 }
 
             } catch (Exception e) {
@@ -195,49 +187,78 @@ public class Worker implements Runnable {
      * @author humzahmalik
      */
     private static void createJSON() {
-    		File file = new File(JSONPATH);
-    		
-    		//If JSON file doesn't exist, create it
-    		try {
-				if (file.createNewFile())
-				{
-				} else {
-				    return;
-				}
-			} catch (IOException e) {
-				System.out.println("There has been an issue accessing the store file system. Please try again");
+        File file = new File(JSONPATH);
 
-			}
-    		
+        //If JSON file doesn't exist, create it
+        try {
+            if (file.createNewFile()) {
+            } else {
+                return;
+            }
+        } catch (IOException e) {
+            System.out.println("There has been an issue accessing the store file system. Please try again");
+        }
     }
-    
+
     /**
-     * Reads JSON index file and stores contents in a list of Song objects, which it returns.
-     * @author Chris Mott 
+     * Reads JSON index file and stores the contents in a list of Song objects which is returns.
+     * @author Chris Mott
      * @return List of Song objects
      */
     public List<Song> getSongs(){
-    		//Create a list of song type to hold the song JSON objects
-        List<Song> songs = new ArrayList<Song>();
-        
+        List<Song> songs = new ArrayList<>();
+
         ObjectMapper objectMapper = new ObjectMapper();
 
-        //Create file object of index.JSON path
         File file = new File(JSONPATH);
         try{
-        		//Read all song objects into a list
             songs = objectMapper.readValue(file, new TypeReference<List<Song>>(){});
         }catch(Exception e){
-            System.out.println("You have added your first song to your library. Congratulations!");
+            System.out.println("Error");
         }
         return songs;
+    }
+
+    public void sendImages() throws IOException {
+
+        DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
+        File[] files = new File("src/main/resources/ServerContents/img").listFiles();
+        dos.writeInt(files.length);
+        for(File file: files){
+            OutputStream os = soc.getOutputStream();
+            BufferedImage image = ImageIO.read(file);
+            dos.writeUTF(file.getName());
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ImageIO.write(image, "jpg", byteArrayOutputStream);
+
+            byte[] size = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
+            os.write(size);
+            os.write(byteArrayOutputStream.toByteArray());
+            os.flush();
+            System.out.println("Flushed: " + System.currentTimeMillis());
+
+            System.out.println("Closing: " + System.currentTimeMillis());
+        }
+
+    }
+    public void sendJSON() throws IOException {
+        DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
+        dos.writeUTF("JSON");
+        System.out.println("Receving file..");
+        File file = new File("src/main/resources/ServerContents/index.json");
+        FileInputStream fis = new FileInputStream(file);
+        dos.writeInt((int) file.length());
+        byte[] b = new byte[(int) file.length()];
+        fis.read(b, 0, b.length);
+        OutputStream os = soc.getOutputStream();
+        os.write(b,0,b.length);
     }
     /**
      * @author niha 
      * @param fileName
      * @throws IOException
      */
-    public void getFile(String fileName) throws IOException {
+    public void sendFile(String fileName) throws IOException {
         ArrayList<String> folders = new ArrayList<>();
         folders.add("img");
         folders.add("notes");
@@ -245,15 +266,13 @@ public class Worker implements Runnable {
         String[] extension = {".jpg", ".txt", ".mid"};
         for (int i = 0; i < folders.size(); i++) {
             DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
-            File file = new File(SERVERPATH + folders.get(i) + "/" + fileName + extension[i]);
+            File file = new File("src/main/resources/ServerContents/" + folders.get(i) + "/" + fileName + extension[i]);
             FileInputStream fis = new FileInputStream(file);
             dos.writeInt((int) file.length());
-            System.out.println((int) file.length());
             byte[] b = new byte[(int) file.length()];
             fis.read(b, 0, b.length);
             OutputStream os = soc.getOutputStream();
             os.write(b, 0, b.length);
-//            deleteFile(file);
         }
     }
     

@@ -25,7 +25,7 @@ import java.util.List;
  *
  * @author  Chris Mott.
  * @author  Abigail Lilley
- * @version 2.00, March 2019.
+ * @version 3.00, March 2019.
  */
 public class SlashController extends SceneController implements ButtonListener {
 
@@ -33,8 +33,6 @@ public class SlashController extends SceneController implements ButtonListener {
     protected Carousel carousel;
 
     private FXMLLoader fxmlLoader;
-
-    private Scene nextScene;
 
     private ItemModel itemModel;
     private ItemContainerModel itemContainerModel;
@@ -53,7 +51,7 @@ public class SlashController extends SceneController implements ButtonListener {
      * @param itemContainerModel the Item Container Model to be linked with the carousel.
      * @param module the parent module to allow links back to change module etc...
      */
-    public SlashController(ItemModel itemModel, ItemContainerModel itemContainerModel, SlashModule module){
+    SlashController(ItemModel itemModel, ItemContainerModel itemContainerModel, SlashModule module){
 
         fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SlashView.fxml"));
         fxmlLoader.setRoot(this);
@@ -68,10 +66,8 @@ public class SlashController extends SceneController implements ButtonListener {
      * Is called due to FXML Controller, after constructor.
      */
     public void initialize(){
-        System.out.println("Slash mode initializing...   "+Thread.currentThread());
         carousel.linkModels(this.itemModel, this.itemContainerModel);
         this.loadData();
-
     }
 
     /**
@@ -81,9 +77,8 @@ public class SlashController extends SceneController implements ButtonListener {
      * @throws Exception
      */
     public Scene load() throws Exception{
-        System.out.println("load() running   "+Thread.currentThread());
         Scene scene = super.load(this.fxmlLoader, this.carousel);
-        //Fallback to keyboard input
+                                                                                        /* Fallback to keyboard input */
         scene.setOnKeyPressed(keyEvent -> {
             switch(keyEvent.getCode()){
                 case RIGHT:
@@ -93,7 +88,6 @@ public class SlashController extends SceneController implements ButtonListener {
                     carousel.previous();
                     break;
                 case SPACE:
-                    //TODO: Make itemModel store enum reference so switch not necessary!
                     switch(itemModel.getIntended().getName()){
                         case "Select":
                             module.swapTo(SelectModule.getInstance());
@@ -119,7 +113,6 @@ public class SlashController extends SceneController implements ButtonListener {
     /**
      * Loads data from an index json which links metadata with images and other files.
      */
-    //TODO: Reduce to parent method to prevent code duplication
     private void loadData(){
         ObjectMapper objectMapper = new ObjectMapper();
         List<MenuItem> items;
@@ -137,7 +130,6 @@ public class SlashController extends SceneController implements ButtonListener {
             try{
                 item.setImageFile(new File(getClass().getResource(imgDir+itemId+imgExt).getFile()));
             }catch (NullPointerException e){
-                System.out.println("Setting default image file");
                 item.setImageFile(new File(getClass().getResource(imgDir+defaultName+imgExt).getFile()));
             }
         }
@@ -145,27 +137,36 @@ public class SlashController extends SceneController implements ButtonListener {
         this.carousel.ingest(items);
     }
 
+
+    /**
+     * Handles guitar input according the specification of Slash Mode
+     * @author Abigail Lilley.
+     *
+     * @param buttonName assigned name of the button to make the code more readable and intuitive.
+     *                   Implementations process the event depending on the button, identified by this name.
+     * @param event event triggered. The Button's state can be found from this.
+     */
     @Override
     public void stateReceived(String buttonName, ButtonEvent event) {
-        System.out.println("State received slash:   "+event.state() + "  thread:  "+Thread.currentThread());
-        //TODO implement for slash mode
-        if (this.module == module.getMediator().getCurrentModule()) {
-            System.out.println("SLASH REACTING");
 
+        if (this.module == module.getMediator().getCurrentModule()) {
             Platform.runLater( () -> {
                 if (event.state() == ButtonState.ON) {
+
                     switch (buttonName) {
                         case "zeroPower":
-                            //TODO: Make itemModel store enum reference so switch not necessary!
                             Platform.runLater(() -> {
-                                // Update UI here.
                                 switch (itemModel.getIntended().getName()) {
                                     case "Select":
                                         module.swapTo(SelectModule.getInstance());
                                         break;
-                                    case "Store":
-                                        module.swapTo(StoreModule.getInstance());
+                                    case "Store":                             /* Store Mode not currently integrated */
+                                        //module.swapTo(StoreModule.getInstance());
                                         break;
+                                    case "Tutorial":                              /* Tutorial Mode not yet developed */
+                                        break;
+                                    case "Exit":
+                                        System.exit(0);                                        /* End program */
                                     case "Play":
                                         if (module.getMediator().getIntendedItem() == null) {
                                             module.swapTo(SelectModule.getInstance());

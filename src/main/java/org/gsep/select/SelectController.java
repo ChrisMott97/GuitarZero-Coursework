@@ -24,7 +24,7 @@ import java.util.List;
  * SelectController.
  *
  * @author  Chris Mott.
- * @author  Abigail Lilley
+ * @author  Abigail Lilley.
  * @version 2.00, March 2019.
  */
 public class SelectController extends SceneController implements ButtonListener {
@@ -56,7 +56,7 @@ public class SelectController extends SceneController implements ButtonListener 
      * @param itemContainerModel the Item container model to be linked to the carousel.
      * @param module the link back to the parent module to allow the controller to change to next scene.
      */
-    public SelectController(ItemModel itemModel, ItemContainerModel itemContainerModel, SelectModule module){
+    SelectController(ItemModel itemModel, ItemContainerModel itemContainerModel, SelectModule module){
         fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/SelectView.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
@@ -71,7 +71,6 @@ public class SelectController extends SceneController implements ButtonListener 
      * Is called as a result of loading as an FXML Controller.
      */
     public void initialize(){
-        System.out.println("Select mode initializing...");
         carousel.linkModels(itemModel, itemContainerModel);
 
         loadData();
@@ -86,7 +85,7 @@ public class SelectController extends SceneController implements ButtonListener 
      */
     public Scene load() throws Exception{
         Scene scene = super.load(this.fxmlLoader, this.carousel);
-        //Backup keyboard input
+                                                                                            /* Backup keyboard input */
         scene.setOnKeyPressed(keyEvent -> {
             switch(keyEvent.getCode()){
                 case RIGHT:
@@ -113,7 +112,6 @@ public class SelectController extends SceneController implements ButtonListener 
     private void loadData() {
         ObjectMapper objectMapper = new ObjectMapper();
         List<MusicItem> items;
-        String dir;
 
         File file = new File(getClass().getResource(indexFile).getFile());
         try{
@@ -128,19 +126,16 @@ public class SelectController extends SceneController implements ButtonListener 
             try{
                 item.setMidiFile(new File(getClass().getResource(midiDir+itemId+midiExt).getFile()));
             }catch(NullPointerException e){
-                System.out.println("Setting default midi file");
                 item.setMidiFile(new File(getClass().getResource(midiDir+defaultName+midiExt).getFile()));
             }
             try{
                 item.setNoteFile(new File(getClass().getResource(notesDir+itemId+notesExt).getFile()));
             }catch(NullPointerException e){
-                System.out.println("Setting default notes file");
                 item.setNoteFile(new File(getClass().getResource(notesDir+defaultName+notesExt).getFile()));
             }
             try{
                 item.setImageFile(new File(getClass().getResource(imgDir+itemId+imgExt).getFile()));
             }catch (NullPointerException e){
-                System.out.println("Setting default image file");
                 item.setImageFile(new File(getClass().getResource(imgDir+defaultName+imgExt).getFile()));
             }
 
@@ -150,26 +145,32 @@ public class SelectController extends SceneController implements ButtonListener 
     }
 
 
+    /**
+     * Handles guitar input according the specification of Select Mode
+     * @author Abigail Lilley
+     *
+     * @param buttonName assigned name of the button to make the code more readable and intuitive.
+     *                   Implementations process the event depending on the button, identified by this name.
+     * @param event event triggered. The Button's state can be found from this.
+     */
     @Override
     public void stateReceived(String buttonName, ButtonEvent event) {
-        System.out.println("State received select:   "+event.state() + "  thread:  "+Thread.currentThread());
-        //TODO implement for select mode
+
         if (this.module == module.getMediator().getCurrentModule()) {
-            System.out.println("SELECT REACTING");
+
             Platform.runLater( () -> {
                 if (event.state() == ButtonState.ON) {
+
                     switch (buttonName) {
-                        case "zeroPower":
+                        case "zeroPower":                                    /* Set music bundle to the one selected */
                             if (itemModel.getIntended().getClass() == MusicItem.class) {
                                 module.setIntendedItem((MusicItem) itemModel.getIntended());
                             }
-                        case "escape":
+                        case "escape":                                                       /* Return to Slash Mode */
                             Platform.runLater(() -> {
                                 module.swapTo(SlashModule.getInstance());
                             });
                             break;
-
-
                     }
                 } else if (event.state() == ButtonState.FORWARD) {
                     carousel.next();

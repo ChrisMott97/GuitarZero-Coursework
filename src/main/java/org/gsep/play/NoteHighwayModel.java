@@ -71,7 +71,6 @@ public class NoteHighwayModel {
      */
     public Integer hit(Note[] strum){
         Boolean scored = !scoreRegistered && bottomTickPosition != null && Arrays.equals(strum, bottom);
-//        System.out.printf("%s %s\n", Arrays.toString(strum), Arrays.toString(bottom));
         if (scored){
             scoreRegistered = true;
             advanceScoring();

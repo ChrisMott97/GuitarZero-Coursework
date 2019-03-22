@@ -9,7 +9,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.gsep.SceneController;
 import org.gsep.carousel.Carousel;
-import org.gsep.carousel.Item;
 import org.gsep.carousel.ItemContainerModel;
 import org.gsep.carousel.ItemModel;
 import org.gsep.slash.SlashModule;
@@ -19,10 +18,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
+/**
  * SelectController.
  *
  * @author  Chris Mott.
+ * @author  Abigail Lilley.
  * @version 2.00, March 2019.
  */
 public class StoreController extends SceneController {
@@ -69,7 +69,6 @@ public class StoreController extends SceneController {
      * Is called as a result of loading as an FXML Controller.
      */
     public void initialize(){
-        System.out.println("Store mode initializing...");
         carousel.linkModels(itemModel,itemContainerModel);
         loadData();
 
@@ -138,7 +137,6 @@ public class StoreController extends SceneController {
             try{
                 item.setImageFile(new File(getClass().getResource(imgDir+itemId+imgExt).getFile()));
             }catch (NullPointerException e){
-                System.out.println("Setting default image file");
                 item.setImageFile(new File(getClass().getResource(imgDir+defaultName+imgExt).getFile()));
             }
         }

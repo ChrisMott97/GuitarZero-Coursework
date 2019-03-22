@@ -164,6 +164,10 @@ public class SlashController extends SceneController implements ButtonListener {
                                     module.swapTo(StoreModule.getInstance());
                                     break;
                                 case "Play":
+                                    if(module.getMediator().getIntendedItem() == null){
+                                        module.swapTo(SelectModule.getInstance());
+                                        break;
+                                    }
                                     module.swapTo(PlayModule.getInstance());
                                     break;
                             }

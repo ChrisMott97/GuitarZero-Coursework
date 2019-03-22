@@ -155,25 +155,27 @@ public class SelectController extends SceneController implements ButtonListener 
         System.out.println("State received :   "+event.state());
         //TODO implement for select mode
         if (this.module == module.getMediator().getCurrentModule()) {
-            if (event.state() == ButtonState.ON) {
-                switch (buttonName) {
-                    case "zeroPower":
-                        if(itemModel.getIntended().getClass() == MusicItem.class){
-                            module.setIntendedItem((MusicItem)itemModel.getIntended());
-                        }
-                    case "escape":
-                        Platform.runLater( () -> {
-                            module.swapTo(SlashModule.getInstance());
-                        });
-                        break;
+            Platform.runLater( () -> {
+                if (event.state() == ButtonState.ON) {
+                    switch (buttonName) {
+                        case "zeroPower":
+                            if (itemModel.getIntended().getClass() == MusicItem.class) {
+                                module.setIntendedItem((MusicItem) itemModel.getIntended());
+                            }
+                        case "escape":
+                            Platform.runLater(() -> {
+                                module.swapTo(SlashModule.getInstance());
+                            });
+                            break;
 
 
+                    }
+                } else if (event.state() == ButtonState.FORWARD) {
+                    carousel.next();
+                } else if (event.state() == ButtonState.BACKWARD) {
+                    carousel.previous();
                 }
-            } else if (event.state() == ButtonState.FORWARD) {
-                carousel.next();
-            } else if (event.state() == ButtonState.BACKWARD) {
-                carousel.previous();
-            }
+            });
         }
     }
 }

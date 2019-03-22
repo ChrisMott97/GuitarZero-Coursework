@@ -5,22 +5,24 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javafx.scene.chart.PieChart;
+
 import org.gsep.manager.Song;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Store {
 
-    private static int id;
+
     private static Socket soc;
     private final String BASE_PATH = "src/main/resources/songs/GameContents/";
 
-    Store(int id) {
-        Store.id = id;
+    Store() {
         try {
             soc = new Socket("192.168.56.1", 3335);
         } catch (IOException e) {
@@ -28,7 +30,45 @@ public class Store {
         }
     }
 
-    public void getFile() throws IOException {
+    public void getImages() throws IOException {
+        DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
+        dos.writeUTF("Images");
+        DataInputStream dis = new DataInputStream(soc.getInputStream());
+        int count = dis.readInt();
+        File[] files = new File[count];
+        for(int i = 0; i < files.length; i++){
+        InputStream inputStream = soc.getInputStream();
+
+        System.out.println("Reading: " + System.currentTimeMillis());
+        String name = dis.readUTF();
+        byte[] sizeAr = new byte[4];
+        inputStream.read(sizeAr);
+        int size = ByteBuffer.wrap(sizeAr).asIntBuffer().get();
+
+        byte[] imageAr = new byte[size];
+        inputStream.read(imageAr);
+
+        BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageAr));
+
+        files[i] = new File("src/main/resources/cache/img/"+name);
+        ImageIO.write(image, "jpg", files[i]);
+        }
+
+    }
+    public void getJSON() throws IOException {
+        DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
+        dos.writeUTF("JSON");
+        DataInputStream dis = new DataInputStream(soc.getInputStream());
+        int fileLen = dis.readInt();
+        byte[] b = new byte[fileLen];
+        FileOutputStream fos = new FileOutputStream("src/main/resources/cache/index.json");
+        fos.write(b,0,b.length);
+        InputStream in = soc.getInputStream();
+        in.read(b,0,b.length);
+
+    }
+
+    public void getFile(int id) throws IOException {
         DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
         dos.writeUTF("Get-" + id);
         ArrayList<String> folders = new ArrayList<>();
@@ -39,11 +79,11 @@ public class Store {
         for(int i = 0; i < extension.length; i++) {
             DataInputStream dis = new DataInputStream(soc.getInputStream());
             InputStream in = soc.getInputStream();
-            FileOutputStream fis = new FileOutputStream("src/main/resources/songs/GameContents/"+folders.get(i)+"/" + id + extension[i]);
+            FileOutputStream fos = new FileOutputStream(BASE_PATH+folders.get(i)+"/" + id + extension[i]);
             int fileLen = dis.readInt();
             byte[] b = new byte[fileLen];
             in.read(b, 0, b.length);
-            fis.write(b, 0, b.length);
+            fos.write(b, 0, b.length);
         }
     }
 

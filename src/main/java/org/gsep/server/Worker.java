@@ -1,11 +1,12 @@
 package org.gsep.server;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import javafx.scene.chart.PieChart;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
-import java.lang.reflect.Field;
+
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 /**
@@ -15,6 +16,9 @@ import java.util.ArrayList;
 public class Worker implements Runnable {
 
     private Socket soc;
+    private String[] extension = {".jpg", ".txt", ".mid"};
+    private ArrayList<String> folders = new ArrayList<>();
+
 
     Worker(Socket soc) {
         this.soc = soc;
@@ -24,7 +28,6 @@ public class Worker implements Runnable {
     public void run() {
         synchronized (this) {
             try {
-
 
                 System.out.println("Connected!!");
                 DataInputStream dis = new DataInputStream(soc.getInputStream());
@@ -43,8 +46,12 @@ public class Worker implements Runnable {
                     }
                 } else if (part[0].equals("Get")) {
                     System.out.println("1");
-                    getFile(part[1]);
-                } else {
+                    sendFile(part[1]);
+                } else if(part[0].equals("Images")) {
+                    sendImages();
+                }else if(part[0].equals("JSON")){
+                    sendJSON();
+                }else{
                     System.out.println("WRONG BEGINNING! ");
                 }
 
@@ -73,36 +80,73 @@ public class Worker implements Runnable {
 
     }
 
-    public void addToJSON(String fileName) {
+    public void sendImages() throws IOException {
+
+        DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
+        File[] files = new File("src/main/resources/ServerContents/img").listFiles();
+        dos.writeInt(files.length);
+        for(File file: files){
+            OutputStream os = soc.getOutputStream();
+            BufferedImage image = ImageIO.read(file);
+            dos.writeUTF(file.getName());
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ImageIO.write(image, "jpg", byteArrayOutputStream);
+
+            byte[] size = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
+            os.write(size);
+            os.write(byteArrayOutputStream.toByteArray());
+            os.flush();
+            System.out.println("Flushed: " + System.currentTimeMillis());
+
+            System.out.println("Closing: " + System.currentTimeMillis());
+        }
 
     }
 
-    public void getFile(String fileName) throws IOException {
-        ArrayList<String> folders = new ArrayList<>();
+    public void sendJSON() throws IOException {
+        DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
+        dos.writeUTF("JSON");
+        System.out.println("Receving file..");
+        File file = new File("src/main/resources/ServerContents/index.json");
+        FileInputStream fis = new FileInputStream(file);
+        dos.writeInt((int) file.length());
+        byte[] b = new byte[(int) file.length()];
+        fis.read(b, 0, b.length);
+        OutputStream os = soc.getOutputStream();
+        os.write(b,0,b.length);
+    }
+
+    public void sendFile(String fileName) throws IOException {
         folders.add("img");
         folders.add("notes");
         folders.add("midi");
         String[] extension = {".jpg", ".txt", ".mid"};
         for (int i = 0; i < folders.size(); i++) {
             DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
-            File file = new File("src/main/resources/songs/ServerContents/" + folders.get(i) + "/" + fileName + extension[i]);
+            File file = new File("src/main/resources/ServerContents/" + folders.get(i) + "/" + fileName + extension[i]);
             FileInputStream fis = new FileInputStream(file);
             dos.writeInt((int) file.length());
-            System.out.println((int) file.length());
             byte[] b = new byte[(int) file.length()];
             fis.read(b, 0, b.length);
             OutputStream os = soc.getOutputStream();
             os.write(b, 0, b.length);
-            deleteFile(file);
+
         }
     }
 
 
-    public void deleteFile(File file) {
-        if (file.delete()) {
-            System.out.println("File added to Game Contents");
-        } else {
-            System.out.println("Error: couldn't delete file");
-        }
-    }
+//    public void deleteFile(String fileName) {
+//        folders.add("img");
+//        folders.add("notes");
+//        folders.add("midi");
+//
+//        for(int i = 0; i < folders.size(); i++ ) {
+//            File file = new File("src/main/resources/ServerContents/"+folders.get(i)+"/"+fileName+extension[i]);
+//            if (file.delete()) {
+//                System.out.println("File added to Game Contents");
+//            } else {
+//                System.out.println("Error: couldn't delete file");
+//            }
+//        }
+//    }
 }

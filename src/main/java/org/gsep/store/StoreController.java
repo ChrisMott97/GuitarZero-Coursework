@@ -37,6 +37,7 @@ public class StoreController extends SceneController {
     private ItemModel itemModel;
     private ItemContainerModel itemContainerModel;
     private StoreModule module;
+    private Store store = new Store();
     int currency;
 
     /**
@@ -110,10 +111,16 @@ public class StoreController extends SceneController {
      * Loads data from the index json file.
      */
     private void loadData() {
+        try {
+            store.getImages();
+            store.getJSON();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         ObjectMapper objectMapper = new ObjectMapper();
         List<StoreItem> items;
 
-        File file = new File(getClass().getResource("/songs/index.json").getFile());
+        File file = new File(getClass().getResource("/cache/index.json").getFile());
         try{
             items = objectMapper.readValue(file, new TypeReference<List<StoreItem>>(){});
         }catch(IOException e){
@@ -124,17 +131,14 @@ public class StoreController extends SceneController {
                 items) {
             item.setPrefix("songs");
         }
-       
         //TODO: Read files from network.
-
         this.carousel.ingest(items);
     }
 
     private void downloadData(int id, String fileName){
 
         try {
-            Store store = new Store(id);
-            store.getFile();
+            store.getFile(id);
             System.out.println(fileName + " has been successfully bought.");
             store.updateJSON(fileName);
 

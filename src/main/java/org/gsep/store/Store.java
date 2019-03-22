@@ -24,7 +24,7 @@ public class Store {
 
 
     private static Socket soc;
-    private final String BASE_PATH = "src/main/resources/songs/GameContents/";
+    private final String BASE_PATH = "src/main/resources/songs/";
 
     Store() {
         try {
@@ -75,9 +75,9 @@ public class Store {
         int fileLen = dis.readInt();
         byte[] b = new byte[fileLen];
         FileOutputStream fos = new FileOutputStream("src/main/resources/cache/index.json");
-        fos.write(b,0,b.length);
         InputStream in = soc.getInputStream();
         in.read(b,0,b.length);
+        fos.write(b,0,b.length);
 
     }
 

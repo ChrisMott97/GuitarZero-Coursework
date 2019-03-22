@@ -62,7 +62,6 @@ public class StoreController extends SceneController {
         this.itemModel = itemModel;
         this.itemContainerModel = itemContainerModel;
         this.module = module;
-        this.store = new Store();
 
     }
 
@@ -72,9 +71,6 @@ public class StoreController extends SceneController {
     public void initialize(){
         System.out.println("Store mode initializing...");
         carousel.linkModels(itemModel,itemContainerModel);
-        File file = new File("src/main/resources/Store/currency.jpg");
-        Image image = new Image(file.toURI().toString());
-        imageView.setImage(image);
         loadData();
 
     }
@@ -120,8 +116,13 @@ public class StoreController extends SceneController {
      */
     private void loadData() {
         try {
+            this.store = new Store();
             store.getImages();
+            System.out.println("images");
+            this.store = new Store();
             store.getJSON();
+            System.out.println("Json");
+            this.store = new Store();
         } catch (IOException e) {
             e.printStackTrace();
         }

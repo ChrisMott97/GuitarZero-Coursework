@@ -68,7 +68,7 @@ public class SlashController extends SceneController implements ButtonListener {
      * Is called due to FXML Controller, after constructor.
      */
     public void initialize(){
-        System.out.println("Slash mode initializing...");
+        System.out.println("Slash mode initializing...   "+Thread.currentThread());
         carousel.linkModels(this.itemModel, this.itemContainerModel);
         this.loadData();
 
@@ -81,7 +81,7 @@ public class SlashController extends SceneController implements ButtonListener {
      * @throws Exception
      */
     public Scene load() throws Exception{
-        System.out.println("load() running");
+        System.out.println("load() running   "+Thread.currentThread());
         Scene scene = super.load(this.fxmlLoader, this.carousel);
         //Fallback to keyboard input
         scene.setOnKeyPressed(keyEvent -> {
@@ -147,38 +147,42 @@ public class SlashController extends SceneController implements ButtonListener {
 
     @Override
     public void stateReceived(String buttonName, ButtonEvent event) {
-        System.out.println("State recieved :   "+event.state());
+        System.out.println("State received slash:   "+event.state() + "  thread:  "+Thread.currentThread());
         //TODO implement for slash mode
         if (this.module == module.getMediator().getCurrentModule()) {
-            if (event.state() == ButtonState.ON) {
-                switch (buttonName) {
-                    case "zeroPower":
-                        //TODO: Make itemModel store enum reference so switch not necessary!
-                        Platform.runLater( () -> {
-                            // Update UI here.
-                            switch (itemModel.getIntended().getName()) {
-                                case "Select":
-                                    module.swapTo(SelectModule.getInstance());
-                                    break;
-                                case "Store":
-                                    module.swapTo(StoreModule.getInstance());
-                                    break;
-                                case "Play":
-                                    if(module.getMediator().getIntendedItem() == null){
+            System.out.println("SLASH REACTING");
+
+            Platform.runLater( () -> {
+                if (event.state() == ButtonState.ON) {
+                    switch (buttonName) {
+                        case "zeroPower":
+                            //TODO: Make itemModel store enum reference so switch not necessary!
+                            Platform.runLater(() -> {
+                                // Update UI here.
+                                switch (itemModel.getIntended().getName()) {
+                                    case "Select":
                                         module.swapTo(SelectModule.getInstance());
                                         break;
-                                    }
-                                    module.swapTo(PlayModule.getInstance());
-                                    break;
-                            }
-                        });
-                        break;
+                                    case "Store":
+                                        module.swapTo(StoreModule.getInstance());
+                                        break;
+                                    case "Play":
+                                        if (module.getMediator().getIntendedItem() == null) {
+                                            module.swapTo(SelectModule.getInstance());
+                                            break;
+                                        }
+                                        module.swapTo(PlayModule.getInstance());
+                                        break;
+                                }
+                            });
+                            break;
+                    }
+                } else if (event.state() == ButtonState.FORWARD) {
+                    carousel.next();
+                } else if (event.state() == ButtonState.BACKWARD) {
+                    carousel.previous();
                 }
-            } else if (event.state() == ButtonState.FORWARD) {
-                carousel.next();
-            } else if (event.state() == ButtonState.BACKWARD) {
-                carousel.previous();
-            }
+            });
         }
     }
 }

@@ -15,7 +15,7 @@ import org.gsep.select.MusicItem;
  */
 public class PlayModule extends SceneModule {
 
-    private static PlayModule instance;
+    private static volatile PlayModule instance;
 
     private PlayModule(){
 //        itemModel = new ItemModel();
@@ -41,10 +41,11 @@ public class PlayModule extends SceneModule {
     }
 
     public void init(){
+        System.out.println("PLAY MODULE   THREAD:"+Thread.currentThread());
         MusicItem item = getMediator().getIntendedItem();
         System.out.println(item);
 //        Play play = new Play("/untitled2.txt", "/untitled2.mid");
-        Play play = new Play(item);
+        Play play = new Play(item, instance);
         setScene(play.getScene());
         setTitle("Play Mode");
         play.play();

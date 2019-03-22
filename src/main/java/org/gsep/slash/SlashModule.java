@@ -11,6 +11,7 @@ import org.gsep.mediator.SceneModule;
 import org.gsep.play.GuitarEventHandler;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Locale;
 
 /**
@@ -24,8 +25,9 @@ public class SlashModule extends SceneModule {
     private SlashController controller;
     private ItemModel itemModel;
     private ItemContainerModel itemContainerModel;
+    private ButtonThreadMap map = new ButtonThreadMap();
 
-    private static SlashModule instance;
+    private static volatile SlashModule instance;
 
     private SlashModule(){
     }
@@ -53,6 +55,17 @@ public class SlashModule extends SceneModule {
             System.out.println("Slash controller could not load.");
         }
         setTitle("Slash Mode");
-        linkGuitar(controller);
-    }
+
+        if (map.getButtons() != null && map.getThreads() != null) {
+            for (int i=0; i<map.getButtons().length; i++) {
+                map.getButtons()[i].terminate();
+                try {
+                    map.getThreads()[i].join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        map = linkGuitar(controller);
+        }
 }

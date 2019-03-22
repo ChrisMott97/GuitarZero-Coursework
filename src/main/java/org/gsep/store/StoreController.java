@@ -37,6 +37,7 @@ public class StoreController extends SceneController {
     private ItemModel itemModel;
     private ItemContainerModel itemContainerModel;
     private StoreModule module;
+    private Store store = new Store();
 
     private static final String defaultName = "default";
     private static final String baseDir = "/cache/";
@@ -117,6 +118,12 @@ public class StoreController extends SceneController {
      * Loads data from the index json file.
      */
     private void loadData() {
+        try {
+            store.getImages();
+            store.getJSON();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         ObjectMapper objectMapper = new ObjectMapper();
         List<StoreItem> items;
 
@@ -144,8 +151,7 @@ public class StoreController extends SceneController {
     private void downloadData(int id, String fileName){
 
         try {
-            Store store = new Store(id);
-            store.getFile();
+            store.getFile(id);
             System.out.println(fileName + " has been successfully bought.");
             store.updateJSON(fileName);
 

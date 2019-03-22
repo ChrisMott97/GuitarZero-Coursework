@@ -95,7 +95,6 @@ public class Carousel extends TilePane{
      * Only works if there are no current animations running.
      */
     public void next(){
-        System.out.println("NEXT THREAD:::  "+Thread.currentThread());
         if(icOne.getStatus() == Animation.Status.RUNNING)
             return;
         iModel.next();

@@ -37,14 +37,6 @@ public class guitarMIDI {
         }
     }
 
-    public static String noteName( int n ) {
-        final String[] NAMES =
-                { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
-        final int octave = (n / 12) - 1;
-        final int note   = n % 12;
-        return NAMES[ note ] + octave;
-    }
-
     /**
      * Converts a given track of a MIDI file into an ArrayList containing the ticks and notes of
      * an instrument that contains strings
@@ -55,7 +47,7 @@ public class guitarMIDI {
      *
      */
 
-    public static ArrayList <String> getTrackNotes( Track track ) {
+    static ArrayList <String> getTrackNotes(Track track) {
         ArrayList<Integer> guitarChannnel = new ArrayList<>();
         List<List<String>> currentArray = new ArrayList<>();
         //Goes through tracks
@@ -95,7 +87,7 @@ public class guitarMIDI {
         }
         ArrayList<String> longestArray = new ArrayList<>();
         int arrayLen = 0;
-        //Finds longest instrument in the track
+                                                                            /* Finds longest instrument in the track */
         for (List<String> aCurrentArray : currentArray) {
 
             if (arrayLen < aCurrentArray.size()) {
@@ -112,12 +104,12 @@ public class guitarMIDI {
      * @param arr   An ArrayList. Each element hold a string on information about a note in the order they're played
      * @return      A .txt file called 'noteFile.txt' where each line is an element of arr
      */
-    public static File writeToFile ( ArrayList <String> arr ) {
+    static File writeToFile(ArrayList<String> arr) {
 
         BufferedWriter bw = null;
         try {
             File file = new File("noteFile.txt");
-            //CHECK THIS
+
             if (!file.exists()) {
                 file.createNewFile();
             }
@@ -152,21 +144,20 @@ public class guitarMIDI {
      */
 
     //TODO could change it so that what button is pressed is determined by how high/low the note is
-    public static File addNotes(ArrayList arr){
+    private static File addNotes(ArrayList arr){
         ArrayList<String> newArr = new ArrayList<>();
         Random rand = new Random();
         for(int i = 0; i < arr.size(); i++){
             int count=0;
-            //Gets the ticks
+                                                                                                    /* Gets the ticks */
             String[] iSplit = arr.get(i).toString().split("\\s+");
             int iTick = Integer.parseInt(iSplit[0]);
-            int note = Integer.parseInt(iSplit[1]);
             int min = 200, max = 0;
             for (Object anArr : arr) {
                 String[] jSplit = anArr.toString().split("\\s+");
                 int jTick = Integer.parseInt(jSplit[0]);
                 int jNote = Integer.parseInt(jSplit[1]);
-                //Compares the ticks with themselves
+                                                                                /* Compares the ticks with themselves */
                 if (iTick == jTick) {
                     count = count + 1;
                 }
@@ -179,20 +170,19 @@ public class guitarMIDI {
                     }
                 }
             }
-            //All randomly assigned
-            //If only 1 note is played at that tick
-            if(count == 1){
-                int row = rand.nextInt(3) ;
+                                                                                     /* Notes are randomly assigned */
+            if (count == 1) {
+                int row = rand.nextInt(3);
                 int colr = rand.nextInt(2) + 1;
-                if (row == 0){
+
+                if (row == 0) {
                     newArr.add(iTick + "," + colr + ",0,0");
-                }else if (row == 1) {
+                } else if (row == 1) {
                     newArr.add(iTick + ",0," + colr + ",0");
-                }else if(row == 2){
+                } else if(row == 2) {
                     newArr.add(iTick + ",0,0," + colr);
                 }
-                //If 2 notes are played at that tick
-            }else if(count == 2){
+            }else if (count == 2) {
                 int row = rand.nextInt(3);
                 int row2;
                 do{
@@ -211,7 +201,6 @@ public class guitarMIDI {
                     int colr1 = rand.nextInt(2) + 1;
                     newArr.add(iTick + "," + colr + ",0," + colr1);
                 }
-                //If more than 2 notes are played at that tick
             }else if (count > 2){
                 int colr = rand.nextInt(2) + 1;
                 int colr1 = rand.nextInt(2) + 1;
@@ -238,10 +227,10 @@ public class guitarMIDI {
      * @param arr The longest instrument notes array in whole midi file
      * @return calls the addNotes function with the concatenated array
      */
-    public static File concatArr(ArrayList arr){
+    private static File concatArr(ArrayList arr){
 
         for (int i =0; i <arr.size(); i++){
-            //Checks current tick with next tick
+                                                                                /* Checks current tick with next tick */
             if (i < (arr.size() - 1)) {
                 String[] iSplit = arr.get(i).toString().split("\\s+");
                 String[] nextSplit = arr.get(i + 1).toString().split("\\s+");
@@ -251,7 +240,7 @@ public class guitarMIDI {
                 int nextTick = Integer.parseInt(nextSplit[0]);
 
                 if (nextTick < iTick + 100 && nextTick != iTick) {
-                    //Removes it if the ticks are too close
+                                                                            /* Removes it if the ticks are too close */
                     arr.remove(i + 1);
                     if(i == 0){
                         i = i - 1;
@@ -274,7 +263,6 @@ public class guitarMIDI {
      * @return                  A .txt file, each line has information needed in play mode for a given note
      */
     public File convertMIDI ( String MIDIFileName ) {
-        //TODO make sure it handles when a) file not found b) input file in not a MIDI file
         try {
 
             Sequence seq = MidiSystem.getSequence(new File(MIDIFileName));
@@ -294,7 +282,6 @@ public class guitarMIDI {
                 }
             }
 
-
             return concatArr(trackArray);
 
         } catch ( Exception exn ) {
@@ -302,23 +289,4 @@ public class guitarMIDI {
         }
         return null;
     }
-//
-//    public static void main (String[] args) {                       //To test file is written and passed back correctly
-//        //In real implementation, convertMIDI will be
-//        guitarMIDI gm = new guitarMIDI();
-//        File noteFile = gm.convertMIDI("/songs/GameContents/midi/2.mid");
-//        try {
-//            FileReader fr = new FileReader(noteFile);
-//            BufferedReader br = new BufferedReader(fr);
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                //process the line
-//                System.out.println(line);
-//            }
-//        } catch (FileNotFoundException i ) {
-//            System.out.println("File not found lol");
-//        } catch (IOException e) {
-//            System.out.println("IO Error");
-//        }
-//    }
 }

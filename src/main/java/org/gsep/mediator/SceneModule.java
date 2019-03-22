@@ -10,13 +10,13 @@ import org.gsep.controller.Button;
 import org.gsep.select.MusicItem;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Locale;
 
-/*
+/**
  * SceneModule.
  *
  * @author  Chris Mott.
+ * @author  Abigail Lilley.
  * @version 2.00, March 2019.
  */
 public abstract class SceneModule {
@@ -33,7 +33,6 @@ public abstract class SceneModule {
 
     public void setMediator(ModuleMediator mediator) {
         this.mediator = mediator;
-        //TODO: Check is already exists in the module
         mediator.addModule(this);
     }
 
@@ -63,7 +62,7 @@ public abstract class SceneModule {
         return title;
     }
 
-    public void setTitle(String title) {
+    protected void setTitle(String title) {
         this.title = title;
     }
 
@@ -77,13 +76,22 @@ public abstract class SceneModule {
 
     public void init(){}
 
-    public ButtonThreadMap linkGuitar(SceneController controller) {
-        System.out.println("Linking Guitar");
+    /**
+     * Connect to the guitar and start a thread to listen to each button.
+     * Compatible across Macintosh, Unix, and Windows system.
+     * Returns an array of objects that hold a Button and it's thread.
+     * @author  Abigail Lilley.
+     *
+     * @param controller    controller for a specific mode
+     * @return  ButtonThreadHolder object
+     */
+    protected ButtonThreadHolder linkGuitar(SceneController controller) {
+
         ControllerEnvironment cenv = ControllerEnvironment.getDefaultEnvironment();
         Controller[] ctrls = cenv.getControllers();
         Button[] buttons = new Button[ ButtonNames.BUTTONNAMES.getNames().length ];
         Thread[] threads = new Thread[ ButtonNames.BUTTONNAMES.getNames().length ];
-        ButtonThreadMap map = new ButtonThreadMap();
+        ButtonThreadHolder holder = new ButtonThreadHolder();
         int[] buttonNums;
 
         try {
@@ -92,7 +100,7 @@ public abstract class SceneModule {
                 throw new IOException("os.name not found");
             }
             osName = osName.toLowerCase(Locale.ENGLISH);
-            if (osName.contains("windows")) {
+            if (osName.contains("windows")) {                           /* Set button numbers according to current OS */
                 buttonNums = ButtonNumbers.WINDOWSNUMBERS.getNumbers();
             } else if (osName.contains("linux")
                     || osName.contains("mpe/ix")
@@ -103,32 +111,35 @@ public abstract class SceneModule {
                 buttonNums = ButtonNumbers.UNIXNUMBERS.getNumbers();
             } else if (osName.contains("mac os")) {
                 buttonNums = ButtonNumbers.MACNUMBERS.getNumbers();
-                System.out.println("THIS IS A MAC");
             } else {
                 throw new IOException("os.name not supported");
             }
 
             for ( int i = 0; i < buttons.length; i = i + 1 ) {
                 buttons[ i ] = new Button( ButtonNames.BUTTONNAMES.getNames()[i], buttonNums[i]);
-                buttons[ i ].addButtonListener( controller );			/* Adding listeners to Buttons depending on the mode */
+                buttons[ i ].addButtonListener( controller );	 /* Adding listeners to Buttons depending on the mode */
                 Thread buttonThread = new Thread(buttons[ i ]);
                 threads[ i ] = buttonThread;
-                buttonThread.start();								/* Starting a thread for each Button */
+                buttonThread.start();								             /* Starting a thread for each Button */
             }
 
-            map.setButtons(buttons);
-            map.setThreads(threads);
+            holder.setButtons(buttons);                        /* Customise ButtonThreadHolder for the current button */
+            holder.setThreads(threads);
 
-        } catch (IOException ex) {
-            System.out.println("OS not identified, can't run game");
+        } catch (IOException ex) {                                               /* OS not identified, can't run game */
             ex.getMessage();
             ex.printStackTrace();
-            //TODO terminate game
+            System.exit(1);
         }
-        return map;
+        return holder;
     }
 
-    public class ButtonThreadMap {
+    /**
+     * Inner class acts as a holder for a button and its corresponding thread.
+     *
+     * @author Abigail Lilley.
+     */
+    public class ButtonThreadHolder {
         private Button[] buttons = null;
         private Thread[] threads = null;
 
@@ -140,11 +151,11 @@ public abstract class SceneModule {
             return threads;
         }
 
-        public void setButtons(Button[] buttons) {
+        void setButtons(Button[] buttons) {
             this.buttons = buttons;
         }
 
-        public void setThreads(Thread[] threads) {
+        void setThreads(Thread[] threads) {
             this.threads = threads;
         }
     }

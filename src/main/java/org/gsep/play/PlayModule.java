@@ -13,22 +13,10 @@ public class PlayModule extends SceneModule {
 
     private static volatile PlayModule instance;
 
-    private PlayModule(){
-//        itemModel = new ItemModel();
-//        itemContainerModel = new ItemContainerModel();
-//        controller = new SelectController(itemModel, itemContainerModel, this);
-//        try{
-//            setScene(controller.load());
-//        }catch(Exception e){
-//            System.out.println("Select controller could not load.");
-//        }
-    }
-
     public static PlayModule getInstance(){
         if(instance == null){
             synchronized (PlayModule.class){
                 if(instance == null){
-                    System.out.println("Play Module instanced!");
                     instance = new PlayModule();
                 }
             }
@@ -38,8 +26,6 @@ public class PlayModule extends SceneModule {
 
     public void init(){
         MusicItem item = getMediator().getIntendedItem();
-        System.out.println(item);
-//        Play play = new Play("/3.txt", "/3.mid");
         Play play = new Play(item, instance);
         setScene(play.getScene());
         setTitle("Play Mode");

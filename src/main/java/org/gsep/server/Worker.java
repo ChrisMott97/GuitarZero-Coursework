@@ -42,9 +42,6 @@ public class Worker implements Runnable {
         synchronized (this) {
             try {
 
-
-                System.out.println("You are connected to the Guitar Zero Lite server!");
-                
                 DataInputStream dis = new DataInputStream(soc.getInputStream());
                 
                 //Read message sent from client
@@ -79,15 +76,11 @@ public class Worker implements Runnable {
                     
                 //If the client is requesting to get the file
                 } else if (part[0].equals("Get")) {
-                    
-                    System.out.println("1");
                     sendFile(part[1]);
                 } else if(part[0].equals("Images")) {
                     sendImages();
                 }else if(part[0].equals("JSON")){
                     sendJSON();
-                }else{
-                    System.out.println("WRONG BEGINNING! ");
                 }
 
             } catch (Exception e) {

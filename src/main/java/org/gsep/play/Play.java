@@ -20,8 +20,6 @@ import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
 import org.gsep.ButtonNames;
 import org.gsep.ButtonNumbers;
-import org.gsep.controller.*;
-import org.gsep.select.MusicItem;
 
 /**
  * Play mode
@@ -30,32 +28,14 @@ import org.gsep.select.MusicItem;
  * @author Abigail Lilley
  */
 public class Play {
-    public static final int CANVASWIDTH = 950;
-    public static final int CANVASHEIGHT = 700;
-    private boolean guitarLinked = false;
+    static final int CANVASWIDTH = 950;
+    static final int CANVASHEIGHT = 700;
     private Scene scene;
     private NoteHighwayModel model;
     private NoteHighwayView view;
     private NoteHighwayController controller;
     private File midiFile;
     private Map<Integer, Note[]> songSequence;
-    private ArrayList<Thread> buttonThreads;
-
-//    private final static String[] BUTTONNAMES = { 	"fret1_white",
-//            "fret1_black",
-//            "fret2_white",
-//            "fret2_black",
-//            "fret3_white",
-//            "fret3_black",
-//            "zeroPower",
-//            "strumBar",
-//            "escape",
-//            "power",
-//            "bender",
-//            "whammy"	    	};
-//
-//    private final static int[] BUTTONNUMS = { 0, 1, 4, 2, 5, 3, 8, 15, 10, 12, 13, 17};
-//    /* Index of the component in the component array. Order corresponds to the names in BUTTONNAMES */
 
     /**
      * @author Örs Barkanyi
@@ -65,22 +45,21 @@ public class Play {
      * @param musicItem the object representing the music resources to be played
      * @param module reference to the play module
      */
-    public Play(MusicItem musicItem, PlayModule module){
-        //initialise scene
+    Play(MusicItem musicItem, PlayModule module){
+                                                                                                  /* Initialise scene */
         Group root = new Group();
         this.scene = new Scene(root);
 
         root.getChildren().add(createBackground());
 
-        //set up mvc
+                                                                                                        /* Set up MVC */
         this.model = new NoteHighwayModel();
         this.view = new NoteHighwayView(root);
         this.controller = new NoteHighwayController(model, view);
 
-        if (buttonThreads != null) buttonThreads.clear();
-        buttonThreads = linkGuitar(module);
+        linkGuitar(module);
 
-        //find files
+                                                                                                        /* Find files */
         try{
             this.songSequence = readFile(musicItem.getNoteFile());
         } catch (Exception e) {
@@ -122,7 +101,7 @@ public class Play {
      * @author humzahmalik
      * Setting bakckground image as the fret board
      */
-    public ImageView createBackground(){
+    private ImageView createBackground(){
         File file = new File(getClass().getResource("/play/highway.png").getFile());
         Image image = new Image(file.toURI().toString());
 
@@ -141,7 +120,7 @@ public class Play {
      * @throws IOException
      *
      */
-    public LinkedHashMap readFile(File f) throws IOException {
+    private LinkedHashMap readFile(File f) throws IOException {
 
         BufferedReader in = new BufferedReader(new FileReader(f));
         String str;
@@ -177,7 +156,7 @@ public class Play {
      * Method checking whether number corresponds to black, white or empty note
      * @return Note value
      */
-    public Note checkNote(int num) {
+    private Note checkNote(int num) {
         Note type = null;
 
         if(num==0) {
@@ -194,7 +173,14 @@ public class Play {
 
     }
 
-    private ArrayList<Thread> linkGuitar(PlayModule module) {
+    /**
+     * Connect to the guitar and start a thread to listen to each button.
+     * Compatible across Macintosh, Unix, and Windows system.
+     *
+     * @author Abigail Lilley
+     * @param module        Instance of the current PlayModule
+     */
+    private void linkGuitar(PlayModule module) {
         try {
             int[] buttonNums;
             String osName = System.getProperty("os.name");
@@ -202,7 +188,7 @@ public class Play {
                 throw new IOException("os.name not found");
             }
             osName = osName.toLowerCase(Locale.ENGLISH);
-            if (osName.contains("windows")) {
+            if (osName.contains("windows")) {                           /* Set button numbers according to current OS */
                 buttonNums = ButtonNumbers.WINDOWSNUMBERS.getNumbers();
             } else if (osName.contains("linux")
                     || osName.contains("mpe/ix")
@@ -213,30 +199,25 @@ public class Play {
                 buttonNums = ButtonNumbers.UNIXNUMBERS.getNumbers();
             } else if (osName.contains("mac os")) {
                 buttonNums = ButtonNumbers.MACNUMBERS.getNumbers();
-                System.out.println("THIS IS A MAC");
             } else {
                 throw new IOException("os.name not supported");
             }
 
             ControllerEnvironment cenv = ControllerEnvironment.getDefaultEnvironment();
             Controller[] ctrls = cenv.getControllers();
-            ArrayList<Thread> buttonThreads = new ArrayList<>();
             GuitarEventHandler guitarEventHandler = new GuitarEventHandler(controller, module);
 
             Button[] buttons = new Button[ButtonNames.BUTTONNAMES.getNames().length];
             for (int i = 0; i < buttons.length; i = i + 1) {
                 buttons[i] = new Button(ButtonNames.BUTTONNAMES.getNames()[i], buttonNums[i]);
-                buttons[i].addButtonListener(guitarEventHandler);            /* Adding listeners to Buttons depending on the mode */
+                buttons[i].addButtonListener(guitarEventHandler);/* Adding listeners to Buttons depending on the mode */
                 Thread buttonThread = new Thread(buttons[i]);
-                buttonThreads.add(buttonThread);
-                buttonThread.start();                                /* Starting a thread for each Button */
+                buttonThread.start();                                           /* Starting a thread for each Button */
             }
-        } catch (IOException ex) {
-            System.out.println("OS not identified, can't run game");
+    } catch (IOException ex) {                                                  /* OS not identified, can't run game */
             ex.getMessage();
             ex.printStackTrace();
-            //TODO terminate game
+            System.exit(1);
         }
-        return buttonThreads;
     }
 }

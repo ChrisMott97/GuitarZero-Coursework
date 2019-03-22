@@ -13,9 +13,9 @@ import net.java.games.input.ControllerEnvironment;
  * @version 2.0, March 2019.
  */
 public class Button implements Runnable {
-    private volatile boolean running = true;
+    private volatile boolean running = true;                     /* If true, the button will be polled continuously */
 
-    private final static String GUITAR_HERO = "Guitar Hero"; /* Identifier  */
+    private final static String GUITAR_HERO = "Guitar Hero";                                        /* Identifier  */
     private final static int DELAY = 50;
 
     private ButtonState _state = ButtonState.OFF;
@@ -42,22 +42,22 @@ public class Button implements Runnable {
 	}
 
 
-    public synchronized void buttonOn() {
+    private synchronized void buttonOn() {
             _state = ButtonState.ON;
             _fireMoodEvent();
     }
 	
-    public synchronized void buttonOff() {
+    private synchronized void buttonOff() {
             _state = ButtonState.OFF;
             _fireMoodEvent();
     }
 	
-    public synchronized void scrollForward() {
+    private synchronized void scrollForward() {
             _state = ButtonState.FORWARD;
             _fireMoodEvent();
     }
 	
-    public synchronized void scrollBackward() {
+    private synchronized void scrollBackward() {
             _state = ButtonState.BACKWARD;
             _fireMoodEvent();
     }
@@ -70,11 +70,6 @@ public class Button implements Runnable {
     public synchronized void addButtonListener( ButtonListener l ) {
         _listeners.add( l );
     }
-    
-    public synchronized void removeButtonListener( ButtonListener l ) {
-        _listeners.remove( l );
-    }
-
 
     /**
      * Informs all of the listeners listening to this button that an event has occurred
@@ -82,9 +77,8 @@ public class Button implements Runnable {
     private synchronized void _fireMoodEvent() {
 
         ButtonEvent state = new ButtonEvent( this, _state );
-        Iterator listeners = _listeners.iterator();
-        while( listeners.hasNext() ) {
-            ( (ButtonListener) listeners.next() ).stateReceived( this.getName(), state );
+        for (Object listener : _listeners) {
+            ((ButtonListener) listener).stateReceived(this.getName(), state);
         }
     }
 
@@ -105,13 +99,13 @@ public class Button implements Runnable {
         Controller[] ctrls = cenv.getControllers();                           /* Gets all controllers registered */
 
         for (Controller ctrl : ctrls) {
-            if (ctrl.getName() != null && ctrl.getName().contains(GUITAR_HERO)) {                       /* Selects only relevant org.gsep.controller */
-
-                Component[] cmps = ctrl.getComponents();                      /* Get all components of the org.gsep.controller */
+            if (ctrl.getName() != null && ctrl.getName().contains(GUITAR_HERO)) {
+                                                                        /* Selects only relevant org.gsep.controller */
+                Component[] cmps = ctrl.getComponents();            /* Get all components of the org.gsep.controller */
 
                 float originalVal = cmps[ _num ].getPollData();
                 if (originalVal == 1) originalVal =0;
-	            float oldVal = originalVal;                                   /* Set base value for button */
+	            float oldVal = originalVal;                                              /* Set base value for button */
 
                 if ( _name.equals("strumBar" )) {
                                                                              /* Strum Bar only used for carousels, so
@@ -121,7 +115,7 @@ public class Button implements Runnable {
 
                             float newVal = cmps[ _num ].getPollData();
 
-                            if (oldVal != newVal) {                         /* State of physical org.gsep.controller changed */
+                            if (oldVal != newVal) {                  /* State of physical org.gsep.controller changed */
 
                                 if ( newVal == originalVal ) {
                                     buttonOff();
@@ -197,7 +191,5 @@ public class Button implements Runnable {
                 }
             }
         }
-        System.out.println(GUITAR_HERO + " org.gsep.controller not found");
-                //System.exit(1);
     }
 }

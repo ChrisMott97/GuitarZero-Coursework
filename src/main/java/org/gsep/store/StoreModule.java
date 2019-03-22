@@ -25,7 +25,6 @@ public class StoreModule extends SceneModule {
         if(instance == null){
             synchronized (StoreModule.class){
                 if(instance == null){
-                    System.out.println("Store Module instanced!");
                     instance = new StoreModule();
                 }
             }
@@ -42,7 +41,6 @@ public class StoreModule extends SceneModule {
             setScene(controller.load());
         }catch(Exception e){
             e.printStackTrace();
-            System.out.println("Store controller could not load.");
         }
         setTitle("Store Mode");
     }

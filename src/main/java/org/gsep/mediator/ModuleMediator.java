@@ -58,7 +58,6 @@ public class ModuleMediator implements Mediator{
     public void setCurrentModule(SceneModule currentModule) {
         //TODO: Fade out scene, change, then fade in new to prevent stutter
         if(currentModule.getClass() == PlayModule.class){
-            System.out.println("Changing to play module!");
         }
 
         currentModule.init();

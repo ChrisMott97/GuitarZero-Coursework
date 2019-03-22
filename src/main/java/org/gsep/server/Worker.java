@@ -221,6 +221,7 @@ public class Worker implements Runnable {
 
     public void sendImages() throws IOException {
 
+        deleteFile();
         DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
         File[] files = new File("src/main/resources/ServerContents/img").listFiles();
         dos.writeInt(files.length);
@@ -234,10 +235,6 @@ public class Worker implements Runnable {
             byte[] size = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
             os.write(size);
             os.write(byteArrayOutputStream.toByteArray());
-            os.flush();
-            System.out.println("Flushed: " + System.currentTimeMillis());
-
-            System.out.println("Closing: " + System.currentTimeMillis());
         }
 
     }
@@ -308,18 +305,18 @@ public class Worker implements Runnable {
         }
     }
 
-//    public void deleteFile(File file) {
-//        if (file.delete()) {
-//            System.out.println("File added to Game Contents");
-//        } else {
-//            System.out.println("Error: couldn't delete file");
-//        }
-//        songs.add(song);
-//        ObjectMapper objectMapper = new ObjectMapper();
-//
-//    }
-    
-    
-	
-    
+
+    public void deleteFile() {
+
+        File[] files = new File("src/main/resources/cache/img").listFiles();
+        if (files != null) {
+            for(File file : files) {
+                file.delete();
+            }
+        }
+        File file = new File("src/main/resources/cache/index.json");
+        if(file.exists()) {
+            file.delete();
+        }
+    }
 }

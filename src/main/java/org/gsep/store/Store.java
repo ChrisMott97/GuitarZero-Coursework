@@ -16,6 +16,10 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Niha Gummakonda
+ * @version 2.0 22 March 2019
+ */
 public class Store {
 
 
@@ -24,12 +28,17 @@ public class Store {
 
     Store() {
         try {
-            soc = new Socket("192.168.56.1", 3335);
+            soc = new Socket("localhost", 3335);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Gets the images that are available on the server and stores them
+     * in a cache folder.
+     * @throws IOException
+     */
     public void getImages() throws IOException {
         DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
         dos.writeUTF("Images");
@@ -39,7 +48,6 @@ public class Store {
         for(int i = 0; i < files.length; i++){
         InputStream inputStream = soc.getInputStream();
 
-        System.out.println("Reading: " + System.currentTimeMillis());
         String name = dis.readUTF();
         byte[] sizeAr = new byte[4];
         inputStream.read(sizeAr);
@@ -55,6 +63,11 @@ public class Store {
         }
 
     }
+
+    /**
+     * Gets the index.json file from the server and stores in cache folder
+     * @throws IOException
+     */
     public void getJSON() throws IOException {
         DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
         dos.writeUTF("JSON");
@@ -68,6 +81,12 @@ public class Store {
 
     }
 
+    /**
+     * When user selects an an image in store, it gets the respective
+     * files for that image (midi and notes)
+     * @param id - of the image selected
+     * @throws IOException
+     */
     public void getFile(int id) throws IOException {
         DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
         dos.writeUTF("Get-" + id);
@@ -87,6 +106,10 @@ public class Store {
         }
     }
 
+    /**
+     * Gets the songs available in select
+     * @return arraylist of songs
+     */
     public List<Song> getSongs(){
         List<Song> songs = new ArrayList<>();
         try{

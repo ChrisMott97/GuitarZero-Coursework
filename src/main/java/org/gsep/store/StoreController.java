@@ -37,7 +37,7 @@ public class StoreController extends SceneController {
     private ItemModel itemModel;
     private ItemContainerModel itemContainerModel;
     private StoreModule module;
-    private Store store = new Store();
+    private Store store;
 
     private static final String defaultName = "default";
     private static final String baseDir = "/cache/";
@@ -62,6 +62,7 @@ public class StoreController extends SceneController {
         this.itemModel = itemModel;
         this.itemContainerModel = itemContainerModel;
         this.module = module;
+        this.store = new Store();
 
     }
 

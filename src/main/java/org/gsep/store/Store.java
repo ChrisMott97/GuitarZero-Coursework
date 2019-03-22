@@ -28,7 +28,7 @@ public class Store {
 
     Store() {
         try {
-            soc = new Socket("192.168.56.1", 3335);
+            soc = new Socket("localhost", 3335);
         } catch (IOException e) {
             e.printStackTrace();
         }

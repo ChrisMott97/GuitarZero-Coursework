@@ -52,6 +52,7 @@ public class StoreManagerModel {
 	 */
 	public static String readFile() throws IOException
 	{
+		//The first element in the list is the file containing the name. 
 		String path = filesSong.get(0).toString();
 		Charset encoding = StandardCharsets.UTF_8;
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
@@ -71,9 +72,9 @@ public class StoreManagerModel {
 		
 		//Notify server that file is about to be sent
 		dos.writeUTF("Send," +filesSong.size()+ "," +readFile());
-		System.out.println("Receving file..");
+		System.out.println("File sending process starting.");
 		
-		//Start i at 1 so title file not sent
+		//Start i at 1 so first element in list, which is the file containing the title, is sent.
 		for(int i =1; i <filesSong.size(); i++) {
 			FileInputStream fis = new FileInputStream(filesSong.get(i));
 			//Write file name along with its length

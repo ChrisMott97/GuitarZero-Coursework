@@ -29,9 +29,13 @@ import com.fasterxml.jackson.databind.SequenceWriter;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-/**
- * @author Niha Gummakonda
- * @version 1.0 07/03/2019
+/*
+ * Worker class
+ * 
+ * This class handles incoming requests to the server. 
+ *
+ * @author  Niha and Humzah Malik
+ * @version 2.00, March 2019.
  */
 public class Worker implements Runnable {
 
@@ -119,7 +123,7 @@ public class Worker implements Runnable {
     /**
      * Stores the file in the correct directory, with correct extension and name.
      * @author humzahmalik and Niha
-     * @param fileName 
+     * @param fileName Path of file
      * @param fileLength Length of file, used in buffered reader.
      * @throws IOException
      */
@@ -155,7 +159,7 @@ public class Worker implements Runnable {
 
 
     /**
-     * This method returns the extension of a file
+     * This method returns the extension of a file.
      * @author humzahmalik
      * @param file The file to check for its extension
      * @return
@@ -170,7 +174,11 @@ public class Worker implements Runnable {
     }
     
     /**
-     * Creates a directory if it doesn't already exist
+     * Creates a directory if it doesn't already exist.
+     * 
+     * The reason this method exists is to preserve the file system. If the event occurs that the directories holding the files are deleted
+     * store manager mode will still be able to continue to function.
+     * 
      * @param dirName The name of the directory to create
      * @author humzahmalik
      */
@@ -239,7 +247,7 @@ public class Worker implements Runnable {
         String[] extension = {".jpg", ".txt", ".mid"};
         for (int i = 0; i < folders.size(); i++) {
             DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
-            File file = new File("src/main/resources/songs/ServerContents/" + folders.get(i) + "/" + fileName + extension[i]);
+            File file = new File(SERVERPATH + folders.get(i) + "/" + fileName + extension[i]);
             FileInputStream fis = new FileInputStream(file);
             dos.writeInt((int) file.length());
             System.out.println((int) file.length());
@@ -253,11 +261,17 @@ public class Worker implements Runnable {
     
     /**
      * @author Chris Mot & Humzah Malik
-     * Adds a Song object to the current array of Song objects, updating the midi file
+     * 
+     * Adds a Song object to the current array of Song objects, updating the midi file. 
+     * The reason we chose a JSON format to store the file names is because of the ability to work with JSON objects.
+     * JSON objects can hold name/value pairs, allowing us to associate an index with each song. 
+     * This means we can iterate through our file system looking for specific index values, making the process more efficient.   
+     * 
      * @param id The index of the song
      * @param name The name of the song
      */
     public void addSong(int id, String name){
+
     		//Get list of current songs
         List<Song> songs = getSongs();
         //Create a new song object of correct id and name
@@ -269,7 +283,7 @@ public class Worker implements Runnable {
         try{
         		//Write updated list to index file
             objectMapper.writeValue(new FileOutputStream(JSONPATH), songs);
-            System.out.println("You have just added game number " + (id+1) + " to your server, congratulations!");
+            System.out.println("You have just added the song called - " + (name) + " - to your server, congratulations! This is game number " + (id+1)+ " in the store.");
             
         }catch(Exception e){
             System.out.println("There's been an error updating the store. Please try again later.");

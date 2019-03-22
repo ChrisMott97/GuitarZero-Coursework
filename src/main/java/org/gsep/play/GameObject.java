@@ -6,9 +6,10 @@ import javafx.scene.image.Image;
 
 import java.io.File;
 
-abstract class Sprite {
+abstract class GameObject {
     private Boolean visible = true;
     private Point2D position;
+    private Point2D positionOffset;
     private double width;
     private double height;
     private Image image;
@@ -27,11 +28,24 @@ abstract class Sprite {
 
     /**
      * sets the position, compensating for the expected midpoint of the sprite
-     * @param newpos
+     * @param position
      */
-    public void setPosition(Point2D newpos){
+    public void setPosition(Point2D position){
         //TODO variable offsets
-        position = new Point2D(newpos.getX()-width*0.5, newpos.getY()-height*0.95);
+        this.position = new Point2D(position.getX(), position.getY());
+    }
+
+    public Point2D getPosition() {
+        if (positionOffset != null){
+            Point2D offsetPosition = new Point2D(positionOffset.getX()*width, positionOffset.getY()*height);
+            return position.subtract(offsetPosition);
+        } else {
+            return position;
+        }
+    }
+
+    public void setPositionOffset(Point2D positionOffset) {
+        this.positionOffset = positionOffset;
     }
 
     public void setWidth(double width) {
@@ -50,6 +64,14 @@ abstract class Sprite {
     public void setHeightPreserveRatio(double height) {
         this.height = height;
         this.width = image.getWidth()/image.getHeight()*height;
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public double getHeight() {
+        return height;
     }
 
     public Boolean active(){
@@ -94,7 +116,7 @@ abstract class Sprite {
     public void render(GraphicsContext gc) {
         if (visible){
             gc.setGlobalAlpha(opacity);
-            gc.drawImage(image, position.getX(), position.getY(), width, height);
+            gc.drawImage(image, getPosition().getX(), getPosition().getY(), width, height);
         }
     }
 }

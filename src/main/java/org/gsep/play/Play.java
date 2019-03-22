@@ -1,9 +1,12 @@
 package org.gsep.play;
 
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,10 +14,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import net.java.games.input.Controller;
-import net.java.games.input.ControllerEnvironment;
-import org.gsep.controller.*;
 
 public class Play {
     public static final int CANVASWIDTH = 950;
@@ -55,32 +54,35 @@ public class Play {
         Group root = new Group();
         this.scene = new Scene(root);
 
-//        scene.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent mouseEvent) {
-//                System.out.println(mouseEvent.getSceneY());
-//                System.out.println(mouseEvent.getSceneX());
-//            }
-//        });
-
         root.getChildren().add(createBackground());
+
+        scene.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                System.out.println(mouseEvent.getSceneY());
+                System.out.println(mouseEvent.getSceneX());
+            }
+        });
 
         //set up mvc
         this.model = new NoteHighwayModel();
         this.view = new NoteHighwayView(root);
         this.controller = new NoteHighwayController(model, view);
 
-        ControllerEnvironment cenv = ControllerEnvironment.getDefaultEnvironment();
-        Controller[] ctrls = cenv.getControllers();
-        GuitarEventHandler guitarEventHandler = new GuitarEventHandler(controller);
+//        GuitarEventHandler guitarEventHandler = new GuitarEventHandler(controller);
+//
+//        //Adding listeners to Buttons depending on the mode, starting a thread for each button
+//        Button[] buttons = new Button[BUTTONNAMES.length];
+//        for (int i = 0; i < buttons.length; i++) {
+//            buttons[i] = new Button( BUTTONNAMES[i], BUTTONNUMS[i]);
+//            buttons[i].addButtonListener(guitarEventHandler);
+//            Thread buttonThread = new Thread(buttons[ i ]);
+//            buttonThread.start();
+//        }
 
-        Button[] 	 buttons = new Button[ BUTTONNAMES.length ];
-        for ( int i = 0; i < buttons.length; i = i + 1 ) {
-            buttons[ i ] = new Button( BUTTONNAMES[i], BUTTONNUMS[i]);
-            buttons[ i ].addButtonListener( guitarEventHandler );			/* Adding listeners to Buttons depending on the mode */
-            Thread buttonThread = new Thread(buttons[ i ]);
-            buttonThread.start();								/* Starting a thread for each Button */
-        }
+        GuitarEventHandler guitarEventHandler = new GuitarEventHandler(controller);
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, guitarEventHandler);
+        scene.addEventHandler(KeyEvent.KEY_RELEASED, guitarEventHandler);
 
         //find files
         try{

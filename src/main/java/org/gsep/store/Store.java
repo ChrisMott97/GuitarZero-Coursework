@@ -107,7 +107,7 @@ public class Store {
         for(int i = 0; i < extension.length; i++) {
             DataInputStream dis = new DataInputStream(soc.getInputStream());
             InputStream in = soc.getInputStream();
-            FileOutputStream fos = new FileOutputStream(BASE_PATH+folders.get(i)+"/" + count + extension[i]);
+            FileOutputStream fos = new FileOutputStream(BASE_PATH+folders.get(i)+"/" + (count-1) + extension[i]);
             int fileLen = dis.readInt();
             byte[] b = new byte[fileLen];
             in.read(b, 0, b.length);

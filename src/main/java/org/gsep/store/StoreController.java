@@ -83,7 +83,6 @@ public class StoreController extends SceneController implements ButtonListener {
      */
     public Scene load() throws Exception{
         Scene scene = super.load(this.fxmlLoader, this.carousel);
-
         scene.setOnKeyPressed(keyEvent -> {                                         /* Fallback to keyboard input */
             switch(keyEvent.getCode()){
                 case RIGHT:
@@ -179,7 +178,9 @@ public class StoreController extends SceneController implements ButtonListener {
 
                     switch (buttonName) {
                         case "zeroPower":
-                              /* Upon integration, this will check purchase the intended song bundle if currency > 0 */
+                            int id = itemModel.getIntended().getId();
+                            String name = itemModel.getIntended().getName();
+                            downloadData(id, name);
                             break;
                         case "escape":                                                       /* Return to Slash Mode */
                             Platform.runLater(() -> {

@@ -7,27 +7,11 @@ import java.io.*;
 
 import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import org.gsep.manager.Song;
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SequenceWriter;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 /*
  * Worker class
  * 
@@ -203,17 +187,37 @@ public class Worker implements Runnable {
      * @author humzahmalik
      */
     private static void createJSON() {
-    		File file = new File(JSONPATH);
-    		
-    		//If JSON file doesn't exist, create it
-    		try {
-				if (file.createNewFile())
-				{
-				} else {
-				    return;
-				}
-			} catch (IOException e) {
-				System.out.println("There has been an issue accessing the store file system. Please try again");
+        File file = new File(JSONPATH);
+
+        //If JSON file doesn't exist, create it
+        try {
+            if (file.createNewFile()) {
+            } else {
+                return;
+            }
+        } catch (IOException e) {
+            System.out.println("There has been an issue accessing the store file system. Please try again");
+        }
+    }
+
+    /**
+     * Reads JSON index file and stores the contents in a list of Song objects which is returns.
+     * @author Chris Mott
+     * @return List of Song objects
+     */
+    public List<Song> getSongs(){
+        List<Song> songs = new ArrayList<>();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        File file = new File(JSONPATH);
+        try{
+            songs = objectMapper.readValue(file, new TypeReference<List<Song>>(){});
+        }catch(Exception e){
+            System.out.println("Error");
+        }
+        return songs;
+    }
 
     public void sendImages() throws IOException {
 
@@ -254,7 +258,7 @@ public class Worker implements Runnable {
      * @param fileName
      * @throws IOException
      */
-    public void getFile(String fileName) throws IOException {
+    public void sendFile(String fileName) throws IOException {
         ArrayList<String> folders = new ArrayList<>();
         folders.add("img");
         folders.add("notes");
@@ -269,11 +273,6 @@ public class Worker implements Runnable {
             fis.read(b, 0, b.length);
             OutputStream os = soc.getOutputStream();
             os.write(b, 0, b.length);
-<<<<<<<
-//            deleteFile(file);
-=======
-
->>>>>>>
         }
     }
     

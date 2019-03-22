@@ -10,6 +10,7 @@ import org.gsep.controller.Button;
 import org.gsep.select.MusicItem;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Locale;
 
 /*
@@ -23,9 +24,6 @@ public abstract class SceneModule {
     private ModuleMediator mediator;
     private Scene scene;
 
-    private final static String[] BUTTONNAMES = {   "zeroPower",
-            "strumBar",
-            "escape"    };
 
     /**
      * Constructor.
@@ -79,15 +77,14 @@ public abstract class SceneModule {
 
     public void init(){}
 
-    public void linkGuitar( SceneController controller) {
+    public ButtonThreadMap linkGuitar(SceneController controller) {
         System.out.println("Linking Guitar");
         ControllerEnvironment cenv = ControllerEnvironment.getDefaultEnvironment();
         Controller[] ctrls = cenv.getControllers();
+        Button[] buttons = new Button[ ButtonNames.BUTTONNAMES.getNames().length ];
+        Thread[] threads = new Thread[ ButtonNames.BUTTONNAMES.getNames().length ];
+        ButtonThreadMap map = new ButtonThreadMap();
         int[] buttonNums;
-//        final int[] windowsButtonNums = {8, 15, 10};
-//        final int[] unixButtonNums    = { 0, 1, 4};
-//        final int[] macButtonNums = { 8, 15, 10 };
-//        //TODO get values for different OS
 
         try {
             String osName = System.getProperty("os.name");
@@ -111,19 +108,44 @@ public abstract class SceneModule {
                 throw new IOException("os.name not supported");
             }
 
-            Button[] 	 buttons = new Button[ ButtonNames.BUTTONNAMES.getNames().length ];
             for ( int i = 0; i < buttons.length; i = i + 1 ) {
                 buttons[ i ] = new Button( ButtonNames.BUTTONNAMES.getNames()[i], buttonNums[i]);
                 buttons[ i ].addButtonListener( controller );			/* Adding listeners to Buttons depending on the mode */
                 Thread buttonThread = new Thread(buttons[ i ]);
+                threads[ i ] = buttonThread;
                 buttonThread.start();								/* Starting a thread for each Button */
             }
+
+            map.setButtons(buttons);
+            map.setThreads(threads);
 
         } catch (IOException ex) {
             System.out.println("OS not identified, can't run game");
             ex.getMessage();
             ex.printStackTrace();
             //TODO terminate game
+        }
+        return map;
+    }
+
+    public class ButtonThreadMap {
+        private Button[] buttons = null;
+        private Thread[] threads = null;
+
+        public Button[] getButtons() {
+            return buttons;
+        }
+
+        public Thread[] getThreads() {
+            return threads;
+        }
+
+        public void setButtons(Button[] buttons) {
+            this.buttons = buttons;
+        }
+
+        public void setThreads(Thread[] threads) {
+            this.threads = threads;
         }
     }
 }

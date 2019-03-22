@@ -10,6 +10,7 @@ import org.gsep.mediator.Mediator;
 import org.gsep.mediator.SceneModule;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Locale;
 
 /**
@@ -23,8 +24,9 @@ public class SelectModule extends SceneModule {
     private SelectController controller;
     private ItemModel itemModel;
     private ItemContainerModel itemContainerModel;
+    private ButtonThreadMap map = new ButtonThreadMap();
 
-    private static SelectModule instance;
+    private static volatile SelectModule instance;
 
     private SelectModule(){
 
@@ -53,6 +55,17 @@ public class SelectModule extends SceneModule {
             System.out.println("Select controller could not load.");
         }
         setTitle("Select Mode");
-        linkGuitar(controller);
+
+        if (map.getButtons() != null && map.getThreads() != null) {
+            for (int i=0; i<map.getButtons().length; i++) {
+                map.getButtons()[i].terminate();
+                try {
+                    map.getThreads()[i].join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        map = linkGuitar(controller);
     }
 }

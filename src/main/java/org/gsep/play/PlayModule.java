@@ -11,7 +11,7 @@ import org.gsep.select.MusicItem;
  */
 public class PlayModule extends SceneModule {
 
-    private static PlayModule instance;
+    private static volatile PlayModule instance;
 
     private PlayModule(){
 //        itemModel = new ItemModel();

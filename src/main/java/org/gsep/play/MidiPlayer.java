@@ -33,6 +33,10 @@ public class MidiPlayer {
         sequencer.start();
     }
 
+    public void stop(){
+        sequencer.stop();
+    }
+
     public long getMicroSecsPerTick(){
         return (long)(sequencer.getTempoInMPQ()/sequence.getResolution());
     }

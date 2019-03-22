@@ -152,9 +152,10 @@ public class SelectController extends SceneController implements ButtonListener 
 
     @Override
     public void stateReceived(String buttonName, ButtonEvent event) {
-        System.out.println("State received :   "+event.state());
+        System.out.println("State received select:   "+event.state() + "  thread:  "+Thread.currentThread());
         //TODO implement for select mode
         if (this.module == module.getMediator().getCurrentModule()) {
+            System.out.println("SELECT REACTING");
             Platform.runLater( () -> {
                 if (event.state() == ButtonState.ON) {
                     switch (buttonName) {

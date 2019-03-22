@@ -179,7 +179,9 @@ public class StoreController extends SceneController implements ButtonListener {
 
                     switch (buttonName) {
                         case "zeroPower":
-                              /* Upon integration, this will check purchase the intended song bundle if currency > 0 */
+                            int id = itemModel.getIntended().getId();
+                            String name = itemModel.getIntended().getName();
+                            downloadData(id, name);
                             break;
                         case "escape":                                                       /* Return to Slash Mode */
                             Platform.runLater(() -> {

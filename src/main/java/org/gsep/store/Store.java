@@ -1,7 +1,7 @@
 package org.gsep.store;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonParseException;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,6 +13,8 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +91,7 @@ public class Store {
      */
     public void getFile(int id) throws IOException {
         DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
-        dos.writeUTF("Get-" + id);
+        dos.writeUTF("Get," + id);
         ArrayList<String> folders = new ArrayList<>();
         folders.add("img");
         folders.add("notes");
@@ -112,26 +114,23 @@ public class Store {
      */
     public List<Song> getSongs(){
         List<Song> songs = new ArrayList<>();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        File file = new File(BASE_PATH+"index.json");
         try{
-            ObjectMapper objectMapper = new ObjectMapper();
-            File file = new File(BASE_PATH + "index.json");
             songs = objectMapper.readValue(file, new TypeReference<List<Song>>(){});
-
-        } catch (JsonParseException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        }catch(Exception e){
+            System.out.println("Error" + e.getMessage());
         }
-
         return songs;
-
     }
+
     public void updateJSON(String fileName){
 
         List<Song> songs = getSongs();
-        int lastID = songs.get(songs.size()-1).getId();
+        System.out.println(songs.size());
+        int lastID = songs.get(songs.size()).getId();
         int newID = lastID + 1;
         songs.add(new Song(newID,fileName));
 

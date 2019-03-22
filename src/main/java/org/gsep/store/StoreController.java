@@ -96,14 +96,9 @@ public class StoreController extends SceneController {
                     module.swapTo(SlashModule.getInstance());
                     break;
                 case SPACE:
-                    if(currency > 1) {
-                        int id = itemModel.getIntended().getId();
-                        String name = itemModel.getIntended().getName();
-                        downloadData(id, name);
-                        currency = currency - 1;
-                    }else{
-                        System.out.println("Don't have enough currency to purchase song");
-                    }
+                    int id = itemModel.getIntended().getId();
+                    String name = itemModel.getIntended().getName();
+                    downloadData(id, name);
                     break;
 
             }

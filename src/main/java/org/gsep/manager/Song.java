@@ -14,6 +14,10 @@ package org.gsep.manager;
 public class Song {
     private int id;
     private String name;
+
+    public Song(){
+
+    }
     
     /**
      * Constructor for song class

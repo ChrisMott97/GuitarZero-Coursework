@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.gsep.SceneController;
 import org.gsep.carousel.Carousel;
@@ -23,6 +22,7 @@ import java.util.List;
  *
  * @author  Chris Mott.
  * @author  Abigail Lilley.
+ * @author Niha Gummakonda
  * @version 2.00, March 2019.
  */
 public class StoreController extends SceneController {
@@ -45,7 +45,6 @@ public class StoreController extends SceneController {
     private static final String imgDir = baseDir +"img/";
     private static final String imgExt = ".jpg";
 
-    int currency;
 
     /**
      * Constructor.
@@ -143,6 +142,11 @@ public class StoreController extends SceneController {
         this.carousel.ingest(items);
     }
 
+    /**
+     * When user purchases, the midi and text files get transferred to the game contents
+     * @param id
+     * @param fileName
+     */
     private void downloadData(int id, String fileName){
 
         try {

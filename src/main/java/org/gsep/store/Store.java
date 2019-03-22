@@ -13,8 +13,6 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,14 +40,17 @@ public class Store {
      * @throws IOException
      */
     public void getImages() throws IOException {
+        // Sends message to server about what it wants to do
         DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
         dos.writeUTF("Images");
         DataInputStream dis = new DataInputStream(soc.getInputStream());
+        // Gets number of files
         int count = dis.readInt();
         File[] files = new File[count];
+
         for(int i = 0; i < files.length; i++){
         InputStream inputStream = soc.getInputStream();
-
+        // Gets name and size
         String name = dis.readUTF();
         byte[] sizeAr = new byte[4];
         inputStream.read(sizeAr);
@@ -59,7 +60,7 @@ public class Store {
         inputStream.read(imageAr);
 
         BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageAr));
-
+        // writes the image
         files[i] = new File("src/main/resources/cache/img/"+name);
         ImageIO.write(image, "jpg", files[i]);
         }
@@ -71,9 +72,11 @@ public class Store {
      * @throws IOException
      */
     public void getJSON() throws IOException {
+        // Tells server what it wants to do
         DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
         dos.writeUTF("JSON");
         DataInputStream dis = new DataInputStream(soc.getInputStream());
+        // Reads and writes bytes
         int fileLen = dis.readInt();
         byte[] b = new byte[fileLen];
         FileOutputStream fos = new FileOutputStream("src/main/resources/cache/index.json");
@@ -92,15 +95,19 @@ public class Store {
     public void getFile(int id) throws IOException {
         DataOutputStream dos = new DataOutputStream(soc.getOutputStream());
         dos.writeUTF("Get," + id);
+        // Creating folders and extensions
         ArrayList<String> folders = new ArrayList<>();
         folders.add("img");
         folders.add("notes");
         folders.add("midi");
         String[] extension = {".jpg",".txt",".mid"};
+        File[] files = new File("src/main/resources/songs/img").listFiles();
+        int count = files.length;
+        // Gets file from each folder
         for(int i = 0; i < extension.length; i++) {
             DataInputStream dis = new DataInputStream(soc.getInputStream());
             InputStream in = soc.getInputStream();
-            FileOutputStream fos = new FileOutputStream(BASE_PATH+folders.get(i)+"/" + id + extension[i]);
+            FileOutputStream fos = new FileOutputStream(BASE_PATH+folders.get(i)+"/" + count + extension[i]);
             int fileLen = dis.readInt();
             byte[] b = new byte[fileLen];
             in.read(b, 0, b.length);
@@ -126,11 +133,15 @@ public class Store {
         return songs;
     }
 
+    /**
+     * Adds the new song to the JSON file
+     * @param fileName name of file chosen
+     */
     public void updateJSON(String fileName){
 
         List<Song> songs = getSongs();
-        System.out.println(songs.size());
-        int lastID = songs.get(songs.size()).getId();
+
+        int lastID = songs.get(songs.size()-1).getId();
         int newID = lastID + 1;
         songs.add(new Song(newID,fileName));
 

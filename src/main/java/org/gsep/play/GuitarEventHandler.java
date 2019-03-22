@@ -45,22 +45,22 @@ public class GuitarEventHandler implements ButtonListener {
 
         if (firstCall){
             switch (buttonName){
-                case "fret1_black":
+                case "fret1Black":
                     controller.setLeftLaneStatus(setStatus, Note.BLACK);
                     break;
-                case "fret2_black":
+                case "fret2Black":
                     controller.setMiddleLaneStatus(setStatus, Note.BLACK);
                     break;
-                case "fret3_black":
+                case "fret3Black":
                     controller.setRightLaneStatus(setStatus, Note.BLACK);
                     break;
-                case "fret1_white":
+                case "fret1White":
                     controller.setLeftLaneStatus(setStatus, Note.WHITE);
                     break;
-                case "fret2_white":
+                case "fret2White":
                     controller.setMiddleLaneStatus(setStatus, Note.WHITE);
                     break;
-                case "fret3_white":
+                case "fret3White":
                     controller.setRightLaneStatus(setStatus, Note.WHITE);
                     break;
                 case "bender":

@@ -38,15 +38,15 @@ public class SelectController extends SceneController implements ButtonListener 
     private ItemContainerModel itemContainerModel;
     private SelectModule module;
 
+    private static final String defaultName = "default";
     private static final String baseDir = "/songs/";
     private static final String indexFile = baseDir +"index.json";
     private static final String imgDir = baseDir +"img/";
-    private static final String imgExt = ".png";
+    private static final String imgExt = ".jpg";
     private static final String midiDir = baseDir +"midi/";
     private static final String midiExt = ".mid";
     private static final String notesDir = baseDir +"notes/";
     private static final String notesExt = ".txt";
-    private static final String defaultName = "default";
 
 
     /**
@@ -155,25 +155,27 @@ public class SelectController extends SceneController implements ButtonListener 
         System.out.println("State received :   "+event.state());
         //TODO implement for select mode
         if (this.module == module.getMediator().getCurrentModule()) {
-            if (event.state() == ButtonState.ON) {
-                switch (buttonName) {
-                    case "zeroPower":
-                        if(itemModel.getIntended().getClass() == MusicItem.class){
-                            module.setIntendedItem((MusicItem)itemModel.getIntended());
-                        }
-                    case "escape":
-                        Platform.runLater( () -> {
-                            module.swapTo(SlashModule.getInstance());
-                        });
-                        break;
+            Platform.runLater( () -> {
+                if (event.state() == ButtonState.ON) {
+                    switch (buttonName) {
+                        case "zeroPower":
+                            if (itemModel.getIntended().getClass() == MusicItem.class) {
+                                module.setIntendedItem((MusicItem) itemModel.getIntended());
+                            }
+                        case "escape":
+                            Platform.runLater(() -> {
+                                module.swapTo(SlashModule.getInstance());
+                            });
+                            break;
 
 
+                    }
+                } else if (event.state() == ButtonState.FORWARD) {
+                    carousel.next();
+                } else if (event.state() == ButtonState.BACKWARD) {
+                    carousel.previous();
                 }
-            } else if (event.state() == ButtonState.FORWARD) {
-                carousel.next();
-            } else if (event.state() == ButtonState.BACKWARD) {
-                carousel.previous();
-            }
+            });
         }
     }
 }

@@ -70,7 +70,7 @@ public class Store {
         List<Song> songs = getSongs();
         int lastID = songs.get(songs.size()-1).getId();
         int newID = lastID + 1;
-        songs.add(new Song(fileName,newID));
+        songs.add(new Song(newID,fileName));
 
         try{
             ObjectMapper objectMapper = new ObjectMapper();

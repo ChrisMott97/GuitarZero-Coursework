@@ -113,10 +113,8 @@ public class StoreController extends SceneController implements ButtonListener {
         try {
             this.store = new Store();
             store.getImages();
-            System.out.println("images");
             this.store = new Store();
             store.getJSON();
-            System.out.println("Json");
             this.store = new Store();
         } catch (IOException e) {
             e.printStackTrace();

@@ -68,7 +68,7 @@ public class NoteHighwayController {
 
     public void stop() {
         if (isRunning && midiPlayer != null) {
-            midiPlay = () -> midiPlayer.stop();
+            midiPlayer.stop();
             isRunning = false;
         }
     }

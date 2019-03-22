@@ -74,9 +74,9 @@ public class GuitarEventHandler implements ButtonListener {
                         controller.strum();
                         break;
                     case "escape":
+                        controller.stop();
                         Platform.runLater(() -> {
                             module.swapTo(SlashModule.getInstance());
-                            controller.stop();
                         });
                 }
             }

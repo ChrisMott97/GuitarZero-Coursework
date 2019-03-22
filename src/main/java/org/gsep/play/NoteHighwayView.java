@@ -17,6 +17,7 @@ public class NoteHighwayView {
     private StreakCounter noteStreakCounter = new StreakCounter();
     private ScoreCounter scoreCounter = new ScoreCounter();
     private MultiplierRoundel multiplierRoundel = new MultiplierRoundel();
+    private CurrencyCounter currencyCounter = new CurrencyCounter();
 
     /**
      * @author Örs Barkanyi
@@ -33,6 +34,7 @@ public class NoteHighwayView {
         renderer.add(noteStreakCounter);
         renderer.add(multiplierRoundel);
         renderer.add(scoreCounter);
+        renderer.add(currencyCounter);
     }
 
     /**

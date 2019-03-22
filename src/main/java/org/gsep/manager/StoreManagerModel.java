@@ -23,6 +23,8 @@ public class StoreManagerModel {
 
 	static ArrayList<File> filesSong = new ArrayList<>();
 	static Socket soc;
+	static String HOST = "localhost";
+	static int port = 3335;
 
 	/**
 	 * Method that calls the methods readFile() and zipFile(). The purpose of run() is to invoke the client side methods all at once.
@@ -34,7 +36,7 @@ public class StoreManagerModel {
 
 		this.filesSong = filesSong;
 		try {
-			soc = new Socket("localhost", 3335);
+			soc = new Socket(HOST, port);
 		} catch (IOException e) {
 			System.out.println("Guitar Zero Lite server is down. Please try again later");
 			//Close application

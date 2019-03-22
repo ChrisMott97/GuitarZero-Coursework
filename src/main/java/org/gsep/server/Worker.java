@@ -42,9 +42,9 @@ public class Worker implements Runnable {
     private Socket soc;
     private String songName;
     private int songIndex;
-    private final static String JSONPATH = "./src/main/resources/songs/ServerContents/index.json";
-    private final static String MIDIPATH = "./src/main/resources/songs/ServerContents/midi";
-    private final static String SERVERPATH = "./src/main/resources/songs/ServerContents/";
+    private final static String JSONPATH = "./src/main/resources/ServerContents/index.json";
+    private final static String MIDIPATH = "./src/main/resources/ServerContents/midi";
+    private final static String SERVERPATH = "./src/main/resources/ServerContents/";
     private static int numSongs;
 
     Worker(Socket soc) {

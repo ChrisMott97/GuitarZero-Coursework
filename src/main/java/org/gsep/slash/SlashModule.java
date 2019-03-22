@@ -8,7 +8,7 @@ import org.gsep.mediator.SceneModule;
  * SlashModule.
  *
  * @author  Chris Mott.
- * @author  Abigail Lilley
+ * @author  Abigail Lilley.
  * @version 2.00, March 2019.
  */
 public class SlashModule extends SceneModule {

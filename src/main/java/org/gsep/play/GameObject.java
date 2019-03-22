@@ -6,6 +6,11 @@ import javafx.scene.image.Image;
 
 import java.io.File;
 
+/**
+ * Base class for objects rendered on the game canvas
+ *
+ * @author orsbarkanyi
+ */
 abstract class GameObject {
     private Boolean visible = true;
     private Point2D position;
@@ -31,11 +36,11 @@ abstract class GameObject {
      * @param position
      */
     public void setPosition(Point2D position){
-        //TODO variable offsets
         this.position = new Point2D(position.getX(), position.getY());
     }
 
     public Point2D getPosition() {
+        //apply offset factors if offset has been set
         if (positionOffset != null){
             Point2D offsetPosition = new Point2D(positionOffset.getX()*width, positionOffset.getY()*height);
             return position.subtract(offsetPosition);

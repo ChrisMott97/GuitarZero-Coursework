@@ -2,6 +2,11 @@ package org.gsep.play;
 
 import javafx.geometry.Point2D;
 
+/**
+ * The note icon game object that runs down the note highway
+ *
+ * @author orsbarkanyi
+ */
 public class NoteIcon extends GameObject {
     private Lane laneType;
     private final int tickPosition;
@@ -10,21 +15,26 @@ public class NoteIcon extends GameObject {
     private double finalSize = 109;
     private double progress = 0;
     private boolean caught = false;
-    //TODO Shadows
 
     public NoteIcon(Note noteType, Lane laneType, int tickPosition){
-        setImage(noteType.getImageSource());
         this.laneType = laneType;
         this.tickPosition = tickPosition;
+        this.spawnTime = System.currentTimeMillis();
+
+        setImage(noteType.getImageSource());
         setWidthPreserveRatio(initialSize);
         setPositionOffset(new Point2D(0.5, 0.95));
-
-        this.spawnTime = System.currentTimeMillis();
     }
 
+    /**
+     * update the position of the object on the canvas during stages of its life
+     * 1 - flowing down the highway
+     * 2 - caught or uncaught
+     *
+     * @param currentTimeMillis the time of rendering
+     */
     @Override
     public void updatePosition(double currentTimeMillis) {
-//        double currentTimeMillis = (double)(currentNanoTime/(float)(10^3));
         progress = (currentTimeMillis-spawnTime)/NoteHighwayView.noteHighwayPeriod;
 
         if (!caught){
@@ -33,7 +43,7 @@ public class NoteIcon extends GameObject {
 
             Point2D vector = destination.subtract(source);
 
-            double wait = NoteHighwayModel.pointTickRange/(double)2/NoteHighwayModel.noteHighwayLength;
+            double wait = NoteHighwayModel.scoreTickRange/(double)2/NoteHighwayModel.noteHighwayLength;
 
             Point2D newPosition;
             Double newWidth;
@@ -63,6 +73,7 @@ public class NoteIcon extends GameObject {
             setOpacity(getOpacity()*0.97);
         }
 
+        //mark for disposal if past its lifetime
         if (progress > 2){
             setActive(false);
         }

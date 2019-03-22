@@ -8,6 +8,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+
+/**
+ * note highway controller
+ *
+ * @author orsbarkanyi
+ */
 public class NoteHighwayController {
     private NoteHighwayModel model;
     private NoteHighwayView view;
@@ -17,8 +23,8 @@ public class NoteHighwayController {
     private ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
 
     /**
-     * @author Örs Barkanyi
      * Constructor for {@link NoteHighwayController}
+     * @author Örs Barkanyi
      *
      * @param model the NoteHighwayModel
      * @param view the NoteHighwayView
@@ -29,11 +35,13 @@ public class NoteHighwayController {
     }
 
     /**
-     * @author Örs Barkanyi
-     *
      * Plays a midi file and advances the model and updates the view using a separate thread that polls the current
      * position of the sequencer
-     * {@link NoteHighwayModel} and {@link NoteHighwayView}
+     *
+     * @author Örs Barkanyi
+     *
+     * @param songSequence the notes to play along the note highway
+     * @param midiFile the midi file to play with {@link MidiPlayer}
      */
     public void play(Map<Integer, Note[]> songSequence, File midiFile) throws MidiPlayerException {
         model.setSongSequence(songSequence);
@@ -83,6 +91,7 @@ public class NoteHighwayController {
     public void strum(){
         Note[] notes = new Note[] {leftLaneStatus.getNote(), middleLaneStatus.getNote(), rightLaneStatus.getNote()};
 
+        //if successfully scored, remove the corresponding notes from the highway
         Integer hitTick = model.hit(notes);
         if (hitTick != null){
             view.destroyNotes(hitTick);

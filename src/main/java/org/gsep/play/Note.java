@@ -1,5 +1,10 @@
 package org.gsep.play;
 
+/**
+ * enum to represent note types
+ *
+ * @author orsbarkanyi
+ */
 public enum Note{
     OPEN(null),
     BLACK("/play/black.png"),

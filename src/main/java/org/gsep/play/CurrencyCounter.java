@@ -3,6 +3,11 @@ package org.gsep.play;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 
+/**
+ * currency counter game object
+ *
+ * @author orsbarkanyi
+ */
 public class CurrencyCounter extends GameObject {
     private int currency = 0;
 

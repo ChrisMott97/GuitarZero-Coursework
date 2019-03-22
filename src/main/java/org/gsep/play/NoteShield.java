@@ -1,5 +1,10 @@
 package org.gsep.play;
 
+/**
+ * enum for representing the note shields that are used to catch notes
+ *
+ * @author orsbarkanyi
+ */
 public enum NoteShield {
     LEFT(
             "/play/leftBlackShield.png",

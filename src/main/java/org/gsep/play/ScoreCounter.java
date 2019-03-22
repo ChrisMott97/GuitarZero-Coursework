@@ -5,6 +5,11 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+/**
+ * score counter game object
+ *
+ * @author orsbarkanyi
+ */
 public class ScoreCounter extends GameObject {
     public Integer score = 0;
 
@@ -20,9 +25,12 @@ public class ScoreCounter extends GameObject {
 
     @Override
     public void render(GraphicsContext gc) {
+        //render label
         Font font = Font.font("Arial");
         gc.setFont(font);
         gc.fillText("Score", getPosition().getX()-50, getPosition().getY()-5);
+
+        //render score
         font = Font.font("Arial", FontWeight.BOLD, 30);
         gc.setFont(font);
         gc.fillText(score.toString(), getPosition().getX(), getPosition().getY(), 18);

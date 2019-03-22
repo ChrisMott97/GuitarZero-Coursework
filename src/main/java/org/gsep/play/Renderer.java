@@ -8,6 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * responsible for rendering game objects to layers of canvases
+ *
+ * @author orsbarkanyi
+ */
 public class Renderer extends AnimationTimer{
     public static int LAYERS = 3;
     private List<GameObject> gameObjects = new CopyOnWriteArrayList<>();
@@ -21,6 +26,7 @@ public class Renderer extends AnimationTimer{
         }
     }
 
+    @Override
     public void handle(long currentNanoTime) {
         for (Canvas layer : layers){
             layer.getGraphicsContext2D().clearRect(0,0, layer.getWidth(), layer.getHeight()); //clear the canvas

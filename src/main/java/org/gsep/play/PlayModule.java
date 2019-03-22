@@ -1,14 +1,10 @@
 package org.gsep.play;
 
-import javafx.scene.Scene;
-import org.gsep.carousel.ItemContainerModel;
-import org.gsep.carousel.ItemModel;
-import org.gsep.mediator.Mediator;
 import org.gsep.mediator.SceneModule;
 import org.gsep.select.MusicItem;
 
-/*
- * PlayModule.
+/**
+ * PlayModule. Wrapper class for {@link Play}
  *
  * @author  Chris Mott.
  * @version 2.00, March 2019.
@@ -44,7 +40,7 @@ public class PlayModule extends SceneModule {
         MusicItem item = getMediator().getIntendedItem();
         System.out.println(item);
 //        Play play = new Play("/3.txt", "/3.mid");
-        Play play = new Play(item);
+        Play play = new Play(item, instance);
         setScene(play.getScene());
         setTitle("Play Mode");
         play.play();

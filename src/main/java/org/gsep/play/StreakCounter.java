@@ -5,6 +5,11 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+/**
+ * streak counter game object
+ *
+ * @author orsbarkanyi
+ */
 public class StreakCounter extends GameObject {
     public Integer noteStreak = 0;
 
@@ -20,9 +25,12 @@ public class StreakCounter extends GameObject {
 
     @Override
     public void render(GraphicsContext gc) {
+        //render the label
         Font font = Font.font("Arial");
         gc.setFont(font);
         gc.fillText("Note\nStreak", getPosition().getX(), getPosition().getY());
+
+        //render the streak number
         font = Font.font("Arial", FontWeight.BOLD, 30);
         gc.setFont(font);
         gc.fillText(noteStreak.toString(), getPosition().getX()+50, getPosition().getY()+12, 18);

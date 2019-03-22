@@ -4,6 +4,11 @@ import javafx.scene.Group;
 
 import java.util.ArrayList;
 
+/**
+ * note highway view
+ *
+ * @author orsbarkanyi
+ */
 public class NoteHighwayView {
     public static double noteHighwayPeriod;
 
@@ -20,8 +25,6 @@ public class NoteHighwayView {
     private CurrencyCounter currencyCounter = new CurrencyCounter();
 
     /**
-     * @author Örs Barkanyi
-     *
      * Constructor for {@link NoteHighwayView} which initialises the game render clock
      */
     NoteHighwayView(Group root){
@@ -38,8 +41,6 @@ public class NoteHighwayView {
     }
 
     /**
-     * @author Örs Barkanyi
-     *
      * Starts the game render clock
      */
     public void startRender(){
@@ -47,7 +48,6 @@ public class NoteHighwayView {
     }
 
     /**
-     * @author Örs Barkanyi
      * @param period the time in microseconds taken for notes travel from top to bottom
      */
     public void setNoteHighwayPeriod(double period){
@@ -55,8 +55,6 @@ public class NoteHighwayView {
     }
 
     /**
-     * @author Örs Barkanyi
-     *
      * Sends notes down the highway, determining what colour they are based on their type
      * and queueing them to be rendered and manages the size of the render queue
      *
@@ -76,6 +74,11 @@ public class NoteHighwayView {
         }
     }
 
+    /**
+     * removes notes from the highway that belong to a particular tick
+     *
+     * @param tick the tick value to remove
+     */
     public void destroyNotes(int tick){
         for (NoteIcon noteIcon : noteIcons){
             if (noteIcon.getTickPosition() == tick) {

@@ -7,6 +7,11 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import java.io.File;
 
+/**
+ * plays midi files
+ *
+ * @author orsbarkanyi
+ */
 public class MidiPlayer {
     private final Sequence sequence;
     private final Sequencer sequencer;
@@ -16,7 +21,6 @@ public class MidiPlayer {
             this.sequence = MidiSystem.getSequence(file);
             this.sequencer = MidiSystem.getSequencer();
 
-//            sequencer.setTempoInBPM(60);
             sequencer.open();
             sequencer.setSequence(sequence);
         } catch (Exception e){

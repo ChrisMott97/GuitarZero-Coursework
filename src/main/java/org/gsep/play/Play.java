@@ -1,12 +1,10 @@
 package org.gsep.play;
 
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+import org.gsep.controller.Button;
 import org.gsep.select.MusicItem;
 
 import java.io.BufferedReader;
@@ -16,78 +14,74 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Play mode
+ *
+ * @author Örs Barkanyi
+ * @author Abigail Lilley
+ */
 public class Play {
     public static final int CANVASWIDTH = 950;
     public static final int CANVASHEIGHT = 700;
+
     private Scene scene;
+
     private NoteHighwayModel model;
     private NoteHighwayView view;
     private NoteHighwayController controller;
     private File midiFile;
     private Map<Integer, Note[]> songSequence;
 
-//    private final static String[] BUTTONNAMES = { 	"fret1_white",
-//            "fret1_black",
-//            "fret2_white",
-//            "fret2_black",
-//            "fret3_white",
-//            "fret3_black",
-//            "zeroPower",
-//            "strumBar",
-//            "escape",
-//            "power",
-//            "bender",
-//            "whammy"	    	};
-//
-//    private final static int[] BUTTONNUMS = { 0, 1, 4, 2, 5, 3, 8, 15, 10, 12, 13, 17};
-//    /* Index of the component in the component array. Order corresponds to the names in BUTTONNAMES */
+    private final static String[] BUTTONNAMES = {
+            "fret1_white",
+            "fret1_black",
+            "fret2_white",
+            "fret2_black",
+            "fret3_white",
+            "fret3_black",
+            "zeroPower",
+            "strumBar",
+            "escape",
+            "power",
+            "bender",
+            "whammy"
+    };
+
+    private final static int[] BUTTONNUMS = { 0, 1, 4, 2, 5, 3, 8, 15, 10, 12, 13, 17};
+    /* Index of the component in the component array. Order corresponds to the names in BUTTONNAMES */
 
     /**
-     * @author Örs Barkanyi
-     * @author Abigail Lilley
      * Constructor for Play Mode
      *
-     * @param noteFile the path to the selected note file
-     * @param midiFile the path to the selected midi file
+     * @param musicItem the object representing the music resources to be played
+     * @param module reference to the play module
      */
-    public Play(MusicItem item){
+    public Play(MusicItem musicItem, PlayModule module){
         //initialise scene
         Group root = new Group();
         this.scene = new Scene(root);
 
         root.getChildren().add(createBackground());
 
-        scene.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                System.out.println(mouseEvent.getSceneY());
-                System.out.println(mouseEvent.getSceneX());
-            }
-        });
-
         //set up mvc
         this.model = new NoteHighwayModel();
         this.view = new NoteHighwayView(root);
         this.controller = new NoteHighwayController(model, view);
 
-//        GuitarEventHandler guitarEventHandler = new GuitarEventHandler(controller);
-//
-//        //Adding listeners to Buttons depending on the mode, starting a thread for each button
-//        Button[] buttons = new Button[BUTTONNAMES.length];
-//        for (int i = 0; i < buttons.length; i++) {
-//            buttons[i] = new Button( BUTTONNAMES[i], BUTTONNUMS[i]);
-//            buttons[i].addButtonListener(guitarEventHandler);
-//            Thread buttonThread = new Thread(buttons[ i ]);
-//            buttonThread.start();
-//        }
-
         GuitarEventHandler guitarEventHandler = new GuitarEventHandler(controller);
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, guitarEventHandler);
-        scene.addEventHandler(KeyEvent.KEY_RELEASED, guitarEventHandler);
+
+        //Adding listeners to Buttons depending on the mode, starting a thread for each button
+        Button[] buttons = new Button[BUTTONNAMES.length];
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i] = new Button( BUTTONNAMES[i], BUTTONNUMS[i]);
+            buttons[i].addButtonListener(guitarEventHandler);
+            Thread buttonThread = new Thread(buttons[ i ]);
+            buttonThread.start();
+        }
 
         //find files
         try{
-            this.songSequence = readFile(item.getNoteFile());
+            this.songSequence = readFile(musicItem.getNoteFile());
         } catch (Exception e) {
             System.out.println("Note file not found or invalid");
             e.printStackTrace();
@@ -95,7 +89,7 @@ public class Play {
         }
 
         try{
-            this.midiFile = item.getMidiFile();
+            this.midiFile = musicItem.getMidiFile();
         } catch (Exception e){
             System.out.println("MIDI file Not found");
             e.printStackTrace();

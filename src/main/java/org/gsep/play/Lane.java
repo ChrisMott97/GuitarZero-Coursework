@@ -3,6 +3,11 @@ package org.gsep.play;
 
 import javafx.geometry.Point2D;
 
+/**
+ * enum representing lanes on the note highway
+ *
+ * @author orsbarkanyi
+ */
 public enum Lane {
     LEFT(new Point2D(417, 0), new Point2D(284, 525)),
     MIDDLE(new Point2D(475, 0), new Point2D(475, 525)),

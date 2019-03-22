@@ -5,6 +5,12 @@ import javafx.scene.image.Image;
 
 import java.io.File;
 
+/**
+ * note shield game objects that appear at the bottom of the note highway that are
+ * visible when a lane is activated by the controller
+ *
+ * @author orsbarkanyi
+ */
 public class NoteShieldIcon extends GameObject {
     private Image whiteImage;
     private Image blackImage;
@@ -15,7 +21,6 @@ public class NoteShieldIcon extends GameObject {
         setBlackImage(noteShieldType.getBlackImageSource());
         setWhiteImage(noteShieldType.getWhiteImageSource());
 
-        //TODO workaround for setting dims until I figure out a better way
         setImage(whiteImage);
         setWidthPreserveRatio(109);
         setPosition(laneType.getShieldPoint());

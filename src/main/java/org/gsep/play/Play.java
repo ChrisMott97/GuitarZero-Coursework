@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class Play {
@@ -25,31 +26,31 @@ public class Play {
     private File midiFile;
     private Map<Integer, Note[]> songSequence;
 
-    private final static String[] BUTTONNAMES = { 	"fret1_white",
-            "fret1_black",
-            "fret2_white",
-            "fret2_black",
-            "fret3_white",
-            "fret3_black",
-            "zeroPower",
-            "strumBar",
-            "escape",
-            "power",
-            "bender",
-            "whammy"	    	};
-
-    private final static int[] BUTTONNUMS = { 0, 1, 4, 2, 5, 3, 8, 15, 10, 12, 13, 17};
-    /* Index of the component in the component array. Order corresponds to the names in BUTTONNAMES */
+//    private final static String[] BUTTONNAMES = { 	"fret1_white",
+//            "fret1_black",
+//            "fret2_white",
+//            "fret2_black",
+//            "fret3_white",
+//            "fret3_black",
+//            "zeroPower",
+//            "strumBar",
+//            "escape",
+//            "power",
+//            "bender",
+//            "whammy"	    	};
+//
+//    private final static int[] BUTTONNUMS = { 0, 1, 4, 2, 5, 3, 8, 15, 10, 12, 13, 17};
+//    /* Index of the component in the component array. Order corresponds to the names in BUTTONNAMES */
 
     /**
      * @author Örs Barkanyi
      * @author Abigail Lilley
      * Constructor for Play Mode
      *
-     * @param noteFilePath the path to the selected note file
-     * @param midiFilePath the path to the selected midi file
+     * @param noteFile the path to the selected note file
+     * @param midiFile the path to the selected midi file
      */
-    public Play(File noteFile, File midiFile){
+    public Play(MusicItem item){
         //initialise scene
         Group root = new Group();
         this.scene = new Scene(root);
@@ -86,7 +87,7 @@ public class Play {
 
         //find files
         try{
-            this.songSequence = readFile(noteFile);
+            this.songSequence = readFile(item.getNoteFile());
         } catch (Exception e) {
             System.out.println("Note file not found or invalid");
             e.printStackTrace();
@@ -94,7 +95,7 @@ public class Play {
         }
 
         try{
-            this.midiFile = midiFile;
+            this.midiFile = item.getMidiFile();
         } catch (Exception e){
             System.out.println("MIDI file Not found");
             e.printStackTrace();
